@@ -72,10 +72,13 @@ const Main = () => {
           <Img bgImg={`${process.env.PUBLIC_URL}/mainImg/back01.png`}></Img>
           <Img
             bgImg={`${process.env.PUBLIC_URL}/mainImg/back02.png`}
-            // stylePlus={`transform: translateX(100px)`}
+            stylePlus={`transform: translateX(100px)`}
           ></Img>
           <Img bgImg={`${process.env.PUBLIC_URL}/mainImg/back03.png`}></Img>
-          <Img bgImg={`${process.env.PUBLIC_URL}/mainImg/back04.png`}></Img>
+          <Img
+            bgImg={`${process.env.PUBLIC_URL}/mainImg/back04.png`}
+            stylePlus={`transform: translatey(-40px)`}
+          ></Img>
           <Img bgImg={`${process.env.PUBLIC_URL}/mainImg/back05.png`}></Img>
           <Img
             bgImg={`${process.env.PUBLIC_URL}/mainImg/back00.png`}

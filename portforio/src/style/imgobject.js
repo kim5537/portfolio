@@ -1,6 +1,7 @@
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
-export const Img = styled.div`
+export const Img = styled(motion.div)`
   position: absolute;
   background-image: url(${(props) => props.bgImg});
   left: ${(props) => props.left || "0"};
