@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { Img } from "../style/imgobject";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const Container = styled.div`
-  height: 100vh;
+  height: 400vh;
   width: 100vw;
   overflow: hidden;
 `;
@@ -22,7 +22,7 @@ const Base = styled.div`
   position: relative;
 `;
 
-const Man = styled.div`
+const Man = styled(motion.div)`
   width: 100%;
   height: 100%;
 
@@ -46,7 +46,7 @@ const Cat = styled.div`
   height: 100%;
   & > img {
     position: absolute;
-    right: 0;
+    right: -10vw;
     bottom: 0;
     width: auto;
     height: 100%;
@@ -55,7 +55,7 @@ const Cat = styled.div`
   & > div {
     img {
       position: absolute;
-      right: 0px;
+      right: -10vw;
       bottom: 0;
       width: auto;
       height: 100%;
@@ -65,6 +65,11 @@ const Cat = styled.div`
 `;
 
 const Main = () => {
+  const { scrollYProgress } = useScroll();
+  console.log(scrollYProgress);
+  const scaleMan = useTransform(scrollYProgress, [0, 1], [1, 1.3]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.3]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, -200]);
   return (
     <Container>
       <ImgWrap>
@@ -97,7 +102,7 @@ const Main = () => {
       </ImgWrap>
       <ImgWrap>
         <Base>
-          <Man>
+          <Man alt="parallax" style={{ scaleMan, y }}>
             <img src={`${process.env.PUBLIC_URL}/mainImg/man01.png`} />
             <img src={`${process.env.PUBLIC_URL}/mainImg/man00.png`} />
             <motion.img
