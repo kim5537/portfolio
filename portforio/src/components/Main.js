@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Img } from "../style/imgobject";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { delay, motion, useScroll, useTransform } from "framer-motion";
 
 const Container = styled.div`
-  height: 400vh;
+  height: 700vh;
   width: 100vw;
   overflow: hidden;
 `;
@@ -41,9 +41,12 @@ const Man = styled(motion.div)`
   }
 `;
 
+const CatWrap = styled(motion.div)`
+  width: 100%;
+  height: 100%;
+`;
+
 const Cat = styled.div`
-  width: 138%;
-  height: 138%;
   & > img {
     position: absolute;
     right: -2vw;
@@ -64,19 +67,15 @@ const Cat = styled.div`
   }
 `;
 
-const Window = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: aliceblue;
-  opacity: 0.6;
-`;
-
 const Main = () => {
   const { scrollYProgress } = useScroll();
-  console.log(scrollYProgress);
-  const scaleMan = useTransform(scrollYProgress, [0, 1], [1, 1.6]);
-  const parX = useTransform(scrollYProgress, [0, 1], [1, 200]);
+  const cloud00 = useTransform(scrollYProgress, [0, 1], [0, -1300]);
+
+  const scaleMan = useTransform(scrollYProgress, [0.3, 1], [1, 1.6]);
+  const parX = useTransform(scrollYProgress, [0, 1], [1, 10]);
+
+  const scaleCat = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
+  const parX01 = useTransform(scrollYProgress, [0, 1], [50, 200]);
   return (
     <Container>
       <ImgWrap>
@@ -84,9 +83,20 @@ const Main = () => {
           <Img bgImg={`mainImg/back01.png`}></Img>
           <Img
             bgImg={`mainImg/back02.png`}
-            stylePlus={`transform: translateX(100px)`}
+            animate={{
+              translateX: [100, -1200],
+              translateY: [0, 18, 3, 15, 0],
+            }}
+            transition={{ duration: 12, repeat: Infinity }}
           ></Img>
-          <Img bgImg={`mainImg/back03.png`}></Img>
+          <Img
+            bgImg={`mainImg/back03.png`}
+            animate={{
+              translateX: [600, -600],
+              translateY: [0, 27, 3, 30, 0],
+            }}
+            transition={{ duration: 32, repeat: Infinity }}
+          ></Img>
           <Img
             bgImg={`mainImg/back04.png`}
             stylePlus={`transform: translatey(-40px)`}
@@ -127,21 +137,17 @@ const Main = () => {
       </ImgWrap>
       <ImgWrap>
         <Base>
-          <Cat>
-            <img src={`mainImg/cat00.png`} />
-            <img src={`mainImg/cat01.png`} />
-            <div>
-              <img src={`mainImg/cat02.png`} />
-              <img src={`mainImg/cat03.png`} />
-            </div>
-          </Cat>
+          <CatWrap style={{ scale: scaleCat, x: parX01 }}>
+            <Cat alt="cat">
+              <img src={`mainImg/cat00.png`} />
+              <img src={`mainImg/cat01.png`} />
+              <div>
+                <img src={`mainImg/cat02.png`} />
+                <img src={`mainImg/cat03.png`} />
+              </div>
+            </Cat>
+          </CatWrap>
         </Base>
-      </ImgWrap>
-      <ImgWrap>
-        {/* <Base>
-          <Window />
-          <Img bgImg={`mainImg/start00.png`} />
-        </Base> */}
       </ImgWrap>
     </Container>
   );
