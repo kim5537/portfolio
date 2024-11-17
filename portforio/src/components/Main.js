@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Img } from "../style/imgobject";
 import { delay, motion, useScroll, useTransform } from "framer-motion";
+import Scolle from "./Scolle";
 
 const Container = styled.div`
   height: 700vh;
@@ -20,6 +21,11 @@ const Base = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
+`;
+
+const Back = styled(motion.div)`
+  width: 100%;
+  height: 100%;
 `;
 
 const Man = styled(motion.div)`
@@ -69,48 +75,88 @@ const Cat = styled.div`
 
 const Main = () => {
   const { scrollYProgress } = useScroll();
-  const cloud00 = useTransform(scrollYProgress, [0, 1], [0, -1300]);
 
-  const scaleMan = useTransform(scrollYProgress, [0.3, 1], [1, 1.6]);
-  const parX = useTransform(scrollYProgress, [0, 1], [1, 10]);
+  // const scaleCloud = useTransform(scrollYProgress, [0.4, 1], [1, 1.1]);
+  const scaleBack = useTransform(scrollYProgress, [0.3, 1], [1, 1.1]);
 
-  const scaleCat = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
-  const parX01 = useTransform(scrollYProgress, [0, 1], [50, 200]);
+  const scaleMan = useTransform(scrollYProgress, [0.1, 1], [1, 1.6]);
+  const parX = useTransform(scrollYProgress, [0, 1], [1, 30]);
+
+  const scaleCat = useTransform(scrollYProgress, [0, 1], [1, 1.8]);
+  const parX01 = useTransform(scrollYProgress, [0, 1], [50, -60]);
   return (
     <Container>
       <ImgWrap>
         <Base>
-          <Img bgImg={`mainImg/back01.png`}></Img>
-          <Img
-            bgImg={`mainImg/back02.png`}
-            animate={{
-              translateX: [100, -1200],
-              translateY: [0, 18, 3, 15, 0],
-            }}
-            transition={{ duration: 12, repeat: Infinity }}
-          ></Img>
-          <Img
-            bgImg={`mainImg/back03.png`}
-            animate={{
-              translateX: [600, -600],
-              translateY: [0, 27, 3, 30, 0],
-            }}
-            transition={{ duration: 32, repeat: Infinity }}
-          ></Img>
-          <Img
-            bgImg={`mainImg/back04.png`}
-            stylePlus={`transform: translatey(-40px)`}
-          ></Img>
-          <Img bgImg={`mainImg/back05.png`}></Img>
-          <Img bgImg={`mainImg/back00.png`} top={0} left={0}></Img>
+          <Back>
+            <Img bgImg={`mainImg/back01.png`} />
+            <Img
+              bgImg={`mainImg/back02.png`}
+              animate={{
+                translateY: [-12, 18, -3, 20, -12],
+              }}
+              transition={{ duration: 16, repeat: Infinity }}
+              top={0}
+              left={"-3vw"}
+            />
+            <Img
+              bgImg={`mainImg/back03.png`}
+              animate={{
+                translateY: [0, 27, 3, 0, -20, 0],
+              }}
+              transition={{
+                duration: 16,
+                repeat: Infinity,
+              }}
+              top={0}
+              left={0}
+            />
+            <Img
+              bgImg={`mainImg/back04.png`}
+              animate={{
+                translateY: [-10, 0, 2, -10, 2, -10],
+              }}
+              transition={{
+                duration: 18,
+                repeat: Infinity,
+              }}
+              stylePlus={`transform: translatey(-40px)`}
+            />
+            <Img
+              bgImg={`mainImg/back05.png`}
+              animate={{
+                translateY: [-140, -120, -100, -110, -140],
+              }}
+              transition={{
+                duration: 18,
+                repeat: Infinity,
+              }}
+            />
+            <Img
+              bgImg={`mainImg/back06.png`}
+              animate={{ translateY: [-40, -30, -24, -18, -40] }}
+              transition={{
+                duration: 18,
+                repeat: Infinity,
+              }}
+            />
+          </Back>
         </Base>
       </ImgWrap>
       <ImgWrap>
         <Base>
-          <Img bgImg={`mainImg/obj00.png`} />
-          <Img bgImg={`mainImg/obj01.png`} />
-          <Img bgImg={`mainImg/obj02.png`} />
-          <Img bgImg={`mainImg/obj03.png`} />
+          <Back style={{ scale: scaleBack }}>
+            <Img
+              bgImg={`mainImg/back00.png`}
+              top={0}
+              left={0}
+              stylePlus={`opacity: 0.3`}
+            ></Img>
+            <Img bgImg={`mainImg/obj00.png`} />
+            <Img bgImg={`mainImg/obj01.png`} />
+            <Img bgImg={`mainImg/obj02.png`} />
+            <Img bgImg={`mainImg/obj03.png`} />
+          </Back>
         </Base>
       </ImgWrap>
       <ImgWrap>
@@ -149,6 +195,7 @@ const Main = () => {
           </CatWrap>
         </Base>
       </ImgWrap>
+      <Scolle />
     </Container>
   );
 };

@@ -4,6 +4,12 @@ import theme from "./style/theme";
 import Main from "./components/Main";
 
 const Globalstyle = createGlobalStyle`
+  @font-face {
+    font-family: 'EF_jejudoldam';
+    src: url('/fonts/EF_jejudoldam.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
 * {
   margin: 0;
   padding: 0;
@@ -17,7 +23,7 @@ a {
   color: inherit;
 }
 body {
-  font-family:'Noto Sans KR', sans-serif ;
+  font-family: 'Noto Sans KR', sans-serif ;
 }
 `;
 
