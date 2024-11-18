@@ -1,7 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Img } from "../style/imgobject";
-import { delay, motion, useScroll, useTransform } from "framer-motion";
+import {
+  delay,
+  motion,
+  useMotionValueEvent,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import Scolle from "./Scolle";
 
 const Container = styled.div`
@@ -9,7 +15,7 @@ const Container = styled.div`
   max-width: 100%;
   height: 8000px;
   overflow: hidden;
-  display: ${(props) => (props.isVisible ? "block" : "none")};
+  opacity: ${(props) => (props.isVisible ? 1 : 0)};
 `;
 
 const ImgWrap = styled.div`
@@ -83,20 +89,19 @@ const Cat = styled.div`
   }
 `;
 
-const Main = ({ id }) => {
+const Main = (ref) => {
   const { scrollYProgress } = useScroll();
+  const mainRef = useRef();
 
   const [isVisible, setIsVisible] = useState(true);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (scrollYProgress != 1) {
-        setIsVisible(false); // 끝에 도달하면 숨김
-      } else {
-        setIsVisible(true); // 다시 보이게 함
-      }
-    };
-  }, []);
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest === 1) {
+      setIsVisible(false);
+    } else {
+      setIsVisible(true);
+    }
+  });
 
   // const scaleCloud = useTransform(scrollYProgress, [0.4, 1], [1, 1.1]);
   const scaleBack = useTransform(scrollYProgress, [0.3, 1], [1, 1.1]);
@@ -107,7 +112,7 @@ const Main = ({ id }) => {
   const scaleCat = useTransform(scrollYProgress, [0, 1], [1, 1.8]);
   const parX01 = useTransform(scrollYProgress, [0, 1], [50, -20]);
   return (
-    <Container isVisible={isVisible}>
+    <Container isVisible={isVisible} ref={ref}>
       <ImgWrap>
         <Base>
           <Back>

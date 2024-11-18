@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useRef } from "react";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import theme from "./style/theme";
 import Main from "./components/Main";
 import Nav from "./components/Nav";
+import Test from "./components/Test";
 
 const Globalstyle = createGlobalStyle`
   @font-face {
@@ -30,12 +31,29 @@ body {
 `;
 
 const App = () => {
+  const mainRef = useRef();
+  const aboutRef = useRef();
+  const skillRef = useRef();
+  const projectRef = useRef();
+  const artRef = useRef();
+
+  const navPages = {
+    Main: mainRef,
+    AboutMe: aboutRef,
+    Skill: skillRef,
+    Project: projectRef,
+    Art: artRef,
+  };
+
+  const navClick = (nav) => {
+    navPages[nav].current.scrollIntoView({ behavior: "smooth" });
+  };
   return (
     <ThemeProvider theme={theme}>
       <Globalstyle />
-      <Nav />
-      <Main />
-      <div>끝~!</div>
+      <Nav navClick={navClick} navPages={navPages} />
+      <Main ref={mainRef} />
+      <div style={{ height: "100vh", width: "100%" }}>끝~!</div>
     </ThemeProvider>
   );
 };

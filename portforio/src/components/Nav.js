@@ -20,11 +20,18 @@ const Wrap = styled.ul`
 `;
 const NavItem = styled.li``;
 
-const Nav = () => {
+const Nav = (navClick) => {
+  console.log(navClick);
   return (
     <Wrapper>
       <Wrap>
-        <NavItem>Main</NavItem>
+        <NavItem
+          onClick={() => {
+            navClick(Main);
+          }}
+        >
+          Main
+        </NavItem>
         <NavItem>AboutMe</NavItem>
         <NavItem>Skill</NavItem>
         <NavItem>Project</NavItem>
