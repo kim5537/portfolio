@@ -1,13 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Img } from "../style/imgobject";
 import { delay, motion, useScroll, useTransform } from "framer-motion";
 import Scolle from "./Scolle";
 
 const Container = styled.div`
-  height: 700vh;
   width: 100vw;
+  max-width: 100%;
+  height: 8000px;
   overflow: hidden;
+  display: ${(props) => (props.isVisible ? "block" : "none")};
 `;
 
 const ImgWrap = styled.div`
@@ -21,17 +23,25 @@ const Base = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
+  overflow: hidden;
+`;
+
+const WhitePaper = styled(motion.div)`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: #fff;
 `;
 
 const Back = styled(motion.div)`
   width: 100%;
   height: 100%;
+  overflow: hidden;
 `;
 
 const Man = styled(motion.div)`
   width: 100%;
   height: 100%;
-
   img {
     position: absolute;
     left: -4vw;
@@ -73,19 +83,31 @@ const Cat = styled.div`
   }
 `;
 
-const Main = () => {
+const Main = ({ id }) => {
   const { scrollYProgress } = useScroll();
+
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (scrollYProgress != 1) {
+        setIsVisible(false); // 끝에 도달하면 숨김
+      } else {
+        setIsVisible(true); // 다시 보이게 함
+      }
+    };
+  }, []);
 
   // const scaleCloud = useTransform(scrollYProgress, [0.4, 1], [1, 1.1]);
   const scaleBack = useTransform(scrollYProgress, [0.3, 1], [1, 1.1]);
 
   const scaleMan = useTransform(scrollYProgress, [0.1, 1], [1, 1.6]);
-  const parX = useTransform(scrollYProgress, [0, 1], [1, 30]);
+  const parX = useTransform(scrollYProgress, [0, 1], [1, 10]);
 
   const scaleCat = useTransform(scrollYProgress, [0, 1], [1, 1.8]);
-  const parX01 = useTransform(scrollYProgress, [0, 1], [50, -60]);
+  const parX01 = useTransform(scrollYProgress, [0, 1], [50, -20]);
   return (
-    <Container>
+    <Container isVisible={isVisible}>
       <ImgWrap>
         <Base>
           <Back>
@@ -146,12 +168,7 @@ const Main = () => {
       <ImgWrap>
         <Base>
           <Back style={{ scale: scaleBack }}>
-            <Img
-              bgImg={`mainImg/back00.png`}
-              top={0}
-              left={0}
-              stylePlus={`opacity: 0.3`}
-            ></Img>
+            <Img bgImg={`mainImg/back00.png`} top={0} left={0}></Img>
             <Img bgImg={`mainImg/obj00.png`} />
             <Img bgImg={`mainImg/obj01.png`} />
             <Img bgImg={`mainImg/obj02.png`} />
@@ -196,6 +213,16 @@ const Main = () => {
         </Base>
       </ImgWrap>
       <Scolle />
+      <WhitePaper
+        style={{
+          opacity: useTransform(scrollYProgress, [0.6, 1], [0, 1]),
+          backgroundColor: useTransform(
+            scrollYProgress,
+            [0.6, 0.8, 1],
+            ["#fff", "#fff", "#C8BA7B"]
+          ),
+        }}
+      />
     </Container>
   );
 };

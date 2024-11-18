@@ -2,6 +2,7 @@ import React from "react";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import theme from "./style/theme";
 import Main from "./components/Main";
+import Nav from "./components/Nav";
 
 const Globalstyle = createGlobalStyle`
   @font-face {
@@ -10,6 +11,7 @@ const Globalstyle = createGlobalStyle`
     font-weight: normal;
     font-style: normal;
   }
+
 * {
   margin: 0;
   padding: 0;
@@ -31,7 +33,9 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Globalstyle />
+      <Nav />
       <Main />
+      <div>끝~!</div>
     </ThemeProvider>
   );
 };

@@ -1,12 +1,15 @@
 import React from "react";
 import styled from "styled-components";
-import { motion, useScroll } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const Wrapper = styled.div`
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+`;
+
+const Wrap = styled(motion.div)`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -16,7 +19,6 @@ const Wrapper = styled.div`
 const ImgWrap = styled(motion.div)`
   width: 13vw;
   height: 13vw;
-  border: 1px solid #f00;
 `;
 
 const CurcleText = styled(motion.div)`
@@ -27,22 +29,31 @@ const CurcleText = styled(motion.div)`
 `;
 
 const Text = styled.div`
-  font-size: 24px;
+  font-size: 2rem;
   font-family: ${(props) => props.theme.font.title};
+  color: ${(props) => props.theme.color.white};
+  -webkit-text-stroke: 2px ${(props) => props.theme.color.mainDark};
+  margin-top: 16px;
 `;
 
 const Scolle = () => {
-  const scroll = useScroll();
-  console.log(scroll);
+  const { scrollYProgress } = useScroll();
   return (
     <Wrapper>
-      <ImgWrap>
-        <CurcleText
-          animate={{ rotate: [0, 360] }}
-          transition={{ duration: 30, repeat: Infinity }}
-        />
-      </ImgWrap>
-      <Text>모든 그림 소재는 전부 직접 드로잉한 소재입니다!</Text>
+      <Wrap
+        style={{
+          scale: useTransform(scrollYProgress, [0.2, 1], [1, 1.4]),
+          opacity: useTransform(scrollYProgress, [0.2, 1], [1, 0]),
+        }}
+      >
+        <ImgWrap>
+          <CurcleText
+            animate={{ rotate: [0, 359] }}
+            transition={{ duration: 30, repeat: Infinity }}
+          />
+        </ImgWrap>
+        <Text>모든 그림 소재는 전부 직접 드로잉한 소재입니다!</Text>
+      </Wrap>
     </Wrapper>
   );
 };
