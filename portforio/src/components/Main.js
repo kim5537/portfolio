@@ -13,7 +13,7 @@ import Scolle from "./Scolle";
 const Container = styled.div`
   width: 100vw;
   max-width: 100%;
-  height: 8000px;
+  height: 2000px;
   overflow: hidden;
   opacity: ${(props) => (props.isVisible ? 1 : 0)};
 `;
@@ -101,7 +101,7 @@ const Main = forwardRef(function Main(props, ref) {
   const [isVisible, setIsVisible] = useState(true);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    if (latest >= 8000) {
+    if (latest >= 2000) {
       setIsVisible(false);
     } else {
       setIsVisible(true);
@@ -241,11 +241,11 @@ const Main = forwardRef(function Main(props, ref) {
       <Scolle />
       <WhitePaper
         style={{
-          opacity: useTransform(scrollYProgress, [0.6, 1], [0, 1]),
+          opacity: useTransform(scrollYProgress, [0, 1], [0, 1]),
           backgroundColor: useTransform(
             scrollYProgress,
-            [0.6, 0.8, 1],
-            ["#fff", "#fff", "#C8BA7B"]
+            [0.3, 1],
+            ["#fff", "#C8BA7B"]
           ),
         }}
       />

@@ -1,8 +1,9 @@
 import React, { forwardRef } from "react";
 import styled from "styled-components";
-import { motion, useInView } from "framer-motion";
+import { motion, transform, useInView } from "framer-motion";
 import { ReactComponent as Light } from "../style/light.svg";
 import lighitem from "../style/lightitem.svg";
+import LightSvg from "../style/LightSvg";
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -28,7 +29,7 @@ const ImgWrap = styled.div`
   position: relative;
 `;
 
-const Img = styled(motion.svg)`
+const Svg = styled(motion.svg)`
   width: 100%;
   height: 100%;
   position: absolute;
@@ -48,15 +49,14 @@ const AboutMe = forwardRef(function AboutMe(props, ref) {
 
   const svgAni = {
     start: { pathLength: 0 },
-    end: { pathLength: 1, transition: { duration: 3 } },
+    end: { pathLength: 1, transition: { duration: 3, repeat: Infinity } },
   };
 
   return (
     <Wrapper>
       <MainItem ref={ref}>
         <ImgWrap isInView={isInView}>
-          <Light variants={svgAni} initial="start" animate="end" />
-          {/* <Img src={lighitem} /> */}
+          <LightSvg />
         </ImgWrap>
         <TextWrap isInView={isInView}>
           <div>웹사이트를 드로잉하는 Front End!</div>
