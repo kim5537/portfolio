@@ -4,6 +4,7 @@ import theme from "./style/theme";
 import Main from "./components/Main";
 import Nav from "./components/Nav";
 import Test from "./components/Test";
+import AboutMe from "./components/AboutMe";
 
 const Globalstyle = createGlobalStyle`
   @font-face {
@@ -46,14 +47,19 @@ const App = () => {
   };
 
   const navClick = (nav) => {
-    navPages[nav].current.scrollIntoView({ behavior: "smooth" });
+    const sectionRef = navPages[nav];
+    if (sectionRef?.current) {
+      sectionRef.current.scrollIntoView({ behavior: "smooth" });
+    } else {
+      console.error(`Invalid ref for nav: ${nav}`);
+    }
   };
   return (
     <ThemeProvider theme={theme}>
       <Globalstyle />
-      <Nav navClick={navClick} navPages={navPages} />
+      <Nav navClick={navClick} />
       <Main ref={mainRef} />
-      <div style={{ height: "100vh", width: "100%" }}>끝~!</div>
+      <AboutMe ref={aboutRef} />
     </ThemeProvider>
   );
 };

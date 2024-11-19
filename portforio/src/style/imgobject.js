@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 export const Img = styled(motion.div)`
   position: absolute;
   background-image: url(${process.env.PUBLIC_URL}/${(props) => props.bgImg});
+  top: ${(props) => props.top || "0"};
   left: ${(props) => props.left || "0"};
   width: ${(props) => props.width || "100%"};
   height: ${(props) => props.height || "100%"};

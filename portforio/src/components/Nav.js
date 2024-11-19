@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -12,30 +12,31 @@ const Wrap = styled.ul`
   display: flex;
   justify-content: end;
   gap: 20px;
-  padding: 10px;
+  padding: 14px;
   font-family: ${(props) => props.theme.font.title};
   color: ${({ theme }) => theme.color.white};
   -webkit-text-stroke: 1px ${({ theme }) => theme.color.darkGreen};
   font-size: 1.4rem;
 `;
-const NavItem = styled.li``;
 
-const Nav = (navClick) => {
-  console.log(navClick);
+const NavItem = styled.li`
+  cursor: pointer;
+  transition: scale 0.3s;
+  &:hover {
+    scale: 1.2;
+  }
+`;
+
+const Nav = ({ navClick }) => {
+  const navList = ["Main", "AboutMe", "Skill", "Project", "Art"];
   return (
     <Wrapper>
       <Wrap>
-        <NavItem
-          onClick={() => {
-            navClick(Main);
-          }}
-        >
-          Main
-        </NavItem>
-        <NavItem>AboutMe</NavItem>
-        <NavItem>Skill</NavItem>
-        <NavItem>Project</NavItem>
-        <NavItem>Art</NavItem>
+        {navList.map((it, idx) => (
+          <NavItem key={idx} onClick={() => navClick(it)}>
+            {it}
+          </NavItem>
+        ))}
       </Wrap>
     </Wrapper>
   );

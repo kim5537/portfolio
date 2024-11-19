@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, forwardRef } from "react";
 import styled from "styled-components";
 import { Img } from "../style/imgobject";
 import {
@@ -76,6 +76,9 @@ const Cat = styled.div`
     width: auto;
     height: 138%;
     object-fit: cover;
+    &:nth-child(2) {
+      transform-origin: 65% 70%;
+    }
   }
   & > div {
     img {
@@ -85,22 +88,25 @@ const Cat = styled.div`
       width: auto;
       height: 138%;
       object-fit: cover;
+      &:nth-child(1) {
+        transform-origin: 34% 20%;
+      }
     }
   }
 `;
 
-const Main = (ref) => {
-  const { scrollYProgress } = useScroll();
-  const mainRef = useRef();
+const Main = forwardRef(function Main(props, ref) {
+  const { scrollYProgress, scrollY } = useScroll();
 
   const [isVisible, setIsVisible] = useState(true);
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (latest === 1) {
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    if (latest >= 8000) {
       setIsVisible(false);
     } else {
       setIsVisible(true);
     }
+    console.log(latest);
   });
 
   // const scaleCloud = useTransform(scrollYProgress, [0.4, 1], [1, 1.1]);
@@ -112,7 +118,7 @@ const Main = (ref) => {
   const scaleCat = useTransform(scrollYProgress, [0, 1], [1, 1.8]);
   const parX01 = useTransform(scrollYProgress, [0, 1], [50, -20]);
   return (
-    <Container isVisible={isVisible} ref={ref}>
+    <Container isVisible={isVisible} ref={ref} id="main">
       <ImgWrap>
         <Base>
           <Back>
@@ -152,7 +158,7 @@ const Main = (ref) => {
             <Img
               bgImg={`mainImg/back05.png`}
               animate={{
-                translateY: [-140, -120, -100, -110, -140],
+                translateY: [-140, -90, -100, -110, -120],
               }}
               transition={{
                 duration: 18,
@@ -178,6 +184,13 @@ const Main = (ref) => {
             <Img bgImg={`mainImg/obj01.png`} />
             <Img bgImg={`mainImg/obj02.png`} />
             <Img bgImg={`mainImg/obj03.png`} />
+            <Img
+              bgImg={`mainImg/obj05.png`}
+              top={"-10px"}
+              animate={{ rotate: [2, -1, 0, -1, 2] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              stylePlus={`transform-origin: 60%  0%`}
+            />
           </Back>
         </Base>
       </ImgWrap>
@@ -208,9 +221,17 @@ const Main = (ref) => {
           <CatWrap style={{ scale: scaleCat, x: parX01 }}>
             <Cat alt="cat">
               <img src={`mainImg/cat00.png`} />
-              <img src={`mainImg/cat01.png`} />
+              <motion.img
+                src={`mainImg/cat01.png`}
+                animate={{ rotate: [12, 0, -1, 12] }}
+                transition={{ duration: 3, repeat: Infinity }}
+              />
               <div>
-                <img src={`mainImg/cat02.png`} />
+                <motion.img
+                  src={`mainImg/cat02.png`}
+                  animate={{ rotate: [12, 1, 24, 4, 10, 12] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                />
                 <img src={`mainImg/cat03.png`} />
               </div>
             </Cat>
@@ -230,6 +251,6 @@ const Main = (ref) => {
       />
     </Container>
   );
-};
+});
 
 export default Main;
