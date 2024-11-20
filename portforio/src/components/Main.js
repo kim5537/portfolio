@@ -45,10 +45,6 @@ const Back = styled(motion.div)`
   width: 100%;
   height: 100%;
   overflow: hidden;
-  /* @media (max-width: 900px) {
-    width: 50%;
-    height: 50%;
-  } */
 `;
 
 const Man = styled(motion.div)`
@@ -153,9 +149,9 @@ const Main = forwardRef(function Main(props, ref) {
       <ImgWrap>
         <Base>
           <Back>
-            <Img bgImg={`mainImg/back01.png`} />
+            <Img bgimg={`mainImg/back01.png`} />
             <Img
-              bgImg={`mainImg/back02.png`}
+              bgimg={`mainImg/back02.png`}
               animate={{
                 translateY: [-12, 18, -3, 20, -12],
               }}
@@ -164,7 +160,7 @@ const Main = forwardRef(function Main(props, ref) {
               left={"-3vw"}
             />
             <Img
-              bgImg={`mainImg/back03.png`}
+              bgimg={`mainImg/back03.png`}
               animate={{
                 translateY: [0, 27, 3, 0, -20, 0],
               }}
@@ -176,7 +172,7 @@ const Main = forwardRef(function Main(props, ref) {
               left={0}
             />
             <Img
-              bgImg={`mainImg/back04.png`}
+              bgimg={`mainImg/back04.png`}
               animate={{
                 translateY: [-10, 0, 2, -10, 2, -10],
               }}
@@ -187,7 +183,7 @@ const Main = forwardRef(function Main(props, ref) {
               stylePlus={`transform: translatey(-40px)`}
             />
             <Img
-              bgImg={`mainImg/back05.png`}
+              bgimg={`mainImg/back05.png`}
               animate={{
                 translateY: [-140, -90, -100, -110, -120],
               }}
@@ -197,7 +193,7 @@ const Main = forwardRef(function Main(props, ref) {
               }}
             />
             <Img
-              bgImg={`mainImg/back06.png`}
+              bgimg={`mainImg/back06.png`}
               animate={{ translateY: [-40, -30, -24, -18, -40] }}
               transition={{
                 duration: 18,
@@ -210,17 +206,21 @@ const Main = forwardRef(function Main(props, ref) {
       <ImgWrap>
         <Base>
           <Back style={{ scale: scaleBack }}>
-            <Img bgImg={`mainImg/back00.png`} top={0} left={0}></Img>
-            <Img bgImg={`mainImg/obj00.png`} />
-            <Img bgImg={`mainImg/obj01.png`} />
-            <Img bgImg={`mainImg/obj02.png`} />
-            <Img bgImg={`mainImg/obj03.png`} />
+            <Img bgimg={`mainImg/back00.png`} top={0} left={0}></Img>
+            <Img bgimg={`mainImg/obj00.png`} />
+            <Img bgimg={`mainImg/obj01.png`} />
+            <Img bgimg={`mainImg/obj02.png`} />
+            <Img bgimg={`mainImg/obj03.png`} />
             <Img
-              bgImg={`mainImg/obj05.png`}
+              bgimg={`mainImg/obj05.png`}
               top={"-10px"}
               animate={{ rotate: [2, -1, 0, -1, 2] }}
               transition={{ duration: 2, repeat: Infinity }}
               stylePlus={`transform-origin: 60%  0%`}
+            />
+            <Img
+              bgimg={`mainImg/back07.png`}
+              media="top: auto; bottom: 0; height: 70vh;"
             />
           </Back>
         </Base>
