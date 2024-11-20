@@ -1,16 +1,19 @@
 import React, { forwardRef } from "react";
 import styled from "styled-components";
-import { motion, transform, useInView } from "framer-motion";
-import { ReactComponent as Light } from "../style/light.svg";
-import lighitem from "../style/lightitem.svg";
+import {
+  motion,
+  useInView,
+  useMotionValueEvent,
+  useScroll,
+} from "framer-motion";
 import LightSvg from "../style/LightSvg";
 
 const Wrapper = styled.div`
   width: 100vw;
   max-width: 100%;
-  height: 2400px;
+  height: 3400px;
   background-image: url(${process.env.PUBLIC_URL}/aboutImg/back00.png);
-  padding-top: 1000px;
+  padding-top: 2000px;
 `;
 
 const MainItem = styled.main`
@@ -44,8 +47,19 @@ const TextWrap = styled.div`
   color: ${({ theme }) => theme.color.white};
 `;
 
+const WhitePage = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  max-width: 100%;
+  height: 3400px;
+  background-color: aliceblue;
+`;
+
 const AboutMe = forwardRef(function AboutMe(props, ref) {
   const isInView = useInView(ref, { once: true });
+  const { scrollY } = useScroll();
 
   const svgAni = {
     start: { pathLength: 0 },

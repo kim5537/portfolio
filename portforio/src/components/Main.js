@@ -13,7 +13,7 @@ import Scolle from "./Scolle";
 const Container = styled.div`
   width: 100vw;
   max-width: 100%;
-  height: 2000px;
+  height: 4000px;
   overflow: hidden;
   opacity: ${(props) => (props.isVisible ? 1 : 0)};
 `;
@@ -30,24 +30,35 @@ const Base = styled.div`
   height: 100%;
   position: relative;
   overflow: hidden;
+  @media (max-width: 900px) {
+    height: 100vh;
+  }
 `;
 
 const WhitePaper = styled(motion.div)`
   position: fixed;
   width: 100vw;
-  height: 100vh;
-  background-color: #fff;
+  height: 120vh;
 `;
 
 const Back = styled(motion.div)`
   width: 100%;
   height: 100%;
   overflow: hidden;
+  /* @media (max-width: 900px) {
+    width: 50%;
+    height: 50%;
+  } */
 `;
 
 const Man = styled(motion.div)`
   width: 100%;
   height: 100%;
+  @media (max-width: 900px) {
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+  }
   img {
     position: absolute;
     left: -4vw;
@@ -60,6 +71,11 @@ const Man = styled(motion.div)`
     &:nth-child(4) {
       transform-origin: 29% 17%;
     }
+    @media (max-width: 900px) {
+      height: auto;
+      width: 90vw;
+      bottom: 0;
+    }
   }
 `;
 
@@ -69,6 +85,11 @@ const CatWrap = styled(motion.div)`
 `;
 
 const Cat = styled.div`
+  @media (max-width: 900px) {
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+  }
   & > img {
     position: absolute;
     right: -2vw;
@@ -78,6 +99,11 @@ const Cat = styled.div`
     object-fit: cover;
     &:nth-child(2) {
       transform-origin: 65% 70%;
+    }
+    @media (max-width: 900px) {
+      height: auto;
+      width: 90vw;
+      bottom: 0;
     }
   }
   & > div {
@@ -91,6 +117,11 @@ const Cat = styled.div`
       &:nth-child(1) {
         transform-origin: 34% 20%;
       }
+      @media (max-width: 900px) {
+        height: auto;
+        width: 90vw;
+        bottom: 0;
+      }
     }
   }
 `;
@@ -101,7 +132,7 @@ const Main = forwardRef(function Main(props, ref) {
   const [isVisible, setIsVisible] = useState(true);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    if (latest >= 2000) {
+    if (latest >= 4000) {
       setIsVisible(false);
     } else {
       setIsVisible(true);
@@ -241,11 +272,11 @@ const Main = forwardRef(function Main(props, ref) {
       <Scolle />
       <WhitePaper
         style={{
-          opacity: useTransform(scrollYProgress, [0, 1], [0, 1]),
+          opacity: useTransform(scrollYProgress, [0.4, 1], [0, 1]),
           backgroundColor: useTransform(
             scrollYProgress,
-            [0.3, 1],
-            ["#fff", "#C8BA7B"]
+            [0, 1],
+            ["#fff", "#fff"]
           ),
         }}
       />

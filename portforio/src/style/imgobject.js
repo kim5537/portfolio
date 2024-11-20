@@ -11,5 +11,7 @@ export const Img = styled(motion.div)`
   background-position: top center;
   background-repeat: no-repeat;
   background-size: ${(props) => props.size || "cover"};
-  ${(props) => props.stylePlus}/* transform:  rotateX('angle'); */
+  ${(props) => props.stylePlus};
+  @media (max-width: 900px) {
+  }
 `;

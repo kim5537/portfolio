@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import theme from "./style/theme";
-import Main from "./components/Main";
 import Nav from "./components/Nav";
+import Main from "./components/Main";
 import Test from "./components/Test";
 import AboutMe from "./components/AboutMe";
 

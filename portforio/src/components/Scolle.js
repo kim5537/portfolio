@@ -19,6 +19,10 @@ const Wrap = styled(motion.div)`
 const ImgWrap = styled(motion.div)`
   width: 13vw;
   height: 13vw;
+  @media (max-width: 900px) {
+    width: 40vw;
+    height: 40vw;
+  }
 `;
 
 const CurcleText = styled(motion.div)`
@@ -34,6 +38,10 @@ const Text = styled.div`
   color: ${(props) => props.theme.color.white};
   -webkit-text-stroke: 2px ${(props) => props.theme.color.mainDark};
   margin-top: 16px;
+  @media (max-width: 900px) {
+    font-size: 1rem;
+    -webkit-text-stroke: 1px ${(props) => props.theme.color.mainDark};
+  }
 `;
 
 const Scolle = () => {
