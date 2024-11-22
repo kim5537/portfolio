@@ -5,6 +5,8 @@ import Nav from "./components/Nav";
 import Main from "./components/Main";
 import Test from "./components/Test";
 import AboutMe from "./components/AboutMe";
+import Section from "./components/Section";
+import AboutMe2 from "./components/AboutMe2";
 
 const Globalstyle = createGlobalStyle`
   @font-face {
@@ -57,9 +59,11 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Globalstyle />
+      <Section />
       <Nav navClick={navClick} />
       <Main ref={mainRef} />
       <AboutMe ref={aboutRef} />
+      <AboutMe2 />
     </ThemeProvider>
   );
 };

@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState, forwardRef } from "react";
 import styled from "styled-components";
 import { Img } from "../style/imgobject";
 import {
-  delay,
   motion,
   useMotionValueEvent,
   useScroll,
@@ -33,12 +32,6 @@ const Base = styled.div`
   @media (max-width: 900px) {
     height: 100vh;
   }
-`;
-
-const WhitePaper = styled(motion.div)`
-  position: fixed;
-  width: 100vw;
-  height: 120vh;
 `;
 
 const Back = styled(motion.div)`
@@ -133,7 +126,6 @@ const Main = forwardRef(function Main(props, ref) {
     } else {
       setIsVisible(true);
     }
-    console.log(latest);
   });
 
   // const scaleCloud = useTransform(scrollYProgress, [0.4, 1], [1, 1.1]);
@@ -270,16 +262,6 @@ const Main = forwardRef(function Main(props, ref) {
         </Base>
       </ImgWrap>
       <Scolle />
-      <WhitePaper
-        style={{
-          opacity: useTransform(scrollYProgress, [0.4, 1], [0, 1]),
-          backgroundColor: useTransform(
-            scrollYProgress,
-            [0, 1],
-            ["#fff", "#fff"]
-          ),
-        }}
-      />
     </Container>
   );
 });

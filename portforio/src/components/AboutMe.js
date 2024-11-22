@@ -1,19 +1,15 @@
 import React, { forwardRef } from "react";
 import styled from "styled-components";
-import {
-  motion,
-  useInView,
-  useMotionValueEvent,
-  useScroll,
-} from "framer-motion";
+import { motion, useInView, useScroll } from "framer-motion";
 import LightSvg from "../style/LightSvg";
+import { Img } from "../style/imgobject";
 
 const Wrapper = styled.div`
   width: 100vw;
   max-width: 100%;
-  height: 3400px;
+  height: 2600px;
   background-image: url(${process.env.PUBLIC_URL}/aboutImg/back00.png);
-  padding-top: 2000px;
+  padding-top: 1200px;
 `;
 
 const MainItem = styled.main`
@@ -47,19 +43,9 @@ const TextWrap = styled.div`
   color: ${({ theme }) => theme.color.white};
 `;
 
-const WhitePage = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  max-width: 100%;
-  height: 3400px;
-  background-color: aliceblue;
-`;
-
 const AboutMe = forwardRef(function AboutMe(props, ref) {
   const isInView = useInView(ref, { once: true });
-  const { scrollY } = useScroll();
+  const { scrollYProgress } = useScroll();
 
   const svgAni = {
     start: { pathLength: 0 },
@@ -69,8 +55,11 @@ const AboutMe = forwardRef(function AboutMe(props, ref) {
   return (
     <Wrapper>
       <MainItem ref={ref}>
-        <ImgWrap isInView={isInView}>
+        {/* <ImgWrap isInView={isInView}>
           <LightSvg />
+        </ImgWrap> */}
+        <ImgWrap>
+          <Img bgimg={`aboutImg/mockLight.png`} />
         </ImgWrap>
         <TextWrap isInView={isInView}>
           <div>웹사이트를 드로잉하는 Front End!</div>
