@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
 import { motion } from "framer-motion";
+import { style } from "framer-motion/client";
 
 export const Img = styled(motion.div)`
   position: absolute;
@@ -11,7 +12,7 @@ export const Img = styled(motion.div)`
   background-position: top center;
   background-repeat: no-repeat;
   background-size: ${(props) => props.size || "cover"};
-  ${(props) => props.stylePlus};
+  ${(props) => props.styleplus};
   @media (max-width: 900px) {
     ${(props) =>
       props.media &&
@@ -19,4 +20,9 @@ export const Img = styled(motion.div)`
         ${props.media}
       `};
   }
+`;
+
+export const Inner = styled.div`
+  width: 1200px;
+  margin: 0 auto;
 `;

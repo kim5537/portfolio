@@ -14,7 +14,7 @@ const Container = styled.div`
   max-width: 100%;
   height: 4000px;
   overflow: hidden;
-  opacity: ${(props) => (props.isVisible ? 1 : 0)};
+  opacity: ${(props) => (props.isvisible ? 1 : 0)};
 `;
 
 const ImgWrap = styled.div`
@@ -118,7 +118,7 @@ const Cat = styled.div`
 const Main = forwardRef(function Main(props, ref) {
   const { scrollYProgress, scrollY } = useScroll();
 
-  const [isVisible, setIsVisible] = useState(true);
+  const [isvisible, setIsVisible] = useState(true);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     if (latest >= 4000) {
@@ -137,7 +137,7 @@ const Main = forwardRef(function Main(props, ref) {
   const scaleCat = useTransform(scrollYProgress, [0, 1], [1, 1.8]);
   const parX01 = useTransform(scrollYProgress, [0, 1], [50, -20]);
   return (
-    <Container isVisible={isVisible} ref={ref} id="main">
+    <Container isvisible={isvisible} ref={ref} id="main">
       <ImgWrap>
         <Base>
           <Back>
@@ -172,7 +172,7 @@ const Main = forwardRef(function Main(props, ref) {
                 duration: 18,
                 repeat: Infinity,
               }}
-              stylePlus={`transform: translatey(-40px)`}
+              styleplus={`transform: translatey(-40px)`}
             />
             <Img
               bgimg={`mainImg/back05.png`}
@@ -208,7 +208,7 @@ const Main = forwardRef(function Main(props, ref) {
               top={"-10px"}
               animate={{ rotate: [2, -1, 0, -1, 2] }}
               transition={{ duration: 2, repeat: Infinity }}
-              stylePlus={`transform-origin: 60%  0%`}
+              styleplus={`transform-origin: 60%  0%`}
             />
             <Img
               bgimg={`mainImg/back07.png`}

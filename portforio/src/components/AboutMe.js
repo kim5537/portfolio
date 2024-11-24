@@ -7,19 +7,17 @@ import { Img } from "../style/imgobject";
 const Wrapper = styled.div`
   width: 100vw;
   max-width: 100%;
-  height: 2600px;
+  height: 2000px;
   background-image: url(${process.env.PUBLIC_URL}/aboutImg/back00.png);
-  padding-top: 1200px;
+  padding-top: 1000px;
+  overflow: hidden;
 `;
 
 const MainItem = styled.main`
-  border: 1px solid;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* transition: all 0.9s;
-  opacity: ${(props) => (props.isInView ? 1 : 0)}; */
 `;
 
 const ImgWrap = styled.div`
@@ -44,7 +42,7 @@ const TextWrap = styled.div`
 `;
 
 const AboutMe = forwardRef(function AboutMe(props, ref) {
-  const isInView = useInView(ref, { once: true });
+  const isvisible = useInView(ref, { once: true });
   const { scrollYProgress } = useScroll();
 
   const svgAni = {
@@ -61,7 +59,7 @@ const AboutMe = forwardRef(function AboutMe(props, ref) {
         <ImgWrap>
           <Img bgimg={`aboutImg/mockLight.png`} />
         </ImgWrap>
-        <TextWrap isInView={isInView}>
+        <TextWrap isvisible={isvisible}>
           <div>웹사이트를 드로잉하는 Front End!</div>
           <div>긍정적인 소통과 열린 사고로</div>
           <div>팀에 기여하는 열정있는</div>
