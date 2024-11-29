@@ -6,9 +6,10 @@ import { thead } from "framer-motion/client";
 const Container = styled.div`
   width: 100vw;
   max-width: 100%;
-  height: 1010px;
+  height: 1200px;
   background-image: url(${process.env.PUBLIC_URL}/aboutImg/back00.png);
   padding-top: 40px;
+  border: 1px solid orange;
 `;
 
 const BackImgWrap = styled.div`
@@ -18,53 +19,109 @@ const BackImgWrap = styled.div`
   margin: 0 auto;
   transform: translate(32%, 0%);
   overflow: hidden;
+  @media screen and (max-width: 1000px) {
+    width: calc(100% - 30vw);
+    margin: 0 20% 0 24%;
+    transform: translate(10%, 0%);
+  }
 `;
 
 const ContentWarp = styled.div`
   position: relative;
-  top: 30px;
-  width: 1000px;
-  height: 600px;
-  display: flex;
   margin: 0 auto;
+  top: 30px;
+  width: 1080px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: #00000060;
+  @media screen and (max-width: 1000px) {
+    width: 100%;
+    padding: 0 10px;
+  }
 `;
 
 const Content = styled.div`
   position: absolute;
   display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   gap: 60px;
   top: -280px;
+  border: 1px solid blue;
+  @media screen and (max-width: 1000px) {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    top: -500px;
+    padding: 0 20px;
+  }
 `;
 
 const Left = styled.div`
-  height: 100%;
+  height: 600px;
+  width: 420px;
   display: flex;
+  justify-content: center;
   gap: 10px;
+  border: 1px solid #f00;
+  @media screen and (max-width: 1000px) {
+    height: 100%;
+    width: 100%;
+  }
 `;
 
 const Text = styled.h2`
   font-family: ${({ theme }) => theme.font.title};
   writing-mode: vertical-lr;
   height: 100%;
-  -webkit-text-stroke: 1px ${({ theme }) => theme.color.mainDark};
+  -webkit-text-stroke: 2px ${({ theme }) => theme.color.mainDark};
   p:nth-child(1) {
     color: ${({ theme }) => theme.color.darkGreen};
+    position: relative;
+    &::before {
+      position: absolute;
+      content: "샘솟는 창의력을 가진";
+      z-index: 1;
+      color: ${({ theme }) => theme.color.darkGreen};
+      -webkit-text-stroke: 0px;
+    }
   }
   p:nth-child(2) {
+    position: relative;
     color: ${({ theme }) => theme.color.white};
     text-indent: 1%;
+    &::before {
+      content: "드로잉 가능한 개발자 김령희 입니다.";
+      position: absolute;
+      height: 100%;
+      top: 0%;
+      z-index: 1;
+      color: ${({ theme }) => theme.color.white};
+      -webkit-text-stroke: 0px;
+    }
+  }
+  @media screen and (max-width: 1000px) {
+    height: auto;
+    font-size: 16px;
   }
 `;
 
 const Box = styled.div`
-  width: 400px;
-  height: 600px;
-  margin-top: 40px;
+  width: 100%;
+  height: 100%;
   background-color: ${({ theme }) => theme.color.white};
   border: 1px solid ${(props) => props.theme.color.mainDark};
   border-radius: 40px;
   overflow: hidden;
   position: relative;
+  @media screen and (max-width: 1000px) {
+    width: 300px;
+    height: 400px;
+    margin: 0 auto;
+    margin: 0px 6px;
+  }
 `;
 
 const Right = styled.div`
@@ -73,18 +130,41 @@ const Right = styled.div`
   flex-direction: column;
   gap: 10px;
   align-items: end;
+  @media screen and (max-width: 1000px) {
+    margin-top: 0px;
+    width: 100%;
+    align-items: center;
+  }
+  & > div {
+    width: 100%;
+    border: 1px solid purple;
+  }
+`;
+
+const Wap1 = styled.div`
+  width: 400px;
+`;
+const Wap2 = styled.div`
+  width: 80%;
+`;
+const Wap3 = styled.div`
+  width: 80%;
+`;
+const Wap4 = styled.div`
+  width: 80%;
+  display: flex;
+  justify-content: end;
 `;
 
 const Box2 = styled.div`
+  position: relative;
   width: 580px;
   height: 170px;
   background-color: ${({ theme }) => theme.color.white};
   border: 1px solid ${(props) => props.theme.color.mainDark};
   border-radius: 30px;
   text-align: center;
-  gap: 10px;
   padding: 20px;
-  position: relative;
   h3 {
     font-family: ${({ theme }) => theme.font.title};
     color: ${({ theme }) => theme.color.mainDark};
@@ -119,6 +199,19 @@ const Box2 = styled.div`
     border-bottom: 20px solid transparent;
     border-left: 30px solid transparent;
   }
+
+  @media screen and (max-width: 1000px) {
+    width: 340px;
+    margin: 0 auto;
+    height: 130px;
+    &::before {
+      content: "";
+      display: none;
+    }
+    &::after {
+      display: none;
+    }
+  }
 `;
 
 const Box3 = styled.div`
@@ -135,14 +228,24 @@ const Box3 = styled.div`
     font-family: ${({ theme }) => theme.font.title};
     color: ${(props) => props.theme.color.green};
   }
+  @media screen and (max-width: 1000px) {
+    width: 200px;
+    height: 40px;
+  }
 `;
 
 const AboutMe2 = () => {
   return (
     <Container>
       <BackImgWrap>
-        <Img bgimg={`aboutImg/sky.png`} />
-        <Img bgimg={`aboutImg/Window.png`} />
+        <Img
+          bgimg={`aboutImg/sky.png`}
+          media="top:4px; height: 100%; background-size:contain "
+        />
+        <Img
+          bgimg={`aboutImg/Window.png`}
+          media="top: auto; bottom: 0; height: 100%; background-size:contain"
+        />
       </BackImgWrap>
       <ContentWarp>
         <Content>
@@ -156,32 +259,41 @@ const AboutMe2 = () => {
                 bgimg={`aboutImg/character.png`}
                 width={`300px`}
                 height={`480px`}
-                left={`12%`}
+                left={`8%`}
                 top={`auto`}
                 styleplus={`bottom: 0;`}
+                media="width: 100% ; height: 100%; background-size:contain; bottom: -10% ; left: 50% ; transform:translateX(-50%)"
               />
             </Box>
           </Left>
           <Right>
-            <Box2>
-              <h3>만화 컨텐츠과 졸업</h3>
-              <p>세종시 홍보 만화 수상</p>
-              <p>후원 사이트 텀블벅에서 웹툰 소재 판매</p>
-            </Box2>
-            <Box2>
-              <h3>웹툰 에이전시 회사 경력</h3>
-              <p>3D 프로그램 sketchUP을 활용한 </p>
-              <p>웹툰 배경, 소품 제작 및 배경 배치</p>
-            </Box2>
-            <Box2>
-              <h3>K-Digital Traning (KDT)</h3>
-              <br />
-              <p>기업 연계 프론트엔드 개발 과정 수료</p>
-            </Box2>
-            <Box3>
-              <h3>1996.07.04</h3>
-              <h3>010-5685-7063</h3>
-            </Box3>
+            <Wap1>
+              <Box2>
+                <h3>만화 컨텐츠과 졸업</h3>
+                <p>세종시 홍보 만화 수상</p>
+                <p>후원 사이트 텀블벅에서 웹툰 소재 판매 성공</p>
+              </Box2>
+            </Wap1>
+            <Wap2>
+              <Box2>
+                <h3>웹툰 에이전시 회사 경력</h3>
+                <p>3D 프로그램 sketchUP을 활용한 </p>
+                <p>웹툰 배경, 소품 제작 및 배경 배치</p>
+              </Box2>
+            </Wap2>
+            <Wap3>
+              <Box2>
+                <h3>K-Digital Traning (KDT)</h3>
+                <br />
+                <p>기업 연계 프론트엔드 개발 과정 수료</p>
+              </Box2>
+            </Wap3>
+            <Wap4>
+              <Box3>
+                <h3>1996.07.04</h3>
+                <h3>010-5685-7063</h3>
+              </Box3>
+            </Wap4>
           </Right>
         </Content>
       </ContentWarp>

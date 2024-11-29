@@ -13,7 +13,7 @@ export const Img = styled(motion.div)`
   background-repeat: no-repeat;
   background-size: ${(props) => props.size || "cover"};
   ${(props) => props.styleplus};
-  @media (max-width: 900px) {
+  @media (max-width: 1000px) {
     ${(props) =>
       props.media &&
       css`

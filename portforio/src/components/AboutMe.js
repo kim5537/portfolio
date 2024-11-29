@@ -1,6 +1,11 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useState } from "react";
 import styled from "styled-components";
-import { motion, useInView, useScroll } from "framer-motion";
+import {
+  motion,
+  useInView,
+  useMotionValueEvent,
+  useScroll,
+} from "framer-motion";
 import LightSvg from "../style/LightSvg";
 import { Img } from "../style/imgobject";
 
@@ -43,7 +48,11 @@ const TextWrap = styled.div`
 
 const AboutMe = forwardRef(function AboutMe(props, ref) {
   const isvisible = useInView(ref, { once: true });
-  const { scrollYProgress } = useScroll();
+  const { scrollYProgress, scrollY } = useScroll();
+
+  useMotionValueEvent(scrollYProgress, "change", (current) => {
+    // console.log(scrollY.current);
+  });
 
   const svgAni = {
     start: { pathLength: 0 },
@@ -59,7 +68,7 @@ const AboutMe = forwardRef(function AboutMe(props, ref) {
         <ImgWrap>
           <Img bgimg={`aboutImg/mockLight.png`} />
         </ImgWrap>
-        <TextWrap isvisible={isvisible}>
+        <TextWrap isvisible={isvisible ? "visible" : "hidden"}>
           <div>웹사이트를 드로잉하는 Front End!</div>
           <div>긍정적인 소통과 열린 사고로</div>
           <div>팀에 기여하는 열정있는</div>

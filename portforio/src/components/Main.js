@@ -14,7 +14,7 @@ const Container = styled.div`
   max-width: 100%;
   height: 4000px;
   overflow: hidden;
-  opacity: ${(props) => (props.isvisible ? 1 : 0)};
+  opacity: ${(props) => (props.isvisible === "block" ? 1 : 0)};
 `;
 
 const ImgWrap = styled.div`
@@ -118,13 +118,13 @@ const Cat = styled.div`
 const Main = forwardRef(function Main(props, ref) {
   const { scrollYProgress, scrollY } = useScroll();
 
-  const [isvisible, setIsVisible] = useState(true);
+  const [isvisible, setIsVisible] = useState("block");
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     if (latest >= 4000) {
-      setIsVisible(false);
+      setIsVisible("hidden");
     } else {
-      setIsVisible(true);
+      setIsVisible("block");
     }
   });
 

@@ -30,17 +30,23 @@ const CurcleText = styled(motion.div)`
   height: 100%;
   background: center/contain
     url(${process.env.PUBLIC_URL}/mainImg/curveText.png) no-repeat;
+  position: relative;
 `;
 
 const Text = styled.div`
   font-size: 2rem;
   font-family: ${(props) => props.theme.font.title};
   color: ${(props) => props.theme.color.white};
-  -webkit-text-stroke: 2px ${(props) => props.theme.color.mainDark};
+  -webkit-text-stroke: 3px ${(props) => props.theme.color.mainDark};
   margin-top: 16px;
   @media (max-width: 900px) {
     font-size: 1rem;
-    -webkit-text-stroke: 1px ${(props) => props.theme.color.mainDark};
+    -webkit-text-stroke: 2px ${(props) => props.theme.color.mainDark};
+  }
+  &::before {
+    position: absolute;
+    content: "모든 그림 소재는 전부 직접 드로잉한 소재입니다!";
+    -webkit-text-stroke: 0px;
   }
 `;
 
