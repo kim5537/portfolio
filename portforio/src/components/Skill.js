@@ -14,7 +14,15 @@ const Container = styled.div`
   max-width: 100%;
   height: 3000px;
   position: relative;
+`;
+
+const BackScroll = styled(motion.div)`
+  position: absolute;
+  width: 100vw;
+  max-width: 100%;
+  height: calc(100% + 1200px);
   background-image: url(${process.env.PUBLIC_URL}/skill/back01.png);
+  border: 1px solid #000;
 `;
 
 const TopImgWrap = styled.div`
@@ -28,21 +36,22 @@ const TopImgWrap = styled.div`
 `;
 
 const Wrap = styled(motion.div)`
-  height: 100vh;
+  height: 100%;
   width: 100%;
   top: 0;
-  border: 1px solid #f0f;
   /* position: ${(props) => (props.isfixed ? "fixed" : "static")};
    */
-  position: fixed;
-  background-image: url(${process.env.PUBLIC_URL}/skill/back01.png);
+  /* position: absolute; */
+  position: relative;
+  /* background-color: aliceblue; */
 `;
 
-const ContantWapper = styled.div`
+const ContantWapper = styled(motion.div)`
   width: 100%;
-  height: 100%;
-  position: relative;
-  padding-top: 200px;
+  height: 100vh;
+  position: absolute;
+  /* padding-top: 200px; */
+  border: 1px solid orange;
 `;
 
 const Leaf01 = styled(motion.div)`
@@ -95,11 +104,21 @@ const Title = styled.h1`
   -webkit-text-stroke: 1px ${({ theme }) => theme.color.darkGreen};
   position: relative;
   p {
-    font-size: 18px;
+    font-size: 24px;
     position: relative;
-    -webkit-text-stroke: 4px ${({ theme }) => theme.color.darkGreen};
+
     &::before {
+      /* content: ""; */
       content: "화면에 생명을 불어넣는 Code Skill";
+      font-size: 22px;
+      position: absolute;
+      top: 0;
+      -webkit-text-stroke: 4px ${({ theme }) => theme.color.darkGreen};
+    }
+    &::after {
+      /* content: ""; */
+      content: "화면에 생명을 불어넣는 Code Skill";
+      font-size: 22px;
       position: absolute;
       top: 0;
       -webkit-text-stroke: 0px;
@@ -186,7 +205,12 @@ const Skill = forwardRef(function Skill(props, ref) {
   const fixRef = useRef(null);
 
   const { scrollY } = useScroll();
-  const scrollYProgress = useTransform(scrollY, [6600, 8000], [0, 1]);
+  // const { scrollYProgress } = useScroll({
+  //   target: fixRef,
+  //   offset: ["start start", "end end"], // 컴포넌트 시작~끝에 대응
+  // });
+
+  const scrollYProgress = useTransform(scrollY, [7600, 9000], [0, 1]);
 
   // 스크롤에 따라 움직임 값 정의
   const xTransform = useSpring(
@@ -196,15 +220,10 @@ const Skill = forwardRef(function Skill(props, ref) {
       damping: 20,
     }
   );
-  const leafTransform = useSpring(
-    useTransform(scrollYProgress, [0, 1], ["-200px", "0px"]),
-    { stiffness: 50, damping: 20 }
-  );
-
-  // const { scrollYProgress } = useScroll({
-  //   target: ref,
-  //   offset: ["start start", "end end"], // 컴포넌트 시작~끝에 대응
-  // });
+  // const leafTransform = useSpring(
+  //   useTransform(scrollYProgress, [0, 1], ["-200px", "0px"]),
+  //   { stiffness: 50, damping: 20 }
+  // );
 
   // const ScrollLeaf0 = useTransform(scrollY, [6600, 8000], ["-20vh", "4vh"]);
   // const ScrollLeaf1 = useTransform(scrollY, [7000, 8500], ["-14vh", "20vh"]);
@@ -212,38 +231,56 @@ const Skill = forwardRef(function Skill(props, ref) {
   // const ScrollTrain = useTransform(scrollY, [6800, 8500], ["100vw", "0vw"]);
   const ScrollTrainX = useTransform(scrollYProgress, [0, 1], ["100vw", "0vw"]);
   const ScrollLeaf0 = useTransform(scrollYProgress, [0, 1], ["100px", "0px"]);
-  const ScrollLeaf1 = useTransform(scrollYProgress, [0, 1], ["200px", "-10px"]);
+  const ScrollLeaf1 = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ["-200px", "-10px"]
+  );
   const ScrollLeaf2 = useTransform(scrollYProgress, [0, 1], ["10px", "-300px"]);
   // useEffect(() => {
-  //   const handleScroll = (latest) => {
-  //     if (latest >= 0 && latest < 0.9) {
-  //       setIsFixed(true); // 화면 고정
-  //     } else {
-  //       setIsFixed(false); // 화면 고정 해제
-  //     }
-  //   };
+  // const handleScroll = (latest) => {
+  //   if (latest >= 0 && latest < 0.9) {
+  //     setIsFixed(true); // 화면 고정
+  //   } else {
+  //     setIsFixed(false); // 화면 고정 해제
+  //   }
+  // };
 
-  //   const unsubscribe = scrollY.onChange(handleScroll);
-  //   return () => unsubscribe();
+  // const unsubscribe = scrollY.onChange(handleScroll);
+  // return () => unsubscribe();
   // }, [scrollYProgress]);
 
   useMotionValueEvent(scrollYProgress, "change", (prev) => {
     console.log(scrollYProgress.current);
-    if (prev > 0 && prev < 1) {
-      setIsFixed(true); // 화면 고정
-    } else {
-      setIsFixed(false); // 화면 고정 해제
-    }
+    // if (prev > 0 && prev < 1) {
+    //   setIsFixed(true); // 화면 고정
+    // } else {
+    //   setIsFixed(false); // 화면 고정 해제
+    // }
   });
 
   return (
     <Container ref={ref}>
-      <TopImgWrap />
-      <Wrap
-        //  isfixed={isfixed}
-        style={{ y: useTransform(scrollYProgress, [0, 1], ["0px", "-100vh"]) }}
+      <BackScroll
+        style={{
+          top: useTransform(scrollYProgress, [0, 1], ["-10vh", "100vh"]),
+        }}
       >
-        <ContantWapper>
+        <TopImgWrap />
+      </BackScroll>
+
+      <Wrap
+      // isfixed={isfixed}
+      >
+        <ContantWapper
+          style={{
+            top: useTransform(
+              scrollYProgress,
+              [0, 0.2, 1],
+              ["-10vh", "-10vh", "100vh"]
+            ),
+          }}
+        >
           <Leaf01 alt="leaf" style={{ y: ScrollLeaf0 }} />
           <Leaf02 alt="leaf" style={{ y: ScrollLeaf1 }} />
           <Leaf03 alt="leaf" style={{ y: ScrollLeaf2 }} />
@@ -251,7 +288,7 @@ const Skill = forwardRef(function Skill(props, ref) {
             <Inner>
               <Wrapper>
                 <Title>
-                  SKILL<p>화면에 생명을 불어넣는 Code Skill</p>
+                  SKILL<p></p>
                 </Title>
               </Wrapper>
             </Inner>
