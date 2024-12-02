@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { Img } from "../style/imgobject";
-import { thead } from "framer-motion/client";
+import { motion, useInView, useMotionValueEvent } from "framer-motion";
 
 const Container = styled.div`
   width: 100vw;
@@ -9,7 +9,6 @@ const Container = styled.div`
   height: 1200px;
   background-image: url(${process.env.PUBLIC_URL}/aboutImg/back00.png);
   padding-top: 40px;
-  border: 1px solid orange;
 `;
 
 const BackImgWrap = styled.div`
@@ -34,7 +33,6 @@ const ContentWarp = styled.div`
   height: 100%;
   display: flex;
   justify-content: center;
-  background-color: #00000060;
   @media screen and (max-width: 1000px) {
     width: 100%;
     padding: 0 10px;
@@ -49,7 +47,6 @@ const Content = styled.div`
   align-items: center;
   gap: 60px;
   top: -280px;
-  border: 1px solid blue;
   @media screen and (max-width: 1000px) {
     flex-direction: column;
     gap: 10px;
@@ -65,7 +62,6 @@ const Left = styled.div`
   display: flex;
   justify-content: center;
   gap: 10px;
-  border: 1px solid #f00;
   @media screen and (max-width: 1000px) {
     height: 100%;
     width: 100%;
@@ -137,11 +133,10 @@ const Right = styled.div`
   }
   & > div {
     width: 100%;
-    border: 1px solid purple;
   }
 `;
 
-const Wap1 = styled.div`
+const Wap1 = styled(motion.div)`
   width: 400px;
 `;
 const Wap2 = styled.div`
@@ -235,6 +230,13 @@ const Box3 = styled.div`
 `;
 
 const AboutMe2 = () => {
+  const wapRef = useRef(null);
+  const wapRef2 = useRef(null);
+  const wapRef3 = useRef(null);
+  const wapRef4 = useRef(null);
+
+  const wapView = useInView(wapRef, { once: true });
+
   return (
     <Container>
       <BackImgWrap>
@@ -248,7 +250,7 @@ const AboutMe2 = () => {
         />
       </BackImgWrap>
       <ContentWarp>
-        <Content>
+        <Content ref={wapRef}>
           <Left>
             <Text>
               <p>샘솟는 창의력을 가진 </p>
@@ -267,28 +269,57 @@ const AboutMe2 = () => {
             </Box>
           </Left>
           <Right>
-            <Wap1>
+            <Wap1
+              style={
+                {
+                  // transform: wapView ? "none" : "translateY(200px)",
+                  // opacity: wapView ? 1 : 0,
+                  // transition: `all 1s 0.5s`,
+                }
+              }
+            >
               <Box2>
                 <h3>만화 컨텐츠과 졸업</h3>
                 <p>세종시 홍보 만화 수상</p>
                 <p>후원 사이트 텀블벅에서 웹툰 소재 판매 성공</p>
               </Box2>
             </Wap1>
-            <Wap2>
+            <Wap2
+              ref={wapRef2}
+              style={{
+                transform: wapView ? "none" : "translateY(200px)",
+                opacity: wapView ? 1 : 0,
+                transition: `all 1s 1.5s`,
+              }}
+            >
               <Box2>
                 <h3>웹툰 에이전시 회사 경력</h3>
                 <p>3D 프로그램 sketchUP을 활용한 </p>
                 <p>웹툰 배경, 소품 제작 및 배경 배치</p>
               </Box2>
             </Wap2>
-            <Wap3>
+            <Wap3
+              ref={wapRef3}
+              style={{
+                transform: wapView ? "none" : "translateY(200px)",
+                opacity: wapView ? 1 : 0,
+                transition: `all 1s 2.5s`,
+              }}
+            >
               <Box2>
                 <h3>K-Digital Traning (KDT)</h3>
                 <br />
                 <p>기업 연계 프론트엔드 개발 과정 수료</p>
               </Box2>
             </Wap3>
-            <Wap4>
+            <Wap4
+              ref={wapRef4}
+              style={{
+                transform: wapView ? "none" : "translateX(-200px)",
+                opacity: wapView ? 1 : 0,
+                transition: `all 1s 3.5s`,
+              }}
+            >
               <Box3>
                 <h3>1996.07.04</h3>
                 <h3>010-5685-7063</h3>

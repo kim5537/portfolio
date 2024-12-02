@@ -1,6 +1,5 @@
 import styled, { css } from "styled-components";
 import { motion } from "framer-motion";
-import { style } from "framer-motion/client";
 
 export const Img = styled(motion.div)`
   position: absolute;

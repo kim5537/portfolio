@@ -1,21 +1,23 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Inner } from "../style/imgobject";
+import {
+  useMotionValueEvent,
+  useScroll,
+  motion,
+  useTransform,
+  useSpring,
+} from "framer-motion";
 
-const Wapper = styled.div`
+const Container = styled.div`
   width: 100vw;
   max-width: 100%;
-  height: 2700px;
+  height: 3000px;
   position: relative;
   background-image: url(${process.env.PUBLIC_URL}/skill/back01.png);
-  padding-top: 1600px;
-  overflow: hidden;
 `;
 
 const TopImgWrap = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100vw;
   max-width: 100%;
   height: 1200px;
@@ -25,37 +27,59 @@ const TopImgWrap = styled.div`
   background-size: cover;
 `;
 
-const Leaf01 = styled.div`
+const Wrap = styled(motion.div)`
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  border: 1px solid #f0f;
+  /* position: ${(props) => (props.isfixed ? "fixed" : "static")};
+   */
+  position: fixed;
+  background-image: url(${process.env.PUBLIC_URL}/skill/back01.png);
+`;
+
+const ContantWapper = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding-top: 200px;
+`;
+
+const Leaf01 = styled(motion.div)`
   position: absolute;
-  width: 14vw;
+  width: 18vw;
   max-width: 800px;
   height: 1000px;
   background: center top/contain url(${process.env.PUBLIC_URL}/Skill/leaf01.png)
     no-repeat;
   right: 0;
-  top: 800px;
+  top: 0;
 `;
-const Leaf02 = styled.div`
+const Leaf02 = styled(motion.div)`
   position: absolute;
-  width: 18vw;
+  width: 23vw;
   max-width: 800px;
   height: 1000px;
   background: center top/contain url(${process.env.PUBLIC_URL}/Skill/leaf02.png)
     no-repeat;
-  right: 10px;
-  top: 900px;
-  transform: rotate(14deg);
+  right: 0px;
+  top: 0;
 `;
 
-const Leaf03 = styled.div`
+const Leaf03 = styled(motion.div)`
   position: absolute;
-  width: 16vw;
+  width: 22vw;
   max-width: 800px;
   height: 1000px;
   background: center top/contain url(${process.env.PUBLIC_URL}/Skill/leaf04.png)
     no-repeat;
   left: 0px;
-  top: 1200px;
+  top: 0;
+`;
+
+const TopScroll = styled(motion.div)`
+  position: absolute;
+  height: 100%;
 `;
 
 const Wrapper = styled.div`
@@ -73,6 +97,13 @@ const Title = styled.h1`
   p {
     font-size: 18px;
     position: relative;
+    -webkit-text-stroke: 4px ${({ theme }) => theme.color.darkGreen};
+    &::before {
+      content: "화면에 생명을 불어넣는 Code Skill";
+      position: absolute;
+      top: 0;
+      -webkit-text-stroke: 0px;
+    }
   }
 `;
 
@@ -81,14 +112,19 @@ const SkillWrap = styled.div`
   width: 100vw;
   max-width: 100%;
   height: 530px;
+  border: 1px solid #f00;
 `;
 
 const TrainWrap = styled.div`
   width: 1200px;
   height: 100%;
+  margin: 0 auto;
+`;
+
+const TrainMotion = styled(motion.div)`
+  position: absolute;
   display: flex;
   gap: 12px;
-  margin: 0 auto;
 `;
 
 const Train = styled.div`
@@ -145,159 +181,267 @@ const Rail = styled.div`
 `;
 
 const Skill = forwardRef(function Skill(props, ref) {
+  const [isfixed, setIsFixed] = useState(false);
+  // const { scrollY } = useScroll();
+  const fixRef = useRef(null);
+
+  const { scrollY } = useScroll();
+  const scrollYProgress = useTransform(scrollY, [6600, 8000], [0, 1]);
+
+  // 스크롤에 따라 움직임 값 정의
+  const xTransform = useSpring(
+    useTransform(scrollYProgress, [0, 1], ["100vw", "-100vw"]),
+    {
+      stiffness: 50,
+      damping: 20,
+    }
+  );
+  const leafTransform = useSpring(
+    useTransform(scrollYProgress, [0, 1], ["-200px", "0px"]),
+    { stiffness: 50, damping: 20 }
+  );
+
+  // const { scrollYProgress } = useScroll({
+  //   target: ref,
+  //   offset: ["start start", "end end"], // 컴포넌트 시작~끝에 대응
+  // });
+
+  // const ScrollLeaf0 = useTransform(scrollY, [6600, 8000], ["-20vh", "4vh"]);
+  // const ScrollLeaf1 = useTransform(scrollY, [7000, 8500], ["-14vh", "20vh"]);
+  // const ScrollLeaf2 = useTransform(scrollY, [7900, 8900], ["-20vh", "20vh"]);
+  // const ScrollTrain = useTransform(scrollY, [6800, 8500], ["100vw", "0vw"]);
+  const ScrollTrainX = useTransform(scrollYProgress, [0, 1], ["100vw", "0vw"]);
+  const ScrollLeaf0 = useTransform(scrollYProgress, [0, 1], ["100px", "0px"]);
+  const ScrollLeaf1 = useTransform(scrollYProgress, [0, 1], ["200px", "-10px"]);
+  const ScrollLeaf2 = useTransform(scrollYProgress, [0, 1], ["10px", "-300px"]);
+  // useEffect(() => {
+  //   const handleScroll = (latest) => {
+  //     if (latest >= 0 && latest < 0.9) {
+  //       setIsFixed(true); // 화면 고정
+  //     } else {
+  //       setIsFixed(false); // 화면 고정 해제
+  //     }
+  //   };
+
+  //   const unsubscribe = scrollY.onChange(handleScroll);
+  //   return () => unsubscribe();
+  // }, [scrollYProgress]);
+
+  useMotionValueEvent(scrollYProgress, "change", (prev) => {
+    console.log(scrollYProgress.current);
+    if (prev > 0 && prev < 1) {
+      setIsFixed(true); // 화면 고정
+    } else {
+      setIsFixed(false); // 화면 고정 해제
+    }
+  });
+
   return (
-    <Wapper>
-      <Inner>
-        <TopImgWrap />
-        <Leaf01 />
-        <Leaf02 />
-        <Leaf03 />
-        <Wrapper ref={ref}>
-          <Title>
-            SKILL<p>정적인 화면에 생명을 불어넣는 Code Skill</p>
-          </Title>
-        </Wrapper>
-      </Inner>
-      <SkillWrap>
-        <Rail />
-        <TrainWrap>
-          <Train>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_001.png`} />
-              </div>
-              <div>HTML</div>
-            </Part>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_002.png`} />
-              </div>
-              <div>CSS</div>
-            </Part>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_003.png`} />
-              </div>
-              <div>Java Script</div>
-            </Part>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_004.png`} />
-              </div>
-              <div>SCSS</div>
-            </Part>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_005.png`} />
-              </div>
-              <div style={{ fontSize: " 18px" }}>styled-Components</div>
-            </Part>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_006.png`} />
-              </div>
-              <div>TailWindcss</div>
-            </Part>
-          </Train>
-          <Train>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_007.png`} />
-              </div>
-              <div>Apollo</div>
-            </Part>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_008.png`} />
-              </div>
-              <div>FireBase</div>
-            </Part>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_009.png`} />
-              </div>
-              <div>Netlify</div>
-            </Part>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_010.png`} />
-              </div>
-              <div>GraphQL</div>
-            </Part>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_018.png`} />
-              </div>
-              <div>Node.js</div>
-            </Part>
-          </Train>
-          <Train>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_015.png`} />
-              </div>
-              <div>React</div>
-            </Part>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_011.png`} />
-              </div>
-              <div style={{ fontSize: " 18px" }}>Framer-motion</div>
-            </Part>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_012.png`} />
-              </div>
-              <div>Recoil</div>
-            </Part>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_013.png`} />
-              </div>
-              <div style={{ fontSize: " 18px" }}>Redux,Redux-thunk</div>
-            </Part>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_014.png`} />
-              </div>
-              <div>ReactQL</div>
-            </Part>
-          </Train>
-          <Train>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_016.png`} />
-              </div>
-              <div>TypeScript</div>
-            </Part>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_018.png`} />
-              </div>
-              <div>Next,js</div>
-            </Part>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_019.png`} />
-              </div>
-              <div>Github</div>
-            </Part>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_020.png`} />
-              </div>
-              <div>Clip Studio</div>
-            </Part>
-            <Part>
-              <div>
-                <img src={`${process.env.PUBLIC_URL}/skill/icon_021.png`} />
-              </div>
-              <div>SkechUP</div>
-            </Part>
-          </Train>
-        </TrainWrap>
-      </SkillWrap>
-    </Wapper>
+    <Container ref={ref}>
+      <TopImgWrap />
+      <Wrap
+        //  isfixed={isfixed}
+        style={{ y: useTransform(scrollYProgress, [0, 1], ["0px", "-100vh"]) }}
+      >
+        <ContantWapper>
+          <Leaf01 alt="leaf" style={{ y: ScrollLeaf0 }} />
+          <Leaf02 alt="leaf" style={{ y: ScrollLeaf1 }} />
+          <Leaf03 alt="leaf" style={{ y: ScrollLeaf2 }} />
+          <TopScroll>
+            <Inner>
+              <Wrapper>
+                <Title>
+                  SKILL<p>화면에 생명을 불어넣는 Code Skill</p>
+                </Title>
+              </Wrapper>
+            </Inner>
+            <SkillWrap>
+              <Rail />
+              <TrainWrap>
+                <TrainMotion alt="train" style={{ x: ScrollTrainX }}>
+                  <Train>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_001.png`}
+                        />
+                      </div>
+                      <div>HTML</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_002.png`}
+                        />
+                      </div>
+                      <div>CSS</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_003.png`}
+                        />
+                      </div>
+                      <div>Java Script</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_004.png`}
+                        />
+                      </div>
+                      <div>SCSS</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_005.png`}
+                        />
+                      </div>
+                      <div style={{ fontSize: " 18px" }}>styled-Components</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_006.png`}
+                        />
+                      </div>
+                      <div>TailWindcss</div>
+                    </Part>
+                  </Train>
+                  <Train>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_007.png`}
+                        />
+                      </div>
+                      <div>Apollo</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_008.png`}
+                        />
+                      </div>
+                      <div>FireBase</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_009.png`}
+                        />
+                      </div>
+                      <div>Netlify</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_010.png`}
+                        />
+                      </div>
+                      <div>GraphQL</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_018.png`}
+                        />
+                      </div>
+                      <div>Node.js</div>
+                    </Part>
+                  </Train>
+                  <Train>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_015.png`}
+                        />
+                      </div>
+                      <div>React</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_011.png`}
+                        />
+                      </div>
+                      <div style={{ fontSize: " 18px" }}>Framer-motion</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_012.png`}
+                        />
+                      </div>
+                      <div>Recoil</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_013.png`}
+                        />
+                      </div>
+                      <div style={{ fontSize: " 18px" }}>Redux,Redux-thunk</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_014.png`}
+                        />
+                      </div>
+                      <div>ReactQL</div>
+                    </Part>
+                  </Train>
+                  <Train>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_016.png`}
+                        />
+                      </div>
+                      <div>TypeScript</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_018.png`}
+                        />
+                      </div>
+                      <div>Next,js</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_019.png`}
+                        />
+                      </div>
+                      <div>Github</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_020.png`}
+                        />
+                      </div>
+                      <div>Clip Studio</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          src={`${process.env.PUBLIC_URL}/skill/icon_021.png`}
+                        />
+                      </div>
+                      <div>SkechUP</div>
+                    </Part>
+                  </Train>
+                </TrainMotion>
+              </TrainWrap>
+            </SkillWrap>
+          </TopScroll>
+        </ContantWapper>
+      </Wrap>
+    </Container>
   );
 });
 
