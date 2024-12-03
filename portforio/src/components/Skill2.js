@@ -1,7 +1,12 @@
-import React, { forwardRef, useRef } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Inner } from "../style/imgobject";
-import { useScroll, motion, useMotionValueEvent } from "framer-motion";
+import {
+  useScroll,
+  motion,
+  useMotionValueEvent,
+  useTransform,
+} from "framer-motion";
 
 //기준점
 
@@ -10,6 +15,7 @@ const Container = styled.div`
   max-width: 100%;
   height: 5000px;
   position: relative;
+  border: 1px solid #f09;
 `;
 
 const TopLeaf = styled.div`
@@ -27,7 +33,7 @@ const TargetWrap = styled.div`
   position: relative;
 `;
 
-const Wrap = styled(motion.div)`
+const MotionWrap = styled(motion.div)`
   height: calc(100vh + 300px);
   width: 100vw;
   max-width: 100%;
@@ -35,6 +41,8 @@ const Wrap = styled(motion.div)`
   position: absolute;
   border: 1px solid dodgerblue;
   background: center top/cover url(${process.env.PUBLIC_URL}/skill/back01.png);
+  /* top: 0; */
+  /* top: ; */
 `;
 
 const WrapInner = styled.div`
@@ -121,8 +129,20 @@ const SkillWrap = styled.div`
   width: 100vw;
   max-width: 100%;
   height: 530px;
+  margin-top: 30vh;
 `;
 
+const Rail = styled.div`
+  position: absolute;
+  width: 100vw;
+  height: 130px;
+  background: center/cover url(${process.env.PUBLIC_URL}/Skill/train.png)
+    no-repeat;
+  margin-top: 400px;
+  bottom: -80px;
+`;
+
+//임시 트레인 랩
 const TrainWrap = styled.div`
   width: 1200px;
   height: 100%;
@@ -177,46 +197,57 @@ const Part = styled.div`
   }
 `;
 
-const Rail = styled.div`
-  position: absolute;
-  width: 100vw;
-  height: 130px;
-  background: center/cover url(${process.env.PUBLIC_URL}/Skill/train.png)
-    no-repeat;
-  margin-top: 400px;
-  bottom: 0;
-`;
-
 const Skill = forwardRef(function Skill(props, ref) {
   const targetRef = useRef();
   const { scrollY } = useScroll();
+  const [bottom, setBottom] = useState();
   const { scrollYProgress } = useScroll({
     target: targetRef,
     offset: ["start start", "end end"],
   });
 
+  // useEffect(() => {
+  //   // setHeight(window.innerHeight);
+
+  //   const bottomMath = () => {
+  //     let scrollYNum = window.scrollY;
+  //     let documentHeight = document.body.scrollHeight - window.innerHeight;
+  //     setBottom(documentHeight - scrollYNum);
+  //     console.log("bottom", bottom);
+  //   };
+  //   bottomMath();
+  // }, [scrollYProgress]);
+
   useMotionValueEvent(scrollYProgress, "change", () => {
     console.log(scrollYProgress.current);
+    let scrollYNum = window.scrollY;
+    let documentHeight = document.body.scrollHeight;
+    setBottom(scrollY.current - window.innerHeight);
+    console.log("bottom", bottom);
   });
 
   return (
     <Container ref={ref}>
       <TopLeaf />
       <TargetWrap ref={targetRef}>
-        <Wrap>
+        <MotionWrap
+        // style={{
+        //   y: useTransform(scrollYProgress, [0, 1], ["4357px", "9000px"]),
+        // }}
+        >
           <WrapInner>
             <ContantWapper>
               <Leaf01 alt="leaf" />
               <Leaf02 alt="leaf" />
               <Leaf03 alt="leaf" />
-              <Inner>
-                <Wrapper>
-                  <Title>
-                    SKILL<p></p>
-                  </Title>
-                </Wrapper>
-              </Inner>
               <SkillWrap>
+                <Inner>
+                  <Wrapper>
+                    <Title>
+                      SKILL<p></p>
+                    </Title>
+                  </Wrapper>
+                </Inner>
                 <Rail />
                 <TrainWrap>
                   <TrainMotion>
@@ -405,7 +436,7 @@ const Skill = forwardRef(function Skill(props, ref) {
               </SkillWrap>
             </ContantWapper>
           </WrapInner>
-        </Wrap>
+        </MotionWrap>
       </TargetWrap>
     </Container>
   );
