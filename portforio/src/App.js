@@ -7,7 +7,7 @@ import Test from "./components/Test";
 import AboutMe from "./components/AboutMe";
 import Section from "./components/Section";
 import AboutMe2 from "./components/AboutMe2";
-import Skill from "./components/Skill";
+import Skill2 from "./components/Skill2";
 import Project from "./components/Project";
 
 const Globalstyle = createGlobalStyle`
@@ -119,7 +119,7 @@ const App = () => {
         <Main ref={mainRef} />
         <AboutMe ref={aboutRef} />
         <AboutMe2 />
-        <Skill ref={skillRef} />
+        <Skill2 ref={skillRef} />
         <Section01>
           <TreeBack>
             <img src={`${process.env.PUBLIC_URL}/section/back00.png`} />

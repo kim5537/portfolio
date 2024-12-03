@@ -22,7 +22,6 @@ const BackScroll = styled(motion.div)`
   max-width: 100%;
   height: calc(100% + 1200px);
   background-image: url(${process.env.PUBLIC_URL}/skill/back01.png);
-  border: 1px solid #000;
 `;
 
 const TopImgWrap = styled.div`
@@ -200,26 +199,10 @@ const Rail = styled.div`
 `;
 
 const Skill = forwardRef(function Skill(props, ref) {
-  const [isfixed, setIsFixed] = useState(false);
-  // const { scrollY } = useScroll();
-  const fixRef = useRef(null);
-
   const { scrollY } = useScroll();
-  // const { scrollYProgress } = useScroll({
-  //   target: fixRef,
-  //   offset: ["start start", "end end"], // 컴포넌트 시작~끝에 대응
-  // });
 
   const scrollYProgress = useTransform(scrollY, [7600, 9000], [0, 1]);
 
-  // 스크롤에 따라 움직임 값 정의
-  const xTransform = useSpring(
-    useTransform(scrollYProgress, [0, 1], ["100vw", "-100vw"]),
-    {
-      stiffness: 50,
-      damping: 20,
-    }
-  );
   // const leafTransform = useSpring(
   //   useTransform(scrollYProgress, [0, 1], ["-200px", "0px"]),
   //   { stiffness: 50, damping: 20 }
@@ -237,47 +220,23 @@ const Skill = forwardRef(function Skill(props, ref) {
     ["-200px", "-10px"]
   );
   const ScrollLeaf2 = useTransform(scrollYProgress, [0, 1], ["10px", "-300px"]);
-  // useEffect(() => {
-  // const handleScroll = (latest) => {
-  //   if (latest >= 0 && latest < 0.9) {
-  //     setIsFixed(true); // 화면 고정
-  //   } else {
-  //     setIsFixed(false); // 화면 고정 해제
-  //   }
-  // };
-
-  // const unsubscribe = scrollY.onChange(handleScroll);
-  // return () => unsubscribe();
-  // }, [scrollYProgress]);
-
   useMotionValueEvent(scrollYProgress, "change", (prev) => {
     console.log(scrollYProgress.current);
-    // if (prev > 0 && prev < 1) {
-    //   setIsFixed(true); // 화면 고정
-    // } else {
-    //   setIsFixed(false); // 화면 고정 해제
-    // }
   });
 
   return (
     <Container ref={ref}>
-      <BackScroll
-        style={{
-          top: useTransform(scrollYProgress, [0, 1], ["-10vh", "100vh"]),
-        }}
-      >
+      <BackScroll>
         <TopImgWrap />
       </BackScroll>
 
-      <Wrap
-      // isfixed={isfixed}
-      >
+      <Wrap>
         <ContantWapper
           style={{
-            top: useTransform(
+            y: useTransform(
               scrollYProgress,
               [0, 0.2, 1],
-              ["-10vh", "-10vh", "100vh"]
+              ["-100px", "-100px", "600px"]
             ),
           }}
         >
@@ -483,3 +442,5 @@ const Skill = forwardRef(function Skill(props, ref) {
 });
 
 export default Skill;
+
+/// 잎 밑에 부분에 위쪽에 스크롤이 걸리면 배경 + 전철이 같이 움직이고 이 크기는 100vh를 가지면 사실 배경+ 전철이 같이 움직이는데 유저입장에선 멈춰있게 보이지 않을까?

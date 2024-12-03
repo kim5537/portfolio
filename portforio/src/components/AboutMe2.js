@@ -128,7 +128,8 @@ const Right = styled.div`
   align-items: end;
   @media screen and (max-width: 1000px) {
     margin-top: 0px;
-    width: 100%;
+    /* width: 100%; */
+    width: 340px;
     align-items: center;
   }
   & > div {
@@ -149,6 +150,9 @@ const Wap4 = styled.div`
   width: 80%;
   display: flex;
   justify-content: end;
+  @media screen and (max-width: 1000px) {
+    width: 340px;
+  }
 `;
 
 const Box2 = styled.div`
@@ -199,6 +203,16 @@ const Box2 = styled.div`
     width: 340px;
     margin: 0 auto;
     height: 130px;
+    h3 {
+      font-size: 1.3rem;
+      margin-bottom: 6px;
+    }
+    p {
+      font-size: 1rem;
+    }
+    br {
+      display: none;
+    }
     &::before {
       content: "";
       display: none;
@@ -225,7 +239,12 @@ const Box3 = styled.div`
   }
   @media screen and (max-width: 1000px) {
     width: 200px;
-    height: 40px;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    h3 {
+      font-size: 18px;
+    }
   }
 `;
 
@@ -270,13 +289,11 @@ const AboutMe2 = () => {
           </Left>
           <Right>
             <Wap1
-              style={
-                {
-                  // transform: wapView ? "none" : "translateY(200px)",
-                  // opacity: wapView ? 1 : 0,
-                  // transition: `all 1s 0.5s`,
-                }
-              }
+              style={{
+                transform: wapView ? "none" : "translateY(200px)",
+                opacity: wapView ? 1 : 0,
+                transition: `all 1s 0.5s`,
+              }}
             >
               <Box2>
                 <h3>만화 컨텐츠과 졸업</h3>
@@ -289,7 +306,7 @@ const AboutMe2 = () => {
               style={{
                 transform: wapView ? "none" : "translateY(200px)",
                 opacity: wapView ? 1 : 0,
-                transition: `all 1s 1.5s`,
+                transition: `all 1s 1s`,
               }}
             >
               <Box2>
@@ -303,7 +320,7 @@ const AboutMe2 = () => {
               style={{
                 transform: wapView ? "none" : "translateY(200px)",
                 opacity: wapView ? 1 : 0,
-                transition: `all 1s 2.5s`,
+                transition: `all 1s 1.5s`,
               }}
             >
               <Box2>
@@ -317,7 +334,7 @@ const AboutMe2 = () => {
               style={{
                 transform: wapView ? "none" : "translateX(-200px)",
                 opacity: wapView ? 1 : 0,
-                transition: `all 1s 3.5s`,
+                transition: `all 1s 2s`,
               }}
             >
               <Box3>
