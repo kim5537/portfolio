@@ -15,7 +15,6 @@ const Container = styled.div`
   max-width: 100%;
   height: 5000px;
   position: relative;
-  border: 1px solid #f09;
 `;
 
 const TopLeaf = styled.div`
@@ -27,22 +26,19 @@ const TopLeaf = styled.div`
 `;
 
 const TargetWrap = styled.div`
-  width: 100%;
   height: calc(100% - 1100px);
-  background: url(${process.env.PUBLIC_URL}/skill/back01.png);
+  width: 100%;
   position: relative;
+  background: center top/cover url(${process.env.PUBLIC_URL}/skill/back01.png);
 `;
 
 const MotionWrap = styled(motion.div)`
-  height: calc(100vh + 300px);
+  height: 100vh;
   width: 100vw;
   max-width: 100%;
-  top: 0;
-  position: absolute;
-  border: 1px solid dodgerblue;
+  ${(props) => props.istop}
+  position: ${(props) => props.fixed};
   background: center top/cover url(${process.env.PUBLIC_URL}/skill/back01.png);
-  /* top: 0; */
-  /* top: ; */
 `;
 
 const WrapInner = styled.div`
@@ -142,12 +138,12 @@ const Rail = styled.div`
   bottom: -80px;
 `;
 
-//임시 트레인 랩
-const TrainWrap = styled.div`
-  width: 1200px;
-  height: 100%;
-  margin: 0 auto;
-`;
+// //임시 트레인 랩
+// const TrainWrap = styled.div`
+//   width: 1200px;
+//   height: 100%;
+//   margin: 0 auto;
+// `;
 
 const TrainMotion = styled(motion.div)`
   position: absolute;
@@ -156,16 +152,25 @@ const TrainMotion = styled(motion.div)`
 `;
 
 const Train = styled.div`
+  width: 100%;
+  height: 440px;
   position: relative;
+  display: flex;
+  border: 1px solid #f00;
+  margin: 0 auto;
+`;
+
+const PartWrap = styled(motion.div)`
   width: 300px;
   height: 440px;
-  background-color: ${({ theme }) => theme.color.white};
-  border-radius: 18px;
+  padding: 30px 13px;
+  position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 8px;
-  padding: 30px 13px;
-  justify-content: space-around;
+  border-radius: 18px;
+  background-color: ${({ theme }) => theme.color.white};
 `;
 
 const Part = styled.div`
@@ -196,50 +201,112 @@ const Part = styled.div`
     margin: auto;
   }
 `;
+// useEffect(() => {
+//   scrollY.on("change", () => {
+//     if (scrollY.get() >= targetY.top && scrollY.get() < targetY.bottom) {
+//       setFixed(true); // 화면 고정
+//     } else {
+//       setFixed(false); // 화면 고정 해제
+//     }
+//     console.log(fixed);
+//     console.log(scrollY.get(), targetY);
+//   });
+// }, [scrollYProgress]);
 
 const Skill = forwardRef(function Skill(props, ref) {
   const targetRef = useRef();
+  const moveRef = useRef();
+  const [targetY, setTargetY] = useState({});
   const { scrollY } = useScroll();
-  const [bottom, setBottom] = useState();
+  const [fixed, setFixed] = useState("absolute");
+  const [istop, setIstop] = useState("top : 0 ; bottom : auto ;");
   const { scrollYProgress } = useScroll({
-    target: targetRef,
+    target: ref,
     offset: ["start start", "end end"],
   });
 
-  // useEffect(() => {
-  //   // setHeight(window.innerHeight);
+  const checkY = () => {
+    const rect = targetRef.current.getBoundingClientRect();
+    const move = moveRef.current.getBoundingClientRect();
+    const yTop = rect.top + window.scrollY;
+    const yBottom = rect.bottom + window.scrollY - move.height;
+    setTargetY({ top: yTop, bottom: yBottom });
+  };
 
-  //   const bottomMath = () => {
-  //     let scrollYNum = window.scrollY;
-  //     let documentHeight = document.body.scrollHeight - window.innerHeight;
-  //     setBottom(documentHeight - scrollYNum);
-  //     console.log("bottom", bottom);
-  //   };
-  //   bottomMath();
-  // }, [scrollYProgress]);
+  useEffect(() => {
+    checkY();
+    window.addEventListener("scroll", checkY);
+    console.log("킴");
+    return () => {
+      window.removeEventListener("scroll", checkY);
+      console.log("끔");
+    };
+  }, []);
 
-  useMotionValueEvent(scrollYProgress, "change", () => {
-    console.log(scrollYProgress.current);
-    let scrollYNum = window.scrollY;
-    let documentHeight = document.body.scrollHeight;
-    setBottom(scrollY.current - window.innerHeight);
-    console.log("bottom", bottom);
+  useEffect(() => {
+    checkY();
+  }, [scrollY.current]);
+
+  const veriants = useTransform(
+    scrollYProgress,
+    [0, 0.35, 0.7, 1],
+    [0, 10, 0, 10]
+  );
+  const veriants2 = useTransform(
+    scrollYProgress,
+    [0, 0.35, 0.7, 1],
+    [80, 0, 80, 0]
+  );
+
+  useMotionValueEvent(scrollY, "change", () => {
+    if (scrollY.get() >= targetY.top && scrollY.get() < targetY.bottom) {
+      setFixed("fixed"); // 화면 고정
+    } else {
+      setFixed("absolute"); // 화면 고정 해제
+    }
+
+    if (scrollY.get() > targetY.bottom) {
+      setIstop("top : auto ; bottom : 0 ;");
+    } else {
+      setIstop("top : 0 ; bottom : auto ;");
+    }
   });
 
   return (
     <Container ref={ref}>
       <TopLeaf />
       <TargetWrap ref={targetRef}>
-        <MotionWrap
-        // style={{
-        //   y: useTransform(scrollYProgress, [0, 1], ["4357px", "9000px"]),
-        // }}
-        >
+        <MotionWrap ref={moveRef} fixed={fixed} istop={istop}>
           <WrapInner>
             <ContantWapper>
-              <Leaf01 alt="leaf" />
-              <Leaf02 alt="leaf" />
-              <Leaf03 alt="leaf" />
+              <Leaf01
+                alt="leaf"
+                style={{
+                  bottom: 0,
+                  top: "auto",
+                  y: useTransform(scrollYProgress, [0, 1], ["100px", "200px"]),
+                }}
+              />
+              <Leaf02
+                alt="leaf"
+                style={{
+                  bottom: 0,
+                  top: "auto",
+                  y: useTransform(scrollYProgress, [0.3, 1], ["20px", "180px"]),
+                }}
+              />
+              <Leaf03
+                alt="leaf"
+                style={{
+                  bottom: 0,
+                  top: "auto",
+                  y: useTransform(
+                    scrollYProgress,
+                    [0.2, 0.8],
+                    ["100px", "230px"]
+                  ),
+                }}
+              />
               <SkillWrap>
                 <Inner>
                   <Wrapper>
@@ -249,12 +316,19 @@ const Skill = forwardRef(function Skill(props, ref) {
                   </Wrapper>
                 </Inner>
                 <Rail />
-                <TrainWrap>
-                  <TrainMotion>
-                    <Train>
+                <TrainMotion
+                // style={{
+                //   bottom: 0,
+                //   top: "auto",
+                //   x: useTransform(scrollYProgress, [0, 1], ["60vw", "0vw"]),
+                // }}
+                >
+                  <Train>
+                    <PartWrap>
                       <Part>
                         <div>
                           <img
+                            alt="train01-HTML"
                             src={`${process.env.PUBLIC_URL}/skill/icon_001.png`}
                           />
                         </div>
@@ -263,6 +337,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                       <Part>
                         <div>
                           <img
+                            alt="train01-css"
                             src={`${process.env.PUBLIC_URL}/skill/icon_002.png`}
                           />
                         </div>
@@ -271,6 +346,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                       <Part>
                         <div>
                           <img
+                            alt="train01-js"
                             src={`${process.env.PUBLIC_URL}/skill/icon_003.png`}
                           />
                         </div>
@@ -279,6 +355,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                       <Part>
                         <div>
                           <img
+                            alt="train01-scss"
                             src={`${process.env.PUBLIC_URL}/skill/icon_004.png`}
                           />
                         </div>
@@ -287,6 +364,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                       <Part>
                         <div>
                           <img
+                            alt="train01-styledcomponent"
                             src={`${process.env.PUBLIC_URL}/skill/icon_005.png`}
                           />
                         </div>
@@ -297,16 +375,18 @@ const Skill = forwardRef(function Skill(props, ref) {
                       <Part>
                         <div>
                           <img
+                            alt="train01-TailWindcss"
                             src={`${process.env.PUBLIC_URL}/skill/icon_006.png`}
                           />
                         </div>
                         <div>TailWindcss</div>
                       </Part>
-                    </Train>
-                    <Train>
+                    </PartWrap>
+                    <PartWrap>
                       <Part>
                         <div>
                           <img
+                            alt="train02-Apollo"
                             src={`${process.env.PUBLIC_URL}/skill/icon_007.png`}
                           />
                         </div>
@@ -315,6 +395,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                       <Part>
                         <div>
                           <img
+                            alt="train02-FireBase"
                             src={`${process.env.PUBLIC_URL}/skill/icon_008.png`}
                           />
                         </div>
@@ -323,6 +404,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                       <Part>
                         <div>
                           <img
+                            alt="train02-Netlify"
                             src={`${process.env.PUBLIC_URL}/skill/icon_009.png`}
                           />
                         </div>
@@ -331,6 +413,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                       <Part>
                         <div>
                           <img
+                            alt="train02-GraphQL"
                             src={`${process.env.PUBLIC_URL}/skill/icon_010.png`}
                           />
                         </div>
@@ -339,16 +422,18 @@ const Skill = forwardRef(function Skill(props, ref) {
                       <Part>
                         <div>
                           <img
+                            alt="train02-Node.js"
                             src={`${process.env.PUBLIC_URL}/skill/icon_018.png`}
                           />
                         </div>
                         <div>Node.js</div>
                       </Part>
-                    </Train>
-                    <Train>
+                    </PartWrap>
+                    <PartWrap>
                       <Part>
                         <div>
                           <img
+                            alt="train03-React"
                             src={`${process.env.PUBLIC_URL}/skill/icon_015.png`}
                           />
                         </div>
@@ -357,6 +442,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                       <Part>
                         <div>
                           <img
+                            alt="train03-Framer-motion"
                             src={`${process.env.PUBLIC_URL}/skill/icon_011.png`}
                           />
                         </div>
@@ -365,6 +451,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                       <Part>
                         <div>
                           <img
+                            alt="train03-Recoil"
                             src={`${process.env.PUBLIC_URL}/skill/icon_012.png`}
                           />
                         </div>
@@ -373,6 +460,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                       <Part>
                         <div>
                           <img
+                            alt="train03-Redux"
                             src={`${process.env.PUBLIC_URL}/skill/icon_013.png`}
                           />
                         </div>
@@ -383,16 +471,18 @@ const Skill = forwardRef(function Skill(props, ref) {
                       <Part>
                         <div>
                           <img
+                            alt="train03-ReactQL"
                             src={`${process.env.PUBLIC_URL}/skill/icon_014.png`}
                           />
                         </div>
                         <div>ReactQL</div>
                       </Part>
-                    </Train>
-                    <Train>
+                    </PartWrap>
+                    <PartWrap style={{ y: veriants2 }}>
                       <Part>
                         <div>
                           <img
+                            alt="train04-TypeScript"
                             src={`${process.env.PUBLIC_URL}/skill/icon_016.png`}
                           />
                         </div>
@@ -401,6 +491,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                       <Part>
                         <div>
                           <img
+                            alt="train04-Nextjs"
                             src={`${process.env.PUBLIC_URL}/skill/icon_018.png`}
                           />
                         </div>
@@ -409,6 +500,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                       <Part>
                         <div>
                           <img
+                            alt="train04-Github"
                             src={`${process.env.PUBLIC_URL}/skill/icon_019.png`}
                           />
                         </div>
@@ -417,6 +509,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                       <Part>
                         <div>
                           <img
+                            alt="train04-ClipStudio"
                             src={`${process.env.PUBLIC_URL}/skill/icon_020.png`}
                           />
                         </div>
@@ -425,14 +518,15 @@ const Skill = forwardRef(function Skill(props, ref) {
                       <Part>
                         <div>
                           <img
+                            alt="train04-SkechUP"
                             src={`${process.env.PUBLIC_URL}/skill/icon_021.png`}
                           />
                         </div>
                         <div>SkechUP</div>
                       </Part>
-                    </Train>
-                  </TrainMotion>
-                </TrainWrap>
+                    </PartWrap>
+                  </Train>
+                </TrainMotion>
               </SkillWrap>
             </ContantWapper>
           </WrapInner>

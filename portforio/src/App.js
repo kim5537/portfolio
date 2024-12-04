@@ -3,7 +3,6 @@ import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import theme from "./style/theme";
 import Nav from "./components/Nav";
 import Main from "./components/Main";
-import Test from "./components/Test";
 import AboutMe from "./components/AboutMe";
 import Section from "./components/Section";
 import AboutMe2 from "./components/AboutMe2";
@@ -122,13 +121,22 @@ const App = () => {
         <Skill2 ref={skillRef} />
         <Section01>
           <TreeBack>
-            <img src={`${process.env.PUBLIC_URL}/section/back00.png`} />
+            <img
+              src={`${process.env.PUBLIC_URL}/section/back00.png`}
+              alt="back"
+            />
           </TreeBack>
           <Tree>
-            <img src={`${process.env.PUBLIC_URL}/section/tree00.png`} />
+            <img
+              src={`${process.env.PUBLIC_URL}/section/tree00.png`}
+              alt="tree"
+            />
           </Tree>
           <Tree2>
-            <img src={`${process.env.PUBLIC_URL}/section/tree01.png`} />
+            <img
+              src={`${process.env.PUBLIC_URL}/section/tree01.png`}
+              alt="tree"
+            />
           </Tree2>
         </Section01>
         <Project ref={projectRef} />

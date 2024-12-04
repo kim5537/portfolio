@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, forwardRef } from "react";
+import React, { useState, forwardRef } from "react";
 import styled from "styled-components";
 import { Img } from "../style/imgobject";
 import {
@@ -136,6 +136,7 @@ const Main = forwardRef(function Main(props, ref) {
 
   const scaleCat = useTransform(scrollYProgress, [0, 1], [1, 1.8]);
   const parX01 = useTransform(scrollYProgress, [0, 1], [50, -20]);
+
   return (
     <Container isvisible={isvisible} ref={ref} id="main">
       <ImgWrap>
@@ -220,8 +221,8 @@ const Main = forwardRef(function Main(props, ref) {
       <ImgWrap>
         <Base>
           <Man alt="human" style={{ scale: scaleMan, x: parX }}>
-            <img src={`mainImg/man01.png`} />
-            <img src={`mainImg/man00.png`} />
+            <img src={`mainImg/man01.png`} alt="human" />
+            <img src={`mainImg/man00.png`} alt="human" />
             <motion.img
               src={`mainImg/man03.png`}
               animate={{
@@ -235,13 +236,14 @@ const Main = forwardRef(function Main(props, ref) {
                 rotate: [0, -1, 0, 1, 0, -1, 0],
               }}
               transition={{ duration: 2, repeat: Infinity }}
+              alt="human"
             />
           </Man>
         </Base>
       </ImgWrap>
       <ImgWrap>
         <Base>
-          <CatWrap style={{ scale: scaleCat, x: parX01 }}>
+          <CatWrap style={{ scale: scaleCat, x: parX01 }} alt="cat">
             <Cat alt="cat">
               <img src={`mainImg/cat00.png`} />
               <motion.img
@@ -254,6 +256,7 @@ const Main = forwardRef(function Main(props, ref) {
                   src={`mainImg/cat02.png`}
                   animate={{ rotate: [12, 1, 24, 4, 10, 12] }}
                   transition={{ duration: 3, repeat: Infinity }}
+                  alt="cat"
                 />
                 <img src={`mainImg/cat03.png`} />
               </div>
