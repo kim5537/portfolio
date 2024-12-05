@@ -1,13 +1,15 @@
-import React, { useRef } from "react";
+import React, { useRef, createContext, useState, useEffect } from "react";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import theme from "./style/theme";
 import Nav from "./components/Nav";
 import Main from "./components/Main";
 import AboutMe from "./components/AboutMe";
-import Section from "./components/Section";
 import AboutMe2 from "./components/AboutMe2";
+import Skill from "./components/Skill";
 import Skill2 from "./components/Skill2";
 import Project from "./components/Project";
+import Art from "./components/Art";
+import { useScroll } from "framer-motion";
 
 const Globalstyle = createGlobalStyle`
   @font-face {
@@ -33,6 +35,8 @@ body {
   font-family: 'Noto Sans KR', sans-serif ;
 }
 `;
+
+const MouseEvent = createContext();
 
 const Page = styled.div`
   width: 100vw;
@@ -87,11 +91,14 @@ const Tree2 = styled.div`
 `;
 
 const App = () => {
+  const [mouseX, setMouseX] = useState(0);
+  const [crrentScrollY, setCrrentScrollY] = useState(0);
   const mainRef = useRef();
   const aboutRef = useRef();
   const skillRef = useRef();
   const projectRef = useRef();
   const artRef = useRef();
+  const { scrollY } = useScroll();
 
   const navPages = {
     Main: mainRef,
@@ -106,14 +113,37 @@ const App = () => {
     if (sectionRef?.current) {
       sectionRef.current.scrollIntoView({ behavior: "smooth" });
     } else {
-      console.error(`Invalid ref for nav: ${nav}`);
+      console.error(`nav error: ${nav}`);
     }
   };
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMouseX(e.pageX - window.innerWidth / 2);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
+  useEffect(() => {
+    const scrollNum = throttle(
+      scrollY.on("change", (pre) => {
+        setCrrentScrollY(pre);
+      }),
+      50
+    );
+
+    return () => {
+      scrollNum();
+    };
+  }, [scrollY]);
+
   return (
     <ThemeProvider theme={theme}>
       <Globalstyle />
       <Page>
-        <Section />
         <Nav navClick={navClick} />
         <Main ref={mainRef} />
         <AboutMe ref={aboutRef} />
@@ -140,6 +170,7 @@ const App = () => {
           </Tree2>
         </Section01>
         <Project ref={projectRef} />
+        <Art ref={artRef} />
       </Page>
     </ThemeProvider>
   );

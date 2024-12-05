@@ -1,4 +1,10 @@
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import styled from "styled-components";
 import { Inner } from "../style/imgobject";
 import {
@@ -29,7 +35,7 @@ const TargetWrap = styled.div`
   height: calc(100% - 1100px);
   width: 100%;
   position: relative;
-  background: center top/cover url(${process.env.PUBLIC_URL}/skill/back01.png);
+  background: url(${process.env.PUBLIC_URL}/skill/back01.png);
 `;
 
 const MotionWrap = styled(motion.div)`
@@ -38,7 +44,7 @@ const MotionWrap = styled(motion.div)`
   max-width: 100%;
   ${(props) => props.istop}
   position: ${(props) => props.fixed};
-  background: center top/cover url(${process.env.PUBLIC_URL}/skill/back01.png);
+  background: url(${process.env.PUBLIC_URL}/skill/back01.png);
 `;
 
 const WrapInner = styled.div`
@@ -91,12 +97,13 @@ const Wrapper = styled.div`
   margin-bottom: 24px;
 `;
 
-const Title = styled.h1`
+const Title = styled(motion.h1)`
   font-family: ${({ theme }) => theme.font.title};
   font-size: 50px;
+  width: 100%;
   color: ${({ theme }) => theme.color.white};
   -webkit-text-stroke: 1px ${({ theme }) => theme.color.darkGreen};
-  position: relative;
+  position: absolute;
   p {
     font-size: 24px;
     position: relative;
@@ -152,12 +159,13 @@ const TrainMotion = styled(motion.div)`
 `;
 
 const Train = styled.div`
-  width: 100%;
+  width: 100vw;
+  max-width: 100%;
   height: 440px;
   position: relative;
   display: flex;
-  border: 1px solid #f00;
-  margin: 0 auto;
+  justify-content: center;
+  gap: 10px;
 `;
 
 const PartWrap = styled(motion.div)`
@@ -233,29 +241,28 @@ const Skill = forwardRef(function Skill(props, ref) {
     setTargetY({ top: yTop, bottom: yBottom });
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     checkY();
     window.addEventListener("scroll", checkY);
-    console.log("킴");
     return () => {
       window.removeEventListener("scroll", checkY);
-      console.log("끔");
     };
   }, []);
 
   useEffect(() => {
     checkY();
-  }, [scrollY.current]);
+    console.log(targetY);
+  }, [scrollY]);
 
   const veriants = useTransform(
     scrollYProgress,
-    [0, 0.35, 0.7, 1],
-    [0, 10, 0, 10]
+    [0, 0.2, 0.4, 0.6, 0.8, 1],
+    [6, -6, 6, -6, 6, -6]
   );
   const veriants2 = useTransform(
     scrollYProgress,
-    [0, 0.35, 0.7, 1],
-    [80, 0, 80, 0]
+    [0, 0.2, 0.4, 0.6, 0.8, 1],
+    [-6, 6, -6, 6, -6, 6]
   );
 
   useMotionValueEvent(scrollY, "change", () => {
@@ -310,21 +317,21 @@ const Skill = forwardRef(function Skill(props, ref) {
               <SkillWrap>
                 <Inner>
                   <Wrapper>
-                    <Title>
+                    <Title style={{ y: veriants }}>
                       SKILL<p></p>
                     </Title>
                   </Wrapper>
                 </Inner>
                 <Rail />
                 <TrainMotion
-                // style={{
-                //   bottom: 0,
-                //   top: "auto",
-                //   x: useTransform(scrollYProgress, [0, 1], ["60vw", "0vw"]),
-                // }}
+                  style={{
+                    bottom: 0,
+                    top: "auto",
+                    x: useTransform(scrollYProgress, [0, 1], ["60vw", "0vw"]),
+                  }}
                 >
                   <Train>
-                    <PartWrap>
+                    <PartWrap style={{ y: veriants }}>
                       <Part>
                         <div>
                           <img
@@ -382,7 +389,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                         <div>TailWindcss</div>
                       </Part>
                     </PartWrap>
-                    <PartWrap>
+                    <PartWrap style={{ y: veriants2 }}>
                       <Part>
                         <div>
                           <img
@@ -429,7 +436,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                         <div>Node.js</div>
                       </Part>
                     </PartWrap>
-                    <PartWrap>
+                    <PartWrap style={{ y: veriants }}>
                       <Part>
                         <div>
                           <img

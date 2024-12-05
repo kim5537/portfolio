@@ -4,7 +4,7 @@ import {
   motion,
   useScroll,
   useTransform,
-  useMotionValueEvent,
+  // useMotionValueEvent,
 } from "framer-motion";
 
 const SectionItem = styled(motion.div)`
