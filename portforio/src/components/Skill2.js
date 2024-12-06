@@ -209,17 +209,6 @@ const Part = styled.div`
     margin: auto;
   }
 `;
-// useEffect(() => {
-//   scrollY.on("change", () => {
-//     if (scrollY.get() >= targetY.top && scrollY.get() < targetY.bottom) {
-//       setFixed(true); // 화면 고정
-//     } else {
-//       setFixed(false); // 화면 고정 해제
-//     }
-//     console.log(fixed);
-//     console.log(scrollY.get(), targetY);
-//   });
-// }, [scrollYProgress]);
 
 const Skill = forwardRef(function Skill(props, ref) {
   const targetRef = useRef();

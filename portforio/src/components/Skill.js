@@ -1,13 +1,11 @@
 import React, { forwardRef, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Inner } from "../style/imgobject";
-import {
-  useScroll,
-  motion,
-  useMotionValueEvent,
-  useTransform,
-} from "framer-motion";
-
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+import { section } from "framer-motion/client";
+gsap.registerPlugin(ScrollTrigger);
 //기준점
 
 const Container = styled.div`
@@ -23,7 +21,6 @@ const TopLeaf = styled.div`
   max-width: 100%;
   background: center top/cover url(${process.env.PUBLIC_URL}/skill/back00.png)
     no-repeat;
-  border: 1px solid #f00;
 `;
 
 const TargetWrap = styled.div`
@@ -33,16 +30,12 @@ const TargetWrap = styled.div`
   background: url(${process.env.PUBLIC_URL}/skill/back01.png);
 `;
 
-const MotionWrap = styled(motion.div)`
+const MotionWrap = styled.div`
   height: 100vh;
   width: 100vw;
   max-width: 100%;
-  /* ${(props) => props.istop} */
   position: sticky;
   top: 0;
-  border: 1px solid #0ff;
-  /* background: center top/cover url(${process.env
-    .PUBLIC_URL}/skill/back01.png); */
 `;
 
 const WrapInner = styled.div`
@@ -51,13 +44,13 @@ const WrapInner = styled.div`
   position: relative;
 `;
 
-const ContantWapper = styled(motion.div)`
+const ContantWapper = styled.div`
   width: 100%;
   height: 100vh;
   position: absolute;
 `;
 
-const Leaf01 = styled(motion.div)`
+const Leaf01 = styled.div`
   position: absolute;
   width: 18vw;
   max-width: 800px;
@@ -67,7 +60,7 @@ const Leaf01 = styled(motion.div)`
   right: 0;
   top: 50px;
 `;
-const Leaf02 = styled(motion.div)`
+const Leaf02 = styled.div`
   position: absolute;
   width: 23vw;
   max-width: 800px;
@@ -78,7 +71,7 @@ const Leaf02 = styled(motion.div)`
   top: 200px;
 `;
 
-const Leaf03 = styled(motion.div)`
+const Leaf03 = styled.div`
   position: absolute;
   width: 22vw;
   max-width: 800px;
@@ -95,7 +88,7 @@ const Wrapper = styled.div`
   margin-bottom: 24px;
 `;
 
-const Title = styled(motion.h1)`
+const Title = styled.div`
   font-family: ${({ theme }) => theme.font.title};
   font-size: 50px;
   width: 100%;
@@ -150,10 +143,12 @@ const Rail = styled.div`
 //   margin: 0 auto;
 // `;
 
-const TrainMotion = styled(motion.div)`
+const TrainMotion = styled.div`
   position: absolute;
   display: flex;
   gap: 12px;
+  bottom: 0;
+  left: 60vw;
 `;
 
 const Train = styled.div`
@@ -163,9 +158,10 @@ const Train = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
+  gap: 12px;
 `;
 
-const PartWrap = styled(motion.div)`
+const PartWrap = styled.div`
   width: 300px;
   height: 440px;
   padding: 30px 13px;
@@ -206,130 +202,72 @@ const Part = styled.div`
     margin: auto;
   }
 `;
-// useEffect(() => {
-//   scrollY.on("change", () => {
-//     if (scrollY.get() >= targetY.top && scrollY.get() < targetY.bottom) {
-//       setFixed(true); // 화면 고정
-//     } else {
-//       setFixed(false); // 화면 고정 해제
-//     }
-//     console.log(fixed);
-//     console.log(scrollY.get(), targetY);
-//   });
-// }, [scrollYProgress]);
 
 const Skill = forwardRef(function Skill(props, ref) {
   const targetRef = useRef();
   const moveRef = useRef();
-  const [targetY, setTargetY] = useState({});
-  const { scrollY } = useScroll();
-  const [fixed, setFixed] = useState("absolute");
-  const [istop, setIstop] = useState("top : 0 ; bottom : auto ;");
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end end"],
-  });
+  let train = gsap.utils.toArray(".train-part");
+  let oddTrain = gsap.utils.toArray(".train-part:nth-child(odd)");
+  let evenTrain = gsap.utils.toArray(".train-part:nth-child(even)");
 
-  const checkY = () => {
-    const rect = targetRef.current.getBoundingClientRect();
-    const move = moveRef.current.getBoundingClientRect();
-    const yTop = rect.top + window.scrollY;
-    const yBottom = rect.bottom + window.scrollY - move.height;
-    setTargetY({ top: yTop, bottom: yBottom });
-  };
+  // useGSAP(() => {
+  //   gsap.to(train, {
+  //     xPercent: -130 * (train.length - 1),
+  //     ease: "none",
+  //     start: "top 56px",
+  //     scrollTrigger: {
+  //       trigger: ".scroll-target",
+  //       pin: true,
+  //       scrub: 1,
+  //       snap: 1 / (train.length - 1),
+  //       end: "+=2800",
+  //       markers: true,
+  //       // nvalidateOnRefresh: true,
+  //     },
+  //   });
+  // }, []);
 
-  useEffect(() => {
-    checkY();
-    window.addEventListener("scroll", checkY);
-    console.log("킴");
-    return () => {
-      window.removeEventListener("scroll", checkY);
-      console.log("끔");
-    };
-  }, []);
-
-  // useEffect(() => {
-  //   checkY();
-  // }, [scrollY.current]);
-
-  const veriants = useTransform(
-    scrollYProgress,
-    [0, 0.2, 0.4, 0.6, 0.8, 1],
-    [6, -6, 6, -6, 6, -6]
-  );
-  const veriants2 = useTransform(
-    scrollYProgress,
-    [0, 0.2, 0.4, 0.6, 0.8, 1],
-    [-6, 6, -6, 6, -6, 6]
-  );
-
-  useMotionValueEvent(scrollY, "change", () => {
-    if (scrollY.get() >= targetY.top && scrollY.get() < targetY.bottom) {
-      setFixed("fixed"); // 화면 고정
-    } else {
-      setFixed("absolute"); // 화면 고정 해제
-    }
-
-    if (scrollY.get() > targetY.bottom) {
-      setIstop("top : auto ; bottom : 0 ;");
-    } else {
-      setIstop("top : 0 ; bottom : auto ;");
-    }
-  });
+  useGSAP(() => {
+    ScrollTrigger.batch(train, {
+      onEnter: (batch) => {
+        batch.forEach((element, index) => {
+          gsap.to(element, {
+            xPercent: index % 2 === 0 ? -100 : 100,
+            yPercent: index % 2 === 0 ? 50 : -50,
+            ease: "power1.inOut",
+          });
+        });
+      },
+      start: "top 56px",
+      end: "+=2800",
+      pin: true,
+      scrub: 1,
+      markers: false,
+    });
+  }, [train]);
 
   return (
     <Container ref={ref}>
       <TopLeaf />
-      <TargetWrap ref={targetRef}>
-        <MotionWrap ref={moveRef} istop={istop}>
+      <TargetWrap className="scroll-target" ref={targetRef}>
+        <MotionWrap>
           <WrapInner>
             <ContantWapper>
-              <Leaf01
-                alt="leaf"
-                style={{
-                  bottom: 0,
-                  top: "auto",
-                  y: useTransform(scrollYProgress, [0, 1], ["100px", "200px"]),
-                }}
-              />
-              <Leaf02
-                alt="leaf"
-                style={{
-                  bottom: 0,
-                  top: "auto",
-                  y: useTransform(scrollYProgress, [0.3, 1], ["20px", "180px"]),
-                }}
-              />
-              <Leaf03
-                alt="leaf"
-                style={{
-                  bottom: 0,
-                  top: "auto",
-                  y: useTransform(
-                    scrollYProgress,
-                    [0.2, 0.8],
-                    ["100px", "230px"]
-                  ),
-                }}
-              />
+              <Leaf01 alt="leaf" />
+              <Leaf02 alt="leaf" />
+              <Leaf03 alt="leaf" />
               <SkillWrap>
                 <Inner>
                   <Wrapper>
-                    <Title style={{ y: veriants }}>
+                    <Title>
                       SKILL<p></p>
                     </Title>
                   </Wrapper>
                 </Inner>
                 <Rail />
-                <TrainMotion
-                  style={{
-                    bottom: 0,
-                    top: "auto",
-                    x: useTransform(scrollYProgress, [0, 1], ["60vw", "0vw"]),
-                  }}
-                >
+                <TrainMotion className="moveRef" ref={moveRef}>
                   <Train>
-                    <PartWrap style={{ y: veriants }}>
+                    <PartWrap className="train-part">
                       <Part>
                         <div>
                           <img
@@ -387,7 +325,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                         <div>TailWindcss</div>
                       </Part>
                     </PartWrap>
-                    <PartWrap style={{ y: veriants2 }}>
+                    <PartWrap className="train-part">
                       <Part>
                         <div>
                           <img
@@ -434,7 +372,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                         <div>Node.js</div>
                       </Part>
                     </PartWrap>
-                    <PartWrap style={{ y: veriants }}>
+                    <PartWrap className="train-part">
                       <Part>
                         <div>
                           <img
@@ -469,9 +407,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                             src={`${process.env.PUBLIC_URL}/skill/icon_013.png`}
                           />
                         </div>
-                        <div style={{ fontSize: " 18px" }}>
-                          Redux,Redux-thunk
-                        </div>
+                        <div>Redux,Redux-thunk</div>
                       </Part>
                       <Part>
                         <div>
@@ -483,7 +419,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                         <div>ReactQL</div>
                       </Part>
                     </PartWrap>
-                    <PartWrap style={{ y: veriants2 }}>
+                    <PartWrap className="train-part">
                       <Part>
                         <div>
                           <img

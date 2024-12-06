@@ -1,8 +1,8 @@
 import React, { forwardRef, useEffect, useState, useRef } from "react";
+import { useMouseScroll } from "../context/usecontext";
 import styled from "styled-components";
 import { Img } from "../style/imgobject";
 import { motion, animate, useTransform } from "framer-motion";
-
 const Wrapper = styled.div`
   width: 100vw;
   max-width: 100%;
@@ -148,39 +148,38 @@ const Projects = [
 ];
 
 const Project = forwardRef(function Project(props, ref) {
-  const [x, setX] = useState(0);
-  const targetX = useRef(0);
+  // const [x, setX] = useState(0);
   const speed = 0.1;
-
+  const targetX = useRef(0);
+  const { mouseX } = useMouseScroll();
   const mountRef = useRef(null);
-  const cityRef = useRef(null);
-  const cityRef1 = useRef(null);
-  const cityRef2 = useRef(null);
-  const cityRef3 = useRef(null);
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setX(e.pageX - window.innerWidth / 2);
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      console.log("끝");
-    };
-  }, []);
+  const mountRef2 = useRef(null);
+  const cityRef0 = useRef(null);
+  const cityRef01 = useRef(null);
+  const cityRef11 = useRef(null);
+  const cityRef21 = useRef(null);
+  const cityRef22 = useRef(null);
+  const cityRef31 = useRef(null);
 
   useEffect(() => {
     const loop = () => {
-      targetX.current += (x - targetX.current) * speed;
+      targetX.current += (mouseX - targetX.current) * speed;
+
       if (mountRef.current) {
-        mountRef.current.style.transform = `translateX(${
+        mountRef.current.style.transform = `translateX( -${
           targetX.current / 35
         }px)`;
       }
+      if (mountRef2.current) {
+        mountRef2.current.style.transform = `translateX( -${
+          targetX.current / 35
+        }px)`;
+      }
+
       requestAnimationFrame(loop);
     };
     loop();
-  }, [x]);
+  }, [mouseX]);
 
   return (
     <Wrapper ref={ref}>
@@ -196,14 +195,14 @@ const Project = forwardRef(function Project(props, ref) {
         </ProjectWrap>
         <CityWrap>
           <CityImg>
-            <Back />
+            <Back ref={mountRef2} />
             <Back2 ref={mountRef} />
-            <Img bgimg={"project/night01.png"} ref={cityRef} />
-            <Img bgimg={"project/night02.png"} ref={cityRef} />
-            <Img bgimg={"project/night03.png"} ref={cityRef1} />
-            <Img bgimg={"project/night04.png"} ref={cityRef2} />
-            <Img bgimg={"project/night05.png"} ref={cityRef2} />
-            <Img bgimg={"project/night06.png"} ref={cityRef3} />
+            <Img bgimg={"project/night01.png"} ref={cityRef0} />
+            <Img bgimg={"project/night02.png"} ref={cityRef01} />
+            <Img bgimg={"project/night03.png"} ref={cityRef11} />
+            <Img bgimg={"project/night04.png"} ref={cityRef21} />
+            <Img bgimg={"project/night05.png"} ref={cityRef22} />
+            <Img bgimg={"project/night06.png"} ref={cityRef31} />
           </CityImg>
         </CityWrap>
       </Inner>

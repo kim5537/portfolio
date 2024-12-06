@@ -1,5 +1,6 @@
-import React, { useRef, createContext, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
+import MouseEventContext from "./context/context";
 import theme from "./style/theme";
 import Nav from "./components/Nav";
 import Main from "./components/Main";
@@ -10,6 +11,7 @@ import Skill2 from "./components/Skill2";
 import Project from "./components/Project";
 import Art from "./components/Art";
 import { useScroll } from "framer-motion";
+import { throttle } from "lodash";
 
 const Globalstyle = createGlobalStyle`
   @font-face {
@@ -35,8 +37,6 @@ body {
   font-family: 'Noto Sans KR', sans-serif ;
 }
 `;
-
-const MouseEvent = createContext();
 
 const Page = styled.div`
   width: 100vw;
@@ -118,9 +118,9 @@ const App = () => {
   };
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const handleMouseMove = throttle((e) => {
       setMouseX(e.pageX - window.innerWidth / 2);
-    };
+    }, 50);
     window.addEventListener("mousemove", handleMouseMove);
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
@@ -134,44 +134,47 @@ const App = () => {
       }),
       50
     );
-
+    const unsubscroll = scrollY.on("change", scrollNum);
     return () => {
-      scrollNum();
+      unsubscroll();
+      scrollNum.cancel();
     };
   }, [scrollY]);
 
   return (
     <ThemeProvider theme={theme}>
       <Globalstyle />
-      <Page>
-        <Nav navClick={navClick} />
-        <Main ref={mainRef} />
-        <AboutMe ref={aboutRef} />
-        <AboutMe2 />
-        <Skill2 ref={skillRef} />
-        <Section01>
-          <TreeBack>
-            <img
-              src={`${process.env.PUBLIC_URL}/section/back00.png`}
-              alt="back"
-            />
-          </TreeBack>
-          <Tree>
-            <img
-              src={`${process.env.PUBLIC_URL}/section/tree00.png`}
-              alt="tree"
-            />
-          </Tree>
-          <Tree2>
-            <img
-              src={`${process.env.PUBLIC_URL}/section/tree01.png`}
-              alt="tree"
-            />
-          </Tree2>
-        </Section01>
-        <Project ref={projectRef} />
-        <Art ref={artRef} />
-      </Page>
+      <MouseEventContext.Provider value={{ mouseX, crrentScrollY }}>
+        <Page>
+          <Nav navClick={navClick} />
+          <Main ref={mainRef} />
+          <AboutMe ref={aboutRef} />
+          <AboutMe2 />
+          <Skill ref={skillRef} />
+          <Section01>
+            <TreeBack>
+              <img
+                src={`${process.env.PUBLIC_URL}/section/back00.png`}
+                alt="back"
+              />
+            </TreeBack>
+            <Tree>
+              <img
+                src={`${process.env.PUBLIC_URL}/section/tree00.png`}
+                alt="tree"
+              />
+            </Tree>
+            <Tree2>
+              <img
+                src={`${process.env.PUBLIC_URL}/section/tree01.png`}
+                alt="tree"
+              />
+            </Tree2>
+          </Section01>
+          <Project ref={projectRef} />
+          <Art ref={artRef} />
+        </Page>
+      </MouseEventContext.Provider>
     </ThemeProvider>
   );
 };
