@@ -150,7 +150,7 @@ const App = () => {
           <Main ref={mainRef} />
           <AboutMe ref={aboutRef} />
           <AboutMe2 />
-          <Skill ref={skillRef} />
+          <Skill2 ref={skillRef} />
           <Section01>
             <TreeBack>
               <img

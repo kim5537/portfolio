@@ -5,14 +5,17 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { section } from "framer-motion/client";
+
+// gsap.config({ autoRefreshEvents: "visibilitychange,DOMContentLoaded,load" });
 gsap.registerPlugin(ScrollTrigger);
 //기준점
 
 const Container = styled.div`
   width: 100vw;
   max-width: 100%;
-  height: 5000px;
-  position: relative;
+  /* height: 5000px; */
+  /* position: relative; */
+  height: auto;
 `;
 
 const TopLeaf = styled.div`
@@ -26,7 +29,7 @@ const TopLeaf = styled.div`
 const TargetWrap = styled.div`
   height: calc(100% - 1100px);
   width: 100%;
-  position: relative;
+  /* position: relative; */
   background: url(${process.env.PUBLIC_URL}/skill/back01.png);
 `;
 
@@ -34,20 +37,22 @@ const MotionWrap = styled.div`
   height: 100vh;
   width: 100vw;
   max-width: 100%;
-  position: sticky;
+  /* position: sticky; */
   top: 0;
 `;
 
 const WrapInner = styled.div`
   width: 100%;
   height: 100%;
-  position: relative;
+  /* position: relative; */
 `;
 
 const ContantWapper = styled.div`
   width: 100%;
   height: 100vh;
-  position: absolute;
+  /* position: absolute; */
+  position: relative;
+  border: 1px solid #f00;
 `;
 
 const Leaf01 = styled.div`
@@ -123,6 +128,7 @@ const SkillWrap = styled.div`
   width: 100vw;
   max-width: 100%;
   height: 530px;
+  /* height: auto; */
   margin-top: 30vh;
 `;
 
@@ -144,11 +150,12 @@ const Rail = styled.div`
 // `;
 
 const TrainMotion = styled.div`
-  position: absolute;
+  position: relative;
   display: flex;
   gap: 12px;
   bottom: 0;
   left: 60vw;
+  will-change: transform;
 `;
 
 const Train = styled.div`
@@ -165,13 +172,14 @@ const PartWrap = styled.div`
   width: 300px;
   height: 440px;
   padding: 30px 13px;
-  position: relative;
+  /* position: relative; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 8px;
   border-radius: 18px;
   background-color: ${({ theme }) => theme.color.white};
+  will-change: transform;
 `;
 
 const Part = styled.div`
@@ -205,10 +213,14 @@ const Part = styled.div`
 
 const Skill = forwardRef(function Skill(props, ref) {
   const targetRef = useRef();
-  const moveRef = useRef();
-  let train = gsap.utils.toArray(".train-part");
-  let oddTrain = gsap.utils.toArray(".train-part:nth-child(odd)");
-  let evenTrain = gsap.utils.toArray(".train-part:nth-child(even)");
+  // const moveRef = useRef();
+  const movesRef = useRef([]);
+
+  // let train = gsap.utils.toArray(".train-part");
+  // let oddTrain = gsap.utils.toArray(".train-part:nth-child(odd)");
+  // let evenTrain = gsap.utils.toArray(".train-part:nth-child(even)");
+
+  // ScrollTrigger.config({autoRefreshEvents: "visibilitychange,DOMContentLoaded,load"});
 
   // useGSAP(() => {
   //   gsap.to(train, {
@@ -227,24 +239,84 @@ const Skill = forwardRef(function Skill(props, ref) {
   //   });
   // }, []);
 
-  useGSAP(() => {
-    ScrollTrigger.batch(train, {
-      onEnter: (batch) => {
-        batch.forEach((element, index) => {
-          gsap.to(element, {
-            xPercent: index % 2 === 0 ? -100 : 100,
-            yPercent: index % 2 === 0 ? 50 : -50,
-            ease: "power1.inOut",
-          });
+  // useGSAP(() => {
+  //   ScrollTrigger.batch(train, {
+  //     onEnter: (batch) => {
+  //       batch.forEach((element, index) => {
+  //         gsap.to(element, {
+  //           xPercent: index % 2 === 0 ? -100 : 100,
+  //           yPercent: index % 2 === 0 ? 50 : -50,
+  //           ease: "power1.inOut",
+  //         });
+  //       });
+  //     },
+  //     start: "top 56px",
+  //     end: "+=2800",
+  //     pin: true,
+  //     scrub: 1,
+  //     markers: true,
+  //   });
+  // }, [train]);
+  // useGSAP(() => {
+  //   movesRef.current.forEach((move) => {
+  //     const moveitem1 = move.querySelectorAll(".train-part1");
+  //     const moveitem2 = move.querySelectorAll(".train-part2");
+  //     // console.log(movesRef.current.find())
+  //   });
+  // }, []);
+
+  useEffect(() => {
+    // moveRef를 스크롤에 맞춰 x축 이동
+    if (targetRef.current) {
+      movesRef.current.forEach((move) => {
+        gsap.to(move, {
+          xPercent: -100, // x축으로 이동
+          ease: "none",
+          scrollTrigger: {
+            trigger: targetRef.current,
+            start: "top top",
+            end: "+=2800", // 이동 범위
+            scrub: true, // 스크롤에 따라 이동
+            pin: true, // 고정
+            markers: true, // 마커 표시 (디버깅 용)
+          },
         });
-      },
-      start: "top 56px",
-      end: "+=2800",
-      pin: true,
-      scrub: 1,
-      markers: false,
-    });
-  }, [train]);
+      });
+
+      // train-part1의 Y축 애니메이션 설정
+      gsap.utils.toArray(".train-part1").forEach((part) => {
+        gsap.to(part, {
+          y: [0, 10, -10, 0, 10, -10],
+          duration: 0.6,
+          stagger: 0.1,
+          scrollTrigger: {
+            trigger: targetRef.current,
+            start: "top top",
+            end: "+=2800",
+            scrub: true,
+            markers: false,
+            batch: true, // 배치로 묶어서 최적화
+          },
+        });
+      });
+
+      gsap.utils.toArray(".train-part2").forEach((part) => {
+        gsap.to(part, {
+          y: [0, -10, 10, 0, -10, 10],
+          duration: 0.6,
+          stagger: 0.1,
+          scrollTrigger: {
+            trigger: targetRef.current,
+            start: "top top",
+            end: "+=2800",
+            scrub: true,
+            markers: false,
+            batch: true, // 배치로 묶어서 최적화
+          },
+        });
+      });
+    }
+  }, [targetRef]);
 
   return (
     <Container ref={ref}>
@@ -265,208 +337,209 @@ const Skill = forwardRef(function Skill(props, ref) {
                   </Wrapper>
                 </Inner>
                 <Rail />
-                <TrainMotion className="moveRef" ref={moveRef}>
-                  <Train>
-                    <PartWrap className="train-part">
-                      <Part>
-                        <div>
-                          <img
-                            alt="train01-HTML"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_001.png`}
-                          />
-                        </div>
-                        <div>HTML</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train01-css"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_002.png`}
-                          />
-                        </div>
-                        <div>CSS</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train01-js"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_003.png`}
-                          />
-                        </div>
-                        <div>Java Script</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train01-scss"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_004.png`}
-                          />
-                        </div>
-                        <div>SCSS</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train01-styledcomponent"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_005.png`}
-                          />
-                        </div>
-                        <div style={{ fontSize: " 18px" }}>
-                          styled-Components
-                        </div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train01-TailWindcss"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_006.png`}
-                          />
-                        </div>
-                        <div>TailWindcss</div>
-                      </Part>
-                    </PartWrap>
-                    <PartWrap className="train-part">
-                      <Part>
-                        <div>
-                          <img
-                            alt="train02-Apollo"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_007.png`}
-                          />
-                        </div>
-                        <div>Apollo</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train02-FireBase"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_008.png`}
-                          />
-                        </div>
-                        <div>FireBase</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train02-Netlify"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_009.png`}
-                          />
-                        </div>
-                        <div>Netlify</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train02-GraphQL"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_010.png`}
-                          />
-                        </div>
-                        <div>GraphQL</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train02-Node.js"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_018.png`}
-                          />
-                        </div>
-                        <div>Node.js</div>
-                      </Part>
-                    </PartWrap>
-                    <PartWrap className="train-part">
-                      <Part>
-                        <div>
-                          <img
-                            alt="train03-React"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_015.png`}
-                          />
-                        </div>
-                        <div>React</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train03-Framer-motion"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_011.png`}
-                          />
-                        </div>
-                        <div style={{ fontSize: " 18px" }}>Framer-motion</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train03-Recoil"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_012.png`}
-                          />
-                        </div>
-                        <div>Recoil</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train03-Redux"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_013.png`}
-                          />
-                        </div>
-                        <div>Redux,Redux-thunk</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train03-ReactQL"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_014.png`}
-                          />
-                        </div>
-                        <div>ReactQL</div>
-                      </Part>
-                    </PartWrap>
-                    <PartWrap className="train-part">
-                      <Part>
-                        <div>
-                          <img
-                            alt="train04-TypeScript"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_016.png`}
-                          />
-                        </div>
-                        <div>TypeScript</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train04-Nextjs"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_018.png`}
-                          />
-                        </div>
-                        <div>Next,js</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train04-Github"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_019.png`}
-                          />
-                        </div>
-                        <div>Github</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train04-ClipStudio"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_020.png`}
-                          />
-                        </div>
-                        <div>Clip Studio</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train04-SkechUP"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_021.png`}
-                          />
-                        </div>
-                        <div>SkechUP</div>
-                      </Part>
-                    </PartWrap>
-                  </Train>
+                <TrainMotion
+                  className="moveRef"
+                  ref={(move) => movesRef.current.push(move)}
+                >
+                  {/* <Train> */}
+                  <PartWrap className="train-part1">
+                    <Part>
+                      <div>
+                        <img
+                          alt="train01-HTML"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_001.png`}
+                        />
+                      </div>
+                      <div>HTML</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          alt="train01-css"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_002.png`}
+                        />
+                      </div>
+                      <div>CSS</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          alt="train01-js"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_003.png`}
+                        />
+                      </div>
+                      <div>Java Script</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          alt="train01-scss"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_004.png`}
+                        />
+                      </div>
+                      <div>SCSS</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          alt="train01-styledcomponent"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_005.png`}
+                        />
+                      </div>
+                      <div style={{ fontSize: " 18px" }}>styled-Components</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          alt="train01-TailWindcss"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_006.png`}
+                        />
+                      </div>
+                      <div>TailWindcss</div>
+                    </Part>
+                  </PartWrap>
+                  <PartWrap className="train-part2">
+                    <Part>
+                      <div>
+                        <img
+                          alt="train02-Apollo"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_007.png`}
+                        />
+                      </div>
+                      <div>Apollo</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          alt="train02-FireBase"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_008.png`}
+                        />
+                      </div>
+                      <div>FireBase</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          alt="train02-Netlify"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_009.png`}
+                        />
+                      </div>
+                      <div>Netlify</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          alt="train02-GraphQL"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_010.png`}
+                        />
+                      </div>
+                      <div>GraphQL</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          alt="train02-Node.js"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_018.png`}
+                        />
+                      </div>
+                      <div>Node.js</div>
+                    </Part>
+                  </PartWrap>
+                  <PartWrap className="train-part1">
+                    <Part>
+                      <div>
+                        <img
+                          alt="train03-React"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_015.png`}
+                        />
+                      </div>
+                      <div>React</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          alt="train03-Framer-motion"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_011.png`}
+                        />
+                      </div>
+                      <div style={{ fontSize: " 18px" }}>Framer-motion</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          alt="train03-Recoil"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_012.png`}
+                        />
+                      </div>
+                      <div>Recoil</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          alt="train03-Redux"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_013.png`}
+                        />
+                      </div>
+                      <div>Redux,Redux-thunk</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          alt="train03-ReactQL"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_014.png`}
+                        />
+                      </div>
+                      <div>ReactQL</div>
+                    </Part>
+                  </PartWrap>
+                  <PartWrap className="train-part2">
+                    <Part>
+                      <div>
+                        <img
+                          alt="train04-TypeScript"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_016.png`}
+                        />
+                      </div>
+                      <div>TypeScript</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          alt="train04-Nextjs"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_018.png`}
+                        />
+                      </div>
+                      <div>Next,js</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          alt="train04-Github"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_019.png`}
+                        />
+                      </div>
+                      <div>Github</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          alt="train04-ClipStudio"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_020.png`}
+                        />
+                      </div>
+                      <div>Clip Studio</div>
+                    </Part>
+                    <Part>
+                      <div>
+                        <img
+                          alt="train04-SkechUP"
+                          src={`${process.env.PUBLIC_URL}/skill/icon_021.png`}
+                        />
+                      </div>
+                      <div>SkechUP</div>
+                    </Part>
+                  </PartWrap>
+                  {/* </Train> */}
                 </TrainMotion>
               </SkillWrap>
             </ContantWapper>
