@@ -3,6 +3,7 @@ import { useMouseScroll } from "../context/usecontext";
 import styled from "styled-components";
 import { Img } from "../style/imgobject";
 import { motion, animate, useTransform } from "framer-motion";
+
 const Wrapper = styled.div`
   width: 100vw;
   max-width: 100%;
@@ -24,6 +25,15 @@ const Inner = styled.div`
   width: 100vw;
   max-width: 100%;
   height: 100%;
+  border: 1px solid #fff;
+`;
+
+const Tree = styled.div`
+  position: absolute;
+  width: 500px;
+  height: 100%;
+  background: center/cover url(${process.env.PUBLIC_URL}/section/tree00.png)
+    no-repeat;
 `;
 
 const ProjectWrap = styled.div`
@@ -75,16 +85,19 @@ const CityImg = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+  /* border: 1px solid #f00; */
 `;
 
 const Back = styled(motion.div)`
-  width: 100%;
+  width: 100vw;
+  max-width: 100%;
   height: 100%;
   position: absolute;
   bottom: 0;
   left: 0;
   background: center left/contain
     url(${process.env.PUBLIC_URL}/project/nightback00.png) no-repeat;
+  /* border: 1px solid #0f0; */
 `;
 const Back2 = styled(motion.div)`
   width: 100%;
@@ -164,14 +177,13 @@ const Project = forwardRef(function Project(props, ref) {
   useEffect(() => {
     const loop = () => {
       targetX.current += (mouseX - targetX.current) * speed;
-
       if (mountRef.current) {
         mountRef.current.style.transform = `translateX( -${
           targetX.current / 35
         }px)`;
       }
       if (mountRef2.current) {
-        mountRef2.current.style.transform = `translateX( -${
+        mountRef2.current.style.transform = `translateX( ${
           targetX.current / 35
         }px)`;
       }
@@ -184,6 +196,7 @@ const Project = forwardRef(function Project(props, ref) {
   return (
     <Wrapper ref={ref}>
       <Inner>
+        <Tree />
         <ProjectWrap>
           <ProjectFix>
             {Projects.map((project) => (

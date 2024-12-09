@@ -15,7 +15,7 @@ const WaveWap = styled.div`
   width: 100%;
   height: 100px;
   top: -100px;
-  border: 1px solid #fff;
+  /* border: 1px solid #fff; */
 `;
 
 const WaveInner = styled.div`
