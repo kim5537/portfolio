@@ -25,15 +25,6 @@ const Inner = styled.div`
   width: 100vw;
   max-width: 100%;
   height: 100%;
-  border: 1px solid #fff;
-`;
-
-const Tree = styled.div`
-  position: absolute;
-  width: 500px;
-  height: 100%;
-  background: center/cover url(${process.env.PUBLIC_URL}/section/tree00.png)
-    no-repeat;
 `;
 
 const ProjectWrap = styled.div`
@@ -41,8 +32,8 @@ const ProjectWrap = styled.div`
   width: 100vw;
   max-width: 100%;
   height: 600px;
-  /* border: 1px solid #00f; */
   bottom: 300px;
+  z-index: 2;
 `;
 
 const ProjectFix = styled.div`
@@ -78,7 +69,7 @@ const CityWrap = styled.div`
   width: 100vw;
   max-width: 100%;
   height: 700px;
-  bottom: 70px;
+  bottom: 10px;
 `;
 
 const CityImg = styled.div`
@@ -86,6 +77,12 @@ const CityImg = styled.div`
   width: 100%;
   height: 100%;
   /* border: 1px solid #f00; */
+  .city {
+    z-index: 3;
+  }
+  .mount {
+    z-index: 1;
+  }
 `;
 
 const Back = styled(motion.div)`
@@ -107,6 +104,18 @@ const Back2 = styled(motion.div)`
   right: 0;
   background: center right/contain
     url(${process.env.PUBLIC_URL}/project/nightback01.png) no-repeat;
+`;
+
+const SkyWrap = styled(motion.div)`
+  width: 100%;
+  height: 100%;
+`;
+
+const SkyImg = styled(motion.img)`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: url(${process.env.PUBLIC_URL}/${(props) => props.img});
 `;
 
 const Projects = [
@@ -167,24 +176,56 @@ const Project = forwardRef(function Project(props, ref) {
   const { mouseX } = useMouseScroll();
   const mountRef = useRef(null);
   const mountRef2 = useRef(null);
-  const cityRef0 = useRef(null);
+  const cityRef00 = useRef(null);
   const cityRef01 = useRef(null);
-  const cityRef11 = useRef(null);
-  const cityRef21 = useRef(null);
-  const cityRef22 = useRef(null);
-  const cityRef31 = useRef(null);
+  const cityRef02 = useRef(null);
+  const cityRef03 = useRef(null);
+  const cityRef04 = useRef(null);
+  const cityRef05 = useRef(null);
+  const sky00 = useRef(null);
+  const sky01 = useRef(null);
 
   useEffect(() => {
     const loop = () => {
       targetX.current += (mouseX - targetX.current) * speed;
       if (mountRef.current) {
-        mountRef.current.style.transform = `translateX( -${
-          targetX.current / 35
+        mountRef.current.style.transform = `translateX( ${
+          -targetX.current / 120
         }px)`;
       }
       if (mountRef2.current) {
         mountRef2.current.style.transform = `translateX( ${
-          targetX.current / 35
+          -targetX.current / 120
+        }px)`;
+      }
+      if (cityRef00.current) {
+        cityRef00.current.style.transform = `translateX( ${
+          targetX.current / 100
+        }px)`;
+      }
+      if (cityRef01.current) {
+        cityRef01.current.style.transform = `translateX( ${
+          targetX.current / 100
+        }px)`;
+      }
+      if (cityRef02.current) {
+        cityRef02.current.style.transform = `translateX( ${
+          -targetX.current / 100
+        }px)`;
+      }
+      if (cityRef03.current) {
+        cityRef03.current.style.transform = `translateX( ${
+          targetX.current / 80
+        }px)`;
+      }
+      if (cityRef04.current) {
+        cityRef04.current.style.transform = `translateX( ${
+          targetX.current / 80
+        }px)`;
+      }
+      if (cityRef05.current) {
+        cityRef05.current.style.transform = `translateX( ${
+          -targetX.current / 60
         }px)`;
       }
 
@@ -196,7 +237,6 @@ const Project = forwardRef(function Project(props, ref) {
   return (
     <Wrapper ref={ref}>
       <Inner>
-        <Tree />
         <ProjectWrap>
           <ProjectFix>
             {Projects.map((project) => (
@@ -208,16 +248,44 @@ const Project = forwardRef(function Project(props, ref) {
         </ProjectWrap>
         <CityWrap>
           <CityImg>
-            <Back ref={mountRef2} />
-            <Back2 ref={mountRef} />
-            <Img bgimg={"project/night01.png"} ref={cityRef0} />
-            <Img bgimg={"project/night02.png"} ref={cityRef01} />
-            <Img bgimg={"project/night03.png"} ref={cityRef11} />
-            <Img bgimg={"project/night04.png"} ref={cityRef21} />
-            <Img bgimg={"project/night05.png"} ref={cityRef22} />
-            <Img bgimg={"project/night06.png"} ref={cityRef31} />
+            <Back ref={mountRef2} className="mount" />
+            <Back2 ref={mountRef} className="mount" />
+            <Img
+              bgimg={"project/night01.png"}
+              ref={cityRef00}
+              className="city"
+            />
+            <Img
+              bgimg={"project/night02.png"}
+              ref={cityRef01}
+              className="city"
+            />
+            <Img
+              bgimg={"project/night03.png"}
+              ref={cityRef02}
+              className="city"
+            />
+            <Img
+              bgimg={"project/night04.png"}
+              ref={cityRef03}
+              className="city"
+            />
+            <Img
+              bgimg={"project/night05.png"}
+              ref={cityRef04}
+              className="city"
+            />
+            <Img
+              bgimg={"project/night06.png"}
+              ref={cityRef05}
+              className="city"
+            />
           </CityImg>
         </CityWrap>
+        <SkyWrap>
+          <SkyImg img={"project/SKY00.png"} ref={sky00} />
+          <SkyImg img={"project/SKY01.png"} ref={sky01} />
+        </SkyWrap>
       </Inner>
     </Wrapper>
   );

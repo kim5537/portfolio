@@ -152,7 +152,7 @@ const App = () => {
           <AboutMe ref={aboutRef} />
           <AboutMe2 />
           <Skill2 ref={skillRef} />
-          {/* <Section01>
+          <Section01>
             <TreeBack>
               <img
                 src={`${process.env.PUBLIC_URL}/section/back00.png`}
@@ -171,7 +171,7 @@ const App = () => {
                 alt="tree"
               />
             </Tree2>
-          </Section01> */}
+          </Section01>
           <Project ref={projectRef} />
           <Art ref={artRef} />
         </Page>
