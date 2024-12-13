@@ -1,5 +1,5 @@
 import { head } from "framer-motion/client";
-import React from "react";
+import React, { forwardRef } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -24,14 +24,14 @@ const WaveInner = styled.div`
   position: relative;
 `;
 
-const Art = () => {
+const Art = forwardRef(function Art(props, ref) {
   return (
-    <Wrapper>
+    <Wrapper ref={ref}>
       <WaveWap>
         <WaveInner></WaveInner>
       </WaveWap>
     </Wrapper>
   );
-};
+});
 
 export default Art;

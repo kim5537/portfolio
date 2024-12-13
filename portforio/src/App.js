@@ -120,7 +120,6 @@ const App = () => {
   useEffect(() => {
     const handleMouseMove = throttle((e) => {
       setMouseX(e.pageX - window.innerWidth / 2);
-      console.log(e.pageX, window.innerWidth);
     }, 50);
     window.addEventListener("mousemove", handleMouseMove);
     return () => {

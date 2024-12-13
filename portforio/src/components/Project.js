@@ -1,8 +1,57 @@
 import React, { forwardRef, useEffect, useState, useRef } from "react";
 import { useMouseScroll } from "../context/usecontext";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Img } from "../style/imgobject";
-import { motion, animate, useTransform } from "framer-motion";
+import { motion, animate, useTransform, AnimatePresence } from "framer-motion";
+import ProjectSection from "./section/ProjectSection";
+
+const star = keyframes`
+0% {
+  opacity : 0.8;
+}
+50% {
+  opacity :1 ;
+  filter: drop-shadow(0 0 5px yellow);
+}
+
+100% {
+  opacity: 0.8;
+}
+`;
+
+const starLineAni = keyframes`
+
+0% {
+  opacity: 0;
+  transform: translate(0px , 0px)
+}
+20% {
+  opacity: 0.6;
+  transform: translate(0px , 0px);
+  filter: drop-shadow(0 0 5px yellow);
+}
+
+40% {
+  opacity: 0;
+  transform: translate(0px , 0px);
+  filter: drop-shadow(0 0 0px inherit);
+}
+/* 80%{
+  opacity: 0;
+  transform: translate(0px , 0px) scale(1);
+  filter: drop-shadow(0 0 0px inherit);
+} */
+60% {
+  opacity: 0.9;
+  transform: translate(0px , 0px);
+  filter: drop-shadow(0 0 5px yellow);
+}
+100% {
+transform: translate(-300px , 200px) scale(0.3);
+opacity: 0;
+filter: drop-shadow(0 0 2px yellow);
+}
+`;
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -34,34 +83,6 @@ const ProjectWrap = styled.div`
   height: 600px;
   bottom: 300px;
   z-index: 2;
-`;
-
-const ProjectFix = styled.div`
-  max-width: 920px;
-  max-height: 420px;
-  margin: 0 auto;
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-`;
-
-const ProjectItem = styled.div`
-  width: 300px;
-  height: 200px;
-  background-color: aliceblue;
-  box-shadow: 0px 0px 14px #fff;
-  position: relative;
-  border-radius: 10px;
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: #00000060;
-    border-radius: 10px;
-  }
 `;
 
 const CityWrap = styled.div`
@@ -111,66 +132,73 @@ const SkyWrap = styled(motion.div)`
   height: 100%;
 `;
 
-const SkyImg = styled(motion.img)`
+const SkyImg = styled.img`
   position: absolute;
   width: 100%;
   height: 100%;
   background: url(${process.env.PUBLIC_URL}/${(props) => props.img});
+  &.sky00 {
+    animation: ${star} 4s 3s ease-out infinite;
+  }
+  &.sky01 {
+    animation: ${star} 4s 2s ease-in infinite;
+  }
 `;
 
-const Projects = [
-  {
-    id: 1,
-    title: "캐릭터 능력치 홈페이지",
-    desc: "chackbox와 label을 활용한 이벤트",
-    main: "javaScript",
-    sub: "none",
-    people: "Personal",
-  },
-  {
-    id: 2,
-    title: "제품홍보 홈페이지",
-    desc: "여러 기업들의 제품 페이지를 찾아보고 적용해본 프로젝트",
-    main: "javaScript",
-    sub: "none",
-    people: "Personal",
-  },
-  {
-    id: 3,
-    title: "마켓컬리 디벨롭",
-    desc: "마켓컬리를 따라 만들고 유저 서치 후 UI 변경도 해본 디벨롭 페이지",
-    main: "javaScript",
-    sub: "slickSlider",
-    people: "Team",
-  },
-  {
-    id: 4,
-    title: "마켓컬리 디벨롭",
-    desc: "마켓컬리를 따라 만들고 유저 서치 후 UI 변경도 해본 디벨롭 페이지",
-    main: "javaScript",
-    sub: "slickSlider",
-    people: "Team",
-  },
-  {
-    id: 5,
-    title: "마켓컬리 디벨롭",
-    desc: "마켓컬리를 따라 만들고 유저 서치 후 UI 변경도 해본 디벨롭 페이지",
-    main: "javaScript",
-    sub: "slickSlider",
-    people: "Team",
-  },
-  {
-    id: 6,
-    title: "마켓컬리 디벨롭",
-    desc: "마켓컬리를 따라 만들고 유저 서치 후 UI 변경도 해본 디벨롭 페이지",
-    main: "javaScript",
-    sub: "slickSlider",
-    people: "Team",
-  },
-];
+const StarLineWrap = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
+const StarLine = styled.div`
+  border-radius: 4px;
+  background-color: #fff;
+  position: absolute;
+  z-index: 5;
+  /* opacity: 0; */
+  &.starLine1 {
+    top: 50%;
+    left: 30%;
+    width: 5px;
+    height: 5px;
+    animation: 4s ${starLineAni} ease-in infinite;
+  }
+  &.starLine2 {
+    top: 40%;
+    left: 80%;
+    width: 4px;
+    height: 4px;
+    animation: 6s ${starLineAni} ease-in infinite;
+  }
+  &.starLine3 {
+    top: 54%;
+    left: 82%;
+    animation: 7s ${starLineAni} ease-in infinite;
+  }
+  &.starLine4 {
+    top: 42%;
+    left: 30%;
+    width: 5px;
+    height: 5px;
+    animation: 5s ${starLineAni} ease-in infinite;
+  }
+  &.starLine5 {
+    top: 62%;
+    left: 82%;
+    width: 4px;
+    height: 4px;
+    animation: 6.2s ${starLineAni} ease-in infinite;
+  }
+  &.starLine6 {
+    top: 42%;
+    left: 52%;
+    width: 5px;
+    height: 5px;
+    animation: 3s ${starLineAni} ease-in infinite;
+  }
+`;
 
 const Project = forwardRef(function Project(props, ref) {
-  // const [x, setX] = useState(0);
   const speed = 0.1;
   const targetX = useRef(0);
   const { mouseX } = useMouseScroll();
@@ -182,8 +210,6 @@ const Project = forwardRef(function Project(props, ref) {
   const cityRef03 = useRef(null);
   const cityRef04 = useRef(null);
   const cityRef05 = useRef(null);
-  const sky00 = useRef(null);
-  const sky01 = useRef(null);
 
   useEffect(() => {
     const loop = () => {
@@ -238,13 +264,7 @@ const Project = forwardRef(function Project(props, ref) {
     <Wrapper ref={ref}>
       <Inner>
         <ProjectWrap>
-          <ProjectFix>
-            {Projects.map((project) => (
-              <ProjectItem key={project.id} {...project}>
-                {project.title}
-              </ProjectItem>
-            ))}
-          </ProjectFix>
+          <ProjectSection />
         </ProjectWrap>
         <CityWrap>
           <CityImg>
@@ -283,8 +303,16 @@ const Project = forwardRef(function Project(props, ref) {
           </CityImg>
         </CityWrap>
         <SkyWrap>
-          <SkyImg img={"project/SKY00.png"} ref={sky00} />
-          <SkyImg img={"project/SKY01.png"} ref={sky01} />
+          <SkyImg img={"project/SKY00.png"} className="sky00" />
+          <SkyImg img={"project/SKY01.png"} className="sky01" />
+          <StarLineWrap>
+            <StarLine className="starLine1" />
+            <StarLine className="starLine2" />
+            <StarLine className="starLine3" />
+            <StarLine className="starLine4" />
+            <StarLine className="starLine5" />
+            <StarLine className="starLine6" />
+          </StarLineWrap>
         </SkyWrap>
       </Inner>
     </Wrapper>

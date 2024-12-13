@@ -240,7 +240,6 @@ const Skill = forwardRef(function Skill(props, ref) {
 
   useEffect(() => {
     checkY();
-    console.log(targetY);
   }, [scrollY]);
 
   const veriants = useTransform(
