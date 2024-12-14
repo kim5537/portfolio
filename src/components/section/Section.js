@@ -12,6 +12,7 @@ const SectionItem = styled(motion.div)`
   width: 100vw;
   height: 120vh;
   z-index: 10;
+  pointer-events: none;
 `;
 
 const Section = () => {

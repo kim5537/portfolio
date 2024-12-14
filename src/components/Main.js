@@ -16,6 +16,7 @@ const Container = styled.div`
   height: 4000px;
   overflow: hidden;
   opacity: ${(props) => (props.isvisible === "block" ? 1 : 0)};
+  pointer-events: none;
 `;
 
 const ImgWrap = styled.div`

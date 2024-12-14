@@ -20,7 +20,6 @@ const star = keyframes`
 `;
 
 const starLineAni = keyframes`
-
 0% {
   opacity: 0;
   transform: translate(0px , 0px)
@@ -36,11 +35,7 @@ const starLineAni = keyframes`
   transform: translate(0px , 0px);
   filter: drop-shadow(0 0 0px inherit);
 }
-/* 80%{
-  opacity: 0;
-  transform: translate(0px , 0px) scale(1);
-  filter: drop-shadow(0 0 0px inherit);
-} */
+
 60% {
   opacity: 0.9;
   transform: translate(0px , 0px);
@@ -91,6 +86,7 @@ const CityWrap = styled.div`
   max-width: 100%;
   height: 700px;
   bottom: 10px;
+  pointer-events: none;
 `;
 
 const CityImg = styled.div`
