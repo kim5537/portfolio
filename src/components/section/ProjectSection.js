@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Projects } from "../../data";
 import { data } from "framer-motion/client";
+import { ArrowLeft, ArrowRight } from "../../style/imgobject";
+import Wave from "react-wavify";
 
 const ProjectInner = styled.div`
   z-index: 20;
@@ -10,6 +12,7 @@ const ProjectInner = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 `;
 
 const CategoryWrap = styled.div`
@@ -18,13 +21,18 @@ const CategoryWrap = styled.div`
   justify-content: end;
   margin-bottom: 10px;
   gap: 8px;
-  & > div {
-    background: #fff;
-    padding: 4px 2px;
-    border-radius: 6px;
-    min-width: 60px;
-    text-align: center;
-  }
+`;
+
+const CategoryItem = styled.div`
+  /* background-color: ${(props) => (props.active ? "#A2A7AA" : "#222")}; */
+  padding: 4px 2px;
+  border-radius: 6px;
+  min-width: 60px;
+  text-align: center;
+  color: ${(props) => props.theme.color.darkGray};
+  filter: ${(props) =>
+    props.active ? " drop-shadow(0px 0px 2px #A2A7AA)" : "none"};
+  font-weight: ${(props) => (props.active ? " 800" : "nomal")};
 `;
 
 const SliderWrap = styled.div`
@@ -35,7 +43,7 @@ const SlideWrap = styled.div`
   position: relative;
   width: 940px;
   height: 420px;
-  overflow: hidden;
+  /* overflow: hidden; */
 `;
 
 const ProjectFix = styled(motion.div)`
@@ -48,10 +56,9 @@ const ProjectFix = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
-  border: 1px solid #f00;
 `;
 
-const ProjectItem = styled.div`
+const ProjectItem = styled(motion.div)`
   width: 300px;
   height: 200px;
   background-color: aliceblue;
@@ -79,15 +86,15 @@ const ToggleWrap = styled.div`
 `;
 
 const ToggleLeft = styled.div`
-  width: 10px;
-  height: 10px;
-  background-color: #ffffff60;
+  margin-right: 20px;
+  //margin-bottom: 200px;
+  filter: drop-shadow(0px 0px 3px #a2a7aa);
 `;
 
 const ToggleRight = styled.div`
-  width: 10px;
-  height: 10px;
-  background-color: #ffffff60;
+  margin-left: 20px;
+  //margin-bottom: 200px;
+  filter: drop-shadow(0px 0px 3px #a2a7aa);
 `;
 
 const ProjectSection = () => {
@@ -98,6 +105,7 @@ const ProjectSection = () => {
   const [offset, setOffset] = useState(6);
   const [slideEnd, setSlideEnd] = useState(false);
   const [right, setRight] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("full");
 
   const toggleProject = () => {
     setSlideEnd((prev) => !prev);
@@ -120,8 +128,11 @@ const ProjectSection = () => {
   const typeFillter = (text) => {
     if (text === prevFillter) {
       setdatas(Projectsdata);
+      setActiveFilter("full");
       setprevFillter("full");
     } else {
+      setActiveFilter(text);
+      setDataIndex(0);
       const fillterdata = Projectsdata.filter(
         (project) => project.main === text
       );
@@ -131,51 +142,60 @@ const ProjectSection = () => {
   };
 
   const animeVariants = {
-    hidden: (custom) => ({
-      x: custom ? 940 + 10 : 940 - 10,
-    }),
-    // hidden: { opacity: 0 },
+    hidden: { opacity: 0 },
     visible: {
-      // x: 0,
       opacity: 1,
     },
-    exit: (custom) => ({
-      x: custom ? 940 - 10 : 940 + 10,
-    }),
-    // exit: {
-    //   opacity: 0,
-    // },
+    exit: {
+      opacity: 0,
+    },
   };
 
   return (
     <ProjectInner>
       <CategoryWrap>
-        <div onClick={() => typeFillter("javaScript")}>JS</div>
-        <div onClick={() => typeFillter("react")}>React</div>
-        <div onClick={() => typeFillter("typeScript")}>TS</div>
+        <CategoryItem
+          active={activeFilter === "javaScript"}
+          onClick={() => typeFillter("javaScript")}
+        >
+          JS
+        </CategoryItem>
+        <CategoryItem
+          active={activeFilter === "react"}
+          onClick={() => typeFillter("react")}
+        >
+          React
+        </CategoryItem>
+        <CategoryItem
+          active={activeFilter === "typeScript"}
+          onClick={() => typeFillter("typeScript")}
+        >
+          TS
+        </CategoryItem>
       </CategoryWrap>
       <SliderWrap>
         <ToggleWrap>
-          <ToggleLeft onClick={() => toggleFn("left")}> 왼 </ToggleLeft>
+          <ToggleLeft onClick={() => toggleFn("left")}>
+            <ArrowLeft fill={"#a2a7aa"} size={"20px"} />
+          </ToggleLeft>
+
           <AnimatePresence
             initial={false}
             custom={right}
             variants={toggleProject}
           >
             <SlideWrap>
-              <ProjectFix
-                variants={animeVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                transition={{ duration: 3 }}
-              >
+              <ProjectFix>
                 {datas
                   .slice(dataIndex * offset, dataIndex * offset + offset)
                   .map((project) => (
                     <ProjectItem
                       key={`Project-${project.id}`}
-                      onClick={() => toggleFn("확인")}
+                      variants={animeVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                      transition={{ duration: 3 }}
                     >
                       {project.title} ||
                       {project.people} ||
@@ -185,7 +205,9 @@ const ProjectSection = () => {
               </ProjectFix>
             </SlideWrap>
           </AnimatePresence>
-          <ToggleRight onClick={() => toggleFn("right")}>오</ToggleRight>
+          <ToggleRight onClick={() => toggleFn("right")}>
+            <ArrowRight fill={"#a2a7aa"} size={"20px"} />
+          </ToggleRight>
         </ToggleWrap>
       </SliderWrap>
     </ProjectInner>
