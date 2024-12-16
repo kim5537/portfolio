@@ -31,12 +31,6 @@ const ImgWrap = styled.div`
   position: relative;
 `;
 
-const Svg = styled(motion.svg)`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-`;
-
 const TextWrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -62,9 +56,6 @@ const AboutMe = forwardRef(function AboutMe(props, ref) {
   return (
     <Wrapper>
       <MainItem ref={ref}>
-        {/* <ImgWrap isInView={isInView}>
-          <LightSvg />
-        </ImgWrap> */}
         <ImgWrap>
           <Img bgimg={`aboutImg/mockLight.png`} />
         </ImgWrap>

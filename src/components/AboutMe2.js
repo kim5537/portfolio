@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
-import { Img } from "../style/imgobject";
-import { motion, useInView, useMotionValueEvent } from "framer-motion";
+import { Img, Tree01 } from "../style/imgobject";
+import { color, motion, useInView, useMotionValueEvent } from "framer-motion";
 
 const Container = styled.div`
   width: 100vw;
@@ -9,6 +9,19 @@ const Container = styled.div`
   height: 1200px;
   background-image: url(${process.env.PUBLIC_URL}/aboutImg/back00.png);
   padding-top: 40px;
+  border: 1px solid #f00;
+  position: relative;
+`;
+
+const Svgdiv = styled.div`
+  right: 0;
+  top: -200px;
+  width: 600px;
+  height: auto;
+  position: absolute;
+  rotate: -40deg;
+  z-index: 10;
+  border: 1px solid #f00;
 `;
 
 const BackImgWrap = styled.div`
@@ -258,6 +271,9 @@ const AboutMe2 = () => {
 
   return (
     <Container>
+      <Svgdiv>
+        <Tree01 color={`#6f623f`} />
+      </Svgdiv>
       <BackImgWrap>
         <Img
           bgimg={`aboutImg/sky.png`}
