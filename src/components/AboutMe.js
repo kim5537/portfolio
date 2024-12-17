@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import {
   motion,
@@ -6,8 +6,10 @@ import {
   useMotionValueEvent,
   useScroll,
 } from "framer-motion";
-import LightSvg from "../style/LightSvg";
+// import LightSvg from "../style/LightSvg";
 import { Img } from "../style/imgobject";
+import Light from "../style/Light";
+import LightItem from "../style/LightItem";
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -29,6 +31,9 @@ const ImgWrap = styled.div`
   width: 800px;
   height: 800px;
   position: relative;
+  svg {
+    position: absolute;
+  }
 `;
 
 const TextWrap = styled.div`
@@ -41,23 +46,24 @@ const TextWrap = styled.div`
 `;
 
 const AboutMe = forwardRef(function AboutMe(props, ref) {
-  const isvisible = useInView(ref, { once: true });
+  const aniRef = useRef();
+  const isvisible = useInView(aniRef, { once: true });
+  const [animatePaths, setAnimatePaths] = useState(false);
+
   const { scrollYProgress, scrollY } = useScroll();
 
-  useMotionValueEvent(scrollYProgress, "change", (current) => {
-    // console.log(scrollY.current);
-  });
-
-  const svgAni = {
-    start: { pathLength: 0 },
-    end: { pathLength: 1, transition: { duration: 3, repeat: Infinity } },
-  };
+  useMotionValueEvent(scrollYProgress, "change", (current) => {});
+  useEffect(() => {
+    console.log("isvisible", isvisible);
+    setAnimatePaths(true);
+  }, [isvisible]);
 
   return (
     <Wrapper>
       <MainItem ref={ref}>
         <ImgWrap>
-          <Img bgimg={`aboutImg/mockLight.png`} />
+          <LightItem animatePaths={animatePaths} ref={aniRef} />
+          <Light animatePaths={animatePaths} ref={aniRef} />
         </ImgWrap>
         <TextWrap isvisible={isvisible ? "visible" : "hidden"}>
           <div>웹사이트를 드로잉하는 Front End!</div>
