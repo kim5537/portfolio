@@ -5,6 +5,7 @@ import { Img } from "../style/imgobject";
 import { motion, animate, useTransform, AnimatePresence } from "framer-motion";
 import ProjectSection from "./section/ProjectSection";
 import Wave from "react-wavify";
+import ProjectModal from "./section/ProjectModal";
 
 const star = keyframes`
 0% {
@@ -70,6 +71,7 @@ const Inner = styled.div`
   width: 100vw;
   max-width: 100%;
   height: 100%;
+  z-index: 30;
 `;
 
 const ProjectWrap = styled.div`
@@ -88,15 +90,16 @@ const CityWrap = styled.div`
   height: 700px;
   bottom: 10px;
   pointer-events: none;
+  z-index: 1;
 `;
 
 const CityImg = styled.div`
-  position: relative;
+  /* position: relative; */
   width: 100%;
   height: 100%;
   /* border: 1px solid #f00; */
   .city {
-    z-index: 3;
+    z-index: 2;
   }
   .mount {
     z-index: 1;
@@ -136,9 +139,11 @@ const SkyImg = styled.img`
   background: url(${process.env.PUBLIC_URL}/${(props) => props.img});
   &.sky00 {
     animation: ${star} 4s 3s ease-out infinite;
+    pointer-events: none;
   }
   &.sky01 {
     animation: ${star} 4s 2s ease-in infinite;
+    pointer-events: none;
   }
 `;
 
@@ -161,6 +166,7 @@ const StarLine = styled.div`
   background-color: #fff;
   position: absolute;
   z-index: 5;
+  pointer-events: none;
   /* opacity: 0; */
   &.starLine1 {
     top: 50%;
@@ -204,6 +210,67 @@ const StarLine = styled.div`
   }
 `;
 
+const OverlayWrap = styled.div`
+  /* position: absolute; */
+  z-index: 40;
+`;
+
+const Overlay = styled(motion.div)`
+  top: 0;
+  z-index: 30;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: #00000060;
+`;
+
+const Section01 = styled.div`
+  width: 100vw;
+  max-width: 100%;
+  height: 0px;
+  top: 0;
+  border: 1px solid #f00;
+`;
+
+const TreeBack = styled.div`
+  height: auto;
+  width: 100vw;
+  max-width: 100%;
+  img {
+    position: absolute;
+    top: 0px;
+    width: 100vw;
+    max-width: 100%;
+    z-index: 6;
+  }
+`;
+
+const Tree = styled.div`
+  height: auto;
+  img {
+    position: absolute;
+    top: -100px;
+    right: -10vw;
+    width: 60vw;
+    transform: rotate(-10deg);
+    z-index: 10;
+    pointer-events: none;
+  }
+`;
+
+const Tree2 = styled.div`
+  height: auto;
+  img {
+    position: absolute;
+    top: -40px;
+    left: -10vw;
+    width: 70vw;
+    transform: rotate(12deg);
+    z-index: 10;
+    pointer-events: none;
+  }
+`;
+
 const Project = forwardRef(function Project(props, ref) {
   const speed = 0.1;
   const targetX = useRef(0);
@@ -216,6 +283,8 @@ const Project = forwardRef(function Project(props, ref) {
   const cityRef03 = useRef(null);
   const cityRef04 = useRef(null);
   const cityRef05 = useRef(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [targetId, setTargetId] = useState(0);
 
   useEffect(() => {
     const loop = () => {
@@ -266,11 +335,49 @@ const Project = forwardRef(function Project(props, ref) {
     loop();
   }, [mouseX]);
 
+  useEffect(() => {
+    if (modalOpen) {
+      document.body.style.overflow = "hidden";
+    }
+    if (!modalOpen) {
+      document.body.style.overflow = " visible";
+    }
+  }, [modalOpen]);
+
   return (
     <Wrapper ref={ref}>
+      <Section01>
+        <TreeBack>
+          <img
+            src={`${process.env.PUBLIC_URL}/section/back00.png`}
+            alt="back"
+          />
+        </TreeBack>
+        <Tree>
+          <img
+            src={`${process.env.PUBLIC_URL}/section/tree00.png`}
+            alt="tree"
+          />
+        </Tree>
+        <Tree2>
+          <img
+            src={`${process.env.PUBLIC_URL}/section/tree01.png`}
+            alt="tree"
+          />
+        </Tree2>
+      </Section01>
+
+      <ProjectModal
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+        targetId={targetId}
+      />
       <Inner>
         <ProjectWrap>
-          <ProjectSection />
+          <ProjectSection
+            setModalOpen={setModalOpen}
+            setTargetId={setTargetId}
+          />
         </ProjectWrap>
         <CityWrap>
           <CityImg>
@@ -308,6 +415,7 @@ const Project = forwardRef(function Project(props, ref) {
             />
           </CityImg>
         </CityWrap>
+
         <SkyWrap>
           <SkyImg img={"project/SKY00.png"} className="sky00" />
           <SkyImg img={"project/SKY01.png"} className="sky01" />
@@ -340,6 +448,11 @@ const Project = forwardRef(function Project(props, ref) {
           </Wave>
         </WaveWrap>
       </Inner>
+      {modalOpen ? (
+        <OverlayWrap>
+          <Overlay onClick={() => setModalOpen(false)} />
+        </OverlayWrap>
+      ) : null}
     </Wrapper>
   );
 });

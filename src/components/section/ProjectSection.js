@@ -96,9 +96,9 @@ const ToggleRight = styled.div`
   filter: drop-shadow(0px 0px 3px #a2a7aa);
 `;
 
-const ProjectSection = () => {
-  const [Projectsdata, seProjectsdata] = useState(data.project);
-  const [datas, setdatas] = useState(data.project);
+const ProjectSection = ({ setModalOpen, setTargetId }) => {
+  const [Projectsdata, seProjectsdata] = useState(data.projects);
+  const [datas, setdatas] = useState(data.projects);
   const [prevFillter, setprevFillter] = useState("");
   const [dataIndex, setDataIndex] = useState(0);
   const [offset, setOffset] = useState(6);
@@ -140,6 +140,11 @@ const ProjectSection = () => {
     }
   };
 
+  const handleModal = (id) => {
+    setTargetId(id);
+    setModalOpen(true);
+  };
+
   const animeVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -154,19 +159,19 @@ const ProjectSection = () => {
     <ProjectInner>
       <CategoryWrap>
         <CategoryItem
-          active={activeFilter === "javaScript"}
+          $active={activeFilter === "javaScript"}
           onClick={() => typeFillter("javaScript")}
         >
           JS
         </CategoryItem>
         <CategoryItem
-          active={activeFilter === "react"}
+          $active={activeFilter === "react"}
           onClick={() => typeFillter("react")}
         >
           React
         </CategoryItem>
         <CategoryItem
-          active={activeFilter === "typeScript"}
+          $active={activeFilter === "typeScript"}
           onClick={() => typeFillter("typeScript")}
         >
           TS
@@ -177,7 +182,6 @@ const ProjectSection = () => {
           <ToggleLeft onClick={() => toggleFn("left")}>
             <ArrowLeft fill={"#a2a7aa"} size={"20px"} />
           </ToggleLeft>
-
           <AnimatePresence
             initial={false}
             custom={right}
@@ -195,6 +199,7 @@ const ProjectSection = () => {
                       animate="visible"
                       exit="exit"
                       transition={{ duration: 3 }}
+                      onClick={() => handleModal(project.id)}
                     >
                       {project.title} ||
                       {project.people} ||

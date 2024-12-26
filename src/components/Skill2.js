@@ -16,7 +16,6 @@ import {
 } from "framer-motion";
 import data from "../data.json";
 import { useMouseScroll } from "../context/usecontext";
-import { object } from "framer-motion/client";
 //기준점
 
 const Container = styled.div`
@@ -109,13 +108,16 @@ const ModalWrap = styled(motion.div)`
   left: 400px;
 `;
 const ModalContents = styled.div`
+  padding: 10px 16px;
   width: 100%;
   height: 100%;
   background-color: ${(props) => props.theme.color.white};
   border-radius: 18px;
 `;
 const Name = styled.h5``;
-const Desc = styled.div``;
+const Desc = styled.div`
+  word-break: keep-all;
+`;
 
 const Title = styled(motion.h1)`
   font-family: ${({ theme }) => theme.font.title};
@@ -240,8 +242,9 @@ const Skill = forwardRef(function Skill(props, ref) {
   const [istop, setIstop] = useState("top : 0 ; bottom : auto ;");
   const [target, setTarget] = useState("");
   const [targetId, setTargetId] = useState();
-  const [modalOffen, setModalOffen] = useState(false);
+  const [modalopen, setModalOpen] = useState(false);
   const [mobile, setMobile] = useState(false);
+  const timerRef = useRef(null);
 
   useEffect(() => {
     const mobileSize = () => {
@@ -254,13 +257,13 @@ const Skill = forwardRef(function Skill(props, ref) {
     };
   }, []);
 
-  useEffect(() => {
-    if (modalOffen) {
-      setTimeout(() => {
-        setModalOffen(false);
-      }, 5000);
-    }
-  }, [modalOffen]);
+  // useEffect(() => {
+  //   if (modalopen) {
+  //     setTimeout(() => {
+  //       setModalOpen(false);
+  //     }, 5000);
+  //   }
+  // }, [modalopen]);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -270,6 +273,10 @@ const Skill = forwardRef(function Skill(props, ref) {
   const skills = data.skills;
 
   const checkY = () => {
+    if (!targetRef.current || !moveRef.current) {
+      console.error("targetRef or moveRef is not properly initialized.");
+      return;
+    }
     const rect = targetRef.current.getBoundingClientRect();
     const move = moveRef.current.getBoundingClientRect();
     const yTop = rect.top + window.scrollY;
@@ -312,9 +319,21 @@ const Skill = forwardRef(function Skill(props, ref) {
     setTarget(text);
     setTargetId(id);
     if (id !== targetId) {
-      setModalOffen(true);
-    } else setModalOffen((prev) => !prev);
+      setModalOpen(true);
+    } else setModalOpen((prev) => !prev);
+
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      setModalOpen(false); // 5초 후 Modal 닫기
+    }, 5000);
   };
+
+  useEffect(() => {
+    // 컴포넌트 언마운트 시 타이머 정리
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
 
   const veriants = useTransform(
     scrollYProgress,
@@ -376,11 +395,9 @@ const Skill = forwardRef(function Skill(props, ref) {
               <SkillWrap>
                 <Inner>
                   <Wrapper>
-                    <Title style={{ y: veriants }}>
-                      SKILL<p></p>
-                    </Title>
+                    <Title style={{ y: veriants }}>SKILL</Title>
                     <AnimatePresence initial={false}>
-                      {selectedSkill && modalOffen && (
+                      {selectedSkill && modalopen && (
                         <ModalWrap
                           key={`modal-${target}-${targetId}`}
                           variants={modalVariants}
@@ -415,7 +432,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                           whileHover={{ y: 4 }}
                         >
                           <div>
-                            <img
+                            <motion.img
                               alt={`train01-${skill.name}`}
                               src={`${process.env.PUBLIC_URL}${skill.img}`}
                             />
@@ -432,7 +449,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                           whileHover={{ y: 4 }}
                         >
                           <div>
-                            <img
+                            <motion.img
                               alt={`train01-${skill.name}`}
                               src={`${process.env.PUBLIC_URL}${skill.img}`}
                               whileHover={{ y: 4 }}
@@ -450,7 +467,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                           whileHover={{ y: 4 }}
                         >
                           <div>
-                            <img
+                            <motion.img
                               alt={`train01-${skill.name}`}
                               src={`${process.env.PUBLIC_URL}${skill.img}`}
                             />
@@ -467,7 +484,7 @@ const Skill = forwardRef(function Skill(props, ref) {
                           whileHover={{ y: 4 }}
                         >
                           <div>
-                            <img
+                            <motion.img
                               alt={`train01-${skill.name}`}
                               src={`${process.env.PUBLIC_URL}${skill.img}`}
                             />
@@ -490,4 +507,4 @@ const Skill = forwardRef(function Skill(props, ref) {
 export default Skill;
 
 /// 잎 밑에 부분에 위쪽에 스크롤이 걸리면 배경 + 전철이 같이 움직이고 이 크기는 100vh를 가지면 사실 배경+ 전철이 같이 움직이는데 유저입장에선 멈춰있게 보이지 않을까?
-///onMouseOut={() => setModalOffen(false)}
+///onMouseOut={() => setModalOpen(false)}
