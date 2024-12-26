@@ -12,8 +12,11 @@ import {
   motion,
   useMotionValueEvent,
   useTransform,
+  AnimatePresence,
 } from "framer-motion";
-
+import data from "../data.json";
+import { useMouseScroll } from "../context/usecontext";
+import { object } from "framer-motion/client";
 //기준점
 
 const Container = styled.div`
@@ -95,7 +98,24 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   margin-bottom: 24px;
+  position: relative;
 `;
+
+const ModalWrap = styled(motion.div)`
+  position: absolute;
+  width: 520px;
+  height: 118px;
+  top: -50px;
+  left: 400px;
+`;
+const ModalContents = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: ${(props) => props.theme.color.white};
+  border-radius: 18px;
+`;
+const Name = styled.h5``;
+const Desc = styled.div``;
 
 const Title = styled(motion.h1)`
   font-family: ${({ theme }) => theme.font.title};
@@ -181,7 +201,7 @@ const PartWrap = styled(motion.div)`
   background-color: ${({ theme }) => theme.color.white};
 `;
 
-const Part = styled.div`
+const Part = styled(motion.div)`
   width: 264px;
   height: 60px;
   background-color: ${({ theme }) => theme.color.green};
@@ -214,13 +234,40 @@ const Skill = forwardRef(function Skill(props, ref) {
   const targetRef = useRef();
   const moveRef = useRef();
   const [targetY, setTargetY] = useState({});
-  const { scrollY } = useScroll();
+  // const { crrentScrollY } = useScroll();
+  const { scrollY } = useMouseScroll();
   const [fixed, setFixed] = useState("absolute");
   const [istop, setIstop] = useState("top : 0 ; bottom : auto ;");
+  const [target, setTarget] = useState("");
+  const [targetId, setTargetId] = useState();
+  const [modalOffen, setModalOffen] = useState(false);
+  const [mobile, setMobile] = useState(false);
+
+  useEffect(() => {
+    const mobileSize = () => {
+      setMobile(window.innerWidth < 1000);
+    };
+
+    window.addEventListener("resize", mobileSize);
+    return () => {
+      window.removeEventListener("resize", mobileSize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (modalOffen) {
+      setTimeout(() => {
+        setModalOffen(false);
+      }, 5000);
+    }
+  }, [modalOffen]);
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"],
   });
+
+  const skills = data.skills;
 
   const checkY = () => {
     const rect = targetRef.current.getBoundingClientRect();
@@ -242,6 +289,33 @@ const Skill = forwardRef(function Skill(props, ref) {
     checkY();
   }, [scrollY]);
 
+  useMotionValueEvent(scrollY, "change", (last) => {
+    if (last >= targetY.top && last < targetY.bottom) {
+      setFixed("fixed"); // 화면 고정
+    } else {
+      setFixed("absolute"); // 화면 고정 해제
+    }
+
+    if (last > targetY.bottom) {
+      setIstop("top : auto ; bottom : 0 ;");
+    } else {
+      setIstop("top : 0 ; bottom : auto ;");
+    }
+  });
+
+  const selectedSkill =
+    target && targetId
+      ? skills[target]?.find((skill) => skill.id === targetId)
+      : null;
+
+  const handleModal = (text, id) => {
+    setTarget(text);
+    setTargetId(id);
+    if (id !== targetId) {
+      setModalOffen(true);
+    } else setModalOffen((prev) => !prev);
+  };
+
   const veriants = useTransform(
     scrollYProgress,
     [0, 0.2, 0.4, 0.6, 0.8, 1],
@@ -253,20 +327,16 @@ const Skill = forwardRef(function Skill(props, ref) {
     [-6, 6, -6, 6, -6, 6]
   );
 
-  useMotionValueEvent(scrollY, "change", () => {
-    if (scrollY.get() >= targetY.top && scrollY.get() < targetY.bottom) {
-      setFixed("fixed"); // 화면 고정
-    } else {
-      setFixed("absolute"); // 화면 고정 해제
-    }
-
-    if (scrollY.get() > targetY.bottom) {
-      setIstop("top : auto ; bottom : 0 ;");
-    } else {
-      setIstop("top : 0 ; bottom : auto ;");
-    }
-  });
-
+  const modalVariants = {
+    initial: (custom) => ({ opacity: 0, y: custom ? -100 : 100, scale: 0.8 }),
+    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5 } },
+    leaving: (custom) => ({
+      opacity: 0,
+      scale: 0.8,
+      y: custom ? 100 : -100,
+      transition: { duration: 0.3 },
+    }),
+  };
   return (
     <Container ref={ref}>
       <TopLeaf />
@@ -302,12 +372,30 @@ const Skill = forwardRef(function Skill(props, ref) {
                   ),
                 }}
               />
+
               <SkillWrap>
                 <Inner>
                   <Wrapper>
                     <Title style={{ y: veriants }}>
                       SKILL<p></p>
                     </Title>
+                    <AnimatePresence initial={false}>
+                      {selectedSkill && modalOffen && (
+                        <ModalWrap
+                          key={`modal-${target}-${targetId}`}
+                          variants={modalVariants}
+                          initial="initial"
+                          animate="visible"
+                          exit="leaving"
+                          custom={mobile}
+                        >
+                          <ModalContents>
+                            <Name>{selectedSkill.name}</Name>
+                            <Desc>{selectedSkill.desc}</Desc>
+                          </ModalContents>
+                        </ModalWrap>
+                      )}
+                    </AnimatePresence>
                   </Wrapper>
                 </Inner>
                 <Rail />
@@ -320,205 +408,73 @@ const Skill = forwardRef(function Skill(props, ref) {
                 >
                   <Train>
                     <PartWrap style={{ y: veriants }}>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train01-HTML"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_001.png`}
-                          />
-                        </div>
-                        <div>HTML</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train01-css"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_002.png`}
-                          />
-                        </div>
-                        <div>CSS</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train01-js"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_003.png`}
-                          />
-                        </div>
-                        <div>Java Script</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train01-scss"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_004.png`}
-                          />
-                        </div>
-                        <div>SCSS</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train01-styledcomponent"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_005.png`}
-                          />
-                        </div>
-                        <div style={{ fontSize: " 18px" }}>
-                          styled-Components
-                        </div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train01-TailWindcss"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_006.png`}
-                          />
-                        </div>
-                        <div>TailWindcss</div>
-                      </Part>
+                      {skills.skill01.map((skill) => (
+                        <Part
+                          key={skill.id}
+                          onClick={() => handleModal("skill01", skill.id)}
+                          whileHover={{ y: 4 }}
+                        >
+                          <div>
+                            <img
+                              alt={`train01-${skill.name}`}
+                              src={`${process.env.PUBLIC_URL}${skill.img}`}
+                            />
+                          </div>
+                          <div>{skill.name}</div>
+                        </Part>
+                      ))}
                     </PartWrap>
                     <PartWrap style={{ y: veriants2 }}>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train02-Apollo"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_007.png`}
-                          />
-                        </div>
-                        <div>Apollo</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train02-FireBase"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_008.png`}
-                          />
-                        </div>
-                        <div>FireBase</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train02-Netlify"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_009.png`}
-                          />
-                        </div>
-                        <div>Netlify</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train02-GraphQL"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_010.png`}
-                          />
-                        </div>
-                        <div>GraphQL</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train02-Node.js"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_018.png`}
-                          />
-                        </div>
-                        <div>Node.js</div>
-                      </Part>
+                      {skills.skill02.map((skill) => (
+                        <Part
+                          key={skill.id}
+                          onClick={() => handleModal("skill02", skill.id)}
+                          whileHover={{ y: 4 }}
+                        >
+                          <div>
+                            <img
+                              alt={`train01-${skill.name}`}
+                              src={`${process.env.PUBLIC_URL}${skill.img}`}
+                              whileHover={{ y: 4 }}
+                            />
+                          </div>
+                          <div>{skill.name}</div>
+                        </Part>
+                      ))}
                     </PartWrap>
                     <PartWrap style={{ y: veriants }}>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train03-React"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_015.png`}
-                          />
-                        </div>
-                        <div>React</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train03-Framer-motion"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_011.png`}
-                          />
-                        </div>
-                        <div style={{ fontSize: " 18px" }}>Framer-motion</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train03-Recoil"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_012.png`}
-                          />
-                        </div>
-                        <div>Recoil</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train03-Redux"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_013.png`}
-                          />
-                        </div>
-                        <div style={{ fontSize: " 18px" }}>
-                          Redux,Redux-thunk
-                        </div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train03-ReactQL"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_014.png`}
-                          />
-                        </div>
-                        <div>ReactQL</div>
-                      </Part>
+                      {skills.skill03.map((skill) => (
+                        <Part
+                          key={skill.id}
+                          onClick={() => handleModal("skill03", skill.id)}
+                          whileHover={{ y: 4 }}
+                        >
+                          <div>
+                            <img
+                              alt={`train01-${skill.name}`}
+                              src={`${process.env.PUBLIC_URL}${skill.img}`}
+                            />
+                          </div>
+                          <div>{skill.name}</div>
+                        </Part>
+                      ))}
                     </PartWrap>
                     <PartWrap style={{ y: veriants2 }}>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train04-TypeScript"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_016.png`}
-                          />
-                        </div>
-                        <div>TypeScript</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train04-Nextjs"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_018.png`}
-                          />
-                        </div>
-                        <div>Next,js</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train04-Github"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_019.png`}
-                          />
-                        </div>
-                        <div>Github</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train04-ClipStudio"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_020.png`}
-                          />
-                        </div>
-                        <div>Clip Studio</div>
-                      </Part>
-                      <Part>
-                        <div>
-                          <img
-                            alt="train04-SkechUP"
-                            src={`${process.env.PUBLIC_URL}/skill/icon_021.png`}
-                          />
-                        </div>
-                        <div>SkechUP</div>
-                      </Part>
+                      {skills.skill04.map((skill) => (
+                        <Part
+                          key={skill.id}
+                          onClick={() => handleModal("skill04", skill.id)}
+                          whileHover={{ y: 4 }}
+                        >
+                          <div>
+                            <img
+                              alt={`train01-${skill.name}`}
+                              src={`${process.env.PUBLIC_URL}${skill.img}`}
+                            />
+                          </div>
+                          <div>{skill.name}</div>
+                        </Part>
+                      ))}
                     </PartWrap>
                   </Train>
                 </TrainMotion>
@@ -534,3 +490,4 @@ const Skill = forwardRef(function Skill(props, ref) {
 export default Skill;
 
 /// 잎 밑에 부분에 위쪽에 스크롤이 걸리면 배경 + 전철이 같이 움직이고 이 크기는 100vh를 가지면 사실 배경+ 전철이 같이 움직이는데 유저입장에선 멈춰있게 보이지 않을까?
+///onMouseOut={() => setModalOffen(false)}

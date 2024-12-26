@@ -11,7 +11,7 @@ const Light = ({ animatePaths }) => {
     initial: (index) => ({
       strokeDasharray: index % 2 === 0 ? "100, 20" : "110, 15",
       strokeDashoffset: 100,
-      stroke: "#fce0b9",
+      stroke: "#fff",
     }),
     animate: (index) => ({
       strokeDashoffset: 0,
@@ -28,7 +28,7 @@ const Light = ({ animatePaths }) => {
     initial: (index) => ({
       strokeDasharray: index % 2 === 0 ? "100, 20" : "80, 5",
       strokeDashoffset: 0,
-      stroke: "#fce0b9",
+      stroke: "#fff",
     }),
     animate: (index) => ({
       strokeDashoffset: 100,

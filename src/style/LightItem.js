@@ -39,8 +39,9 @@ const LightItem = ({ animatePaths }) => {
 
       .cls-1, .cls-2 {
         fill: none;
-        stroke: #38801e;
+        stroke:rgb(247, 247, 227);
         stroke-linecap: round;
+        stroke-width: 2px
     
       }
 
