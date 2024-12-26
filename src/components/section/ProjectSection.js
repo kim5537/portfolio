@@ -1,8 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Projects } from "../../data";
-import { data } from "framer-motion/client";
+import data from "../../data.json";
 import { ArrowLeft, ArrowRight } from "../../style/imgobject";
 import Wave from "react-wavify";
 
@@ -98,8 +97,8 @@ const ToggleRight = styled.div`
 `;
 
 const ProjectSection = () => {
-  const [Projectsdata, seProjectsdata] = useState(Projects);
-  const [datas, setdatas] = useState(Projects);
+  const [Projectsdata, seProjectsdata] = useState(data.project);
+  const [datas, setdatas] = useState(data.project);
   const [prevFillter, setprevFillter] = useState("");
   const [dataIndex, setDataIndex] = useState(0);
   const [offset, setOffset] = useState(6);

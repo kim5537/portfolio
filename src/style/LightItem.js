@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
+import styled from "styled-components";
+
+const Svg = styled.svg`
+  position: absolute;
+`;
 
 const LightItem = ({ animatePaths }) => {
-  useEffect(() => {
-    console.log("라이트아이템", animatePaths);
-  }, [animatePaths]);
+  useEffect(() => {}, [animatePaths]);
   const LightItemVariants = {
     start: {
       pathLength: 0,
@@ -22,7 +25,7 @@ const LightItem = ({ animatePaths }) => {
     },
   };
   return (
-    <svg
+    <Svg
       id="_레이어_1"
       data-name="레이어_1"
       xmlns="http://www.w3.org/2000/svg"
@@ -31,12 +34,12 @@ const LightItem = ({ animatePaths }) => {
       <defs>
         <style>
           {`      .cls-1 {
-        stroke-miterlimit: 10;
+        strokeMiterlimit: 10;
       }
 
       .cls-1, .cls-2 {
         fill: none;
-        stroke: #fff;
+        stroke: #38801e;
         stroke-linecap: round;
     
       }
@@ -47,7 +50,6 @@ const LightItem = ({ animatePaths }) => {
         </style>
       </defs>
       <motion.path
-        key={animatePaths ? "end" : "start"}
         className="cls-1"
         d="M266.91,245.07c2.51,3.54-3.59,15.15-11.27,21.26-5.51,4.38-9.74,5.39-12.73,6.44-2.03.71-11.97,2.68-14.38.65-1.68-1.42-.55-3.52-1.67-6.15-.88-2.06-5.45-8.12-6.54-9.4-5.22-6.1-7.59-9.34-9.99-9.67-1.46-.2-3.54-1.9-4.03-3.61,3.52-1.35,4.94-1.91,8.69-3.65,7.75-3.61,12.69-7.37,16.59-11.13,2.98-2.87,3.46-3.35,7.21-7.34,2.5-2.67,2.83-3.06,4.41-5.1,1.19,1.02,3.05,3.61,3.01,5.26-.06,2.53,1.52,4.52,6.99,11.66,4.87,6.36,6.44,7.09,8.41,7.92,2.88,1.22,4.43,1.6,5.31,2.85Z"
         variants={LightItemVariants}
@@ -55,7 +57,6 @@ const LightItem = ({ animatePaths }) => {
         animate={animatePaths ? "end" : "start"}
       />
       <motion.path
-        key={animatePaths ? "end" : "start"}
         className="cls-1"
         d="M260.79,261.52c.87,1.07,1.55,3.39,1.49,5.18-.07,1.98-1.38,4.58-3.49,6.16-2.47,1.85-4.94,1.77-7.25,1.45-1.84-.25-4.22-3.09-4.22-3.09"
         variants={LightItemVariants}
@@ -97,8 +98,8 @@ const LightItem = ({ animatePaths }) => {
         initial="start"
         animate={animatePaths ? "end" : "start"}
       />
-    </svg>
+    </Svg>
   );
 };
 
-export default LightItem;
+export default React.memo(LightItem);

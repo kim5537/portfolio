@@ -1,16 +1,23 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import styled from "styled-components";
+
+const Svg = styled.svg`
+  position: absolute;
+`;
 
 const Light = ({ animatePaths }) => {
   const lineVariants = {
     initial: (index) => ({
       strokeDasharray: index % 2 === 0 ? "100, 20" : "110, 15",
       strokeDashoffset: 100,
+      stroke: "#fce0b9",
     }),
     animate: (index) => ({
       strokeDashoffset: 0,
+      stroke: "#fff",
       transition: {
-        delay: index * 0.2 + 3,
+        delay: index * 0.2 + 1,
         duration: 2,
         ease: "easeInOut",
         repeat: Infinity,
@@ -21,11 +28,13 @@ const Light = ({ animatePaths }) => {
     initial: (index) => ({
       strokeDasharray: index % 2 === 0 ? "100, 20" : "80, 5",
       strokeDashoffset: 0,
+      stroke: "#fce0b9",
     }),
     animate: (index) => ({
       strokeDashoffset: 100,
+      stroke: "#fff",
       transition: {
-        delay: index * 0.2 + 3,
+        delay: index * 0.2 + 1,
         duration: 2,
         ease: "easeInOut",
         repeat: Infinity,
@@ -34,21 +43,21 @@ const Light = ({ animatePaths }) => {
   };
 
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 306.55 276.13">
+    <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 306.55 276.13">
       <defs>
         <style>
-          {`     .cls-1 {
+          {`.light {
         fill: none;
         stroke-linejoin: round;
-        stroke: #fff;
         stroke-linecap: round;
+        stroke-width 20;
       }`}
         </style>
       </defs>
 
       <g id="light">
         <motion.line
-          className="cls-1"
+          className="light"
           x1="42.62"
           y1="48.93"
           x2="106.27"
@@ -59,7 +68,7 @@ const Light = ({ animatePaths }) => {
           animate={animatePaths ? "animate" : "initial"}
         />
         <motion.line
-          className="cls-1"
+          className="light"
           x1="95.51"
           y1="35.72"
           x2="124.11"
@@ -70,7 +79,7 @@ const Light = ({ animatePaths }) => {
           custom={3}
         />
         <motion.line
-          className="cls-1"
+          className="light"
           x1="134.72"
           y1="7.53"
           x2="144.96"
@@ -81,7 +90,7 @@ const Light = ({ animatePaths }) => {
           custom={5}
         />
         <motion.line
-          className="cls-1"
+          className="light"
           x1="181.81"
           y1="29.77"
           x2="171.32"
@@ -92,7 +101,7 @@ const Light = ({ animatePaths }) => {
           custom={2}
         />
         <motion.line
-          className="cls-1"
+          className="light"
           x1="222.33"
           y1="18.54"
           x2="194.8"
@@ -103,7 +112,7 @@ const Light = ({ animatePaths }) => {
           custom={5}
         />
         <motion.line
-          className="cls-1"
+          className="light"
           x1="211.54"
           y1="101.78"
           x2="277.82"
@@ -114,7 +123,7 @@ const Light = ({ animatePaths }) => {
           custom={3}
         />
         <motion.line
-          className="cls-1"
+          className="light"
           x1="231.14"
           y1="115.66"
           x2="304.25"
@@ -125,7 +134,7 @@ const Light = ({ animatePaths }) => {
           custom={2}
         />
         <motion.line
-          className="cls-1"
+          className="light"
           x1="235.98"
           y1="135.7"
           x2="286.85"
@@ -136,7 +145,7 @@ const Light = ({ animatePaths }) => {
           custom={4}
         />
         <motion.line
-          className="cls-1"
+          className="light"
           x1="236.88"
           y1="157.28"
           x2="280.25"
@@ -147,7 +156,7 @@ const Light = ({ animatePaths }) => {
           custom={4}
         />
         <motion.line
-          className="cls-1"
+          className="light"
           x1="244.68"
           y1="180.23"
           x2="269.23"
@@ -158,7 +167,7 @@ const Light = ({ animatePaths }) => {
           custom={1}
         />
         <motion.line
-          className="cls-1"
+          className="light"
           x1="235.98"
           y1="195.16"
           x2="261.42"
@@ -169,7 +178,7 @@ const Light = ({ animatePaths }) => {
           custom={2}
         />
         <motion.line
-          className="cls-1"
+          className="light"
           x1="178.06"
           y1="236.68"
           x2="183.57"
@@ -180,7 +189,7 @@ const Light = ({ animatePaths }) => {
           custom={5}
         />
         <motion.line
-          className="cls-1"
+          className="light"
           x1="154.72"
           y1="236.68"
           x2="153.41"
@@ -191,7 +200,7 @@ const Light = ({ animatePaths }) => {
           custom={2}
         />
         <motion.line
-          className="cls-1"
+          className="light"
           x1="132.03"
           y1="222.2"
           x2="118.82"
@@ -202,7 +211,7 @@ const Light = ({ animatePaths }) => {
           custom={4}
         />
         <motion.line
-          className="cls-1"
+          className="light"
           x1="111.27"
           y1="215.86"
           x2="71.69"
@@ -213,7 +222,7 @@ const Light = ({ animatePaths }) => {
           custom={2}
         />
         <motion.line
-          className="cls-1"
+          className="light"
           x1="92.39"
           y1="201.55"
           x2="51.65"
@@ -224,7 +233,7 @@ const Light = ({ animatePaths }) => {
           custom={5}
         />
         <motion.line
-          className="cls-1"
+          className="light"
           x1="82.48"
           y1="188.55"
           x2="2.1"
@@ -235,7 +244,7 @@ const Light = ({ animatePaths }) => {
           custom={1}
         />
         <motion.line
-          className="cls-1"
+          className="light"
           x1="81.16"
           y1="163.45"
           x2="12.23"
@@ -246,7 +255,7 @@ const Light = ({ animatePaths }) => {
           custom={6}
         />
         <motion.line
-          className="cls-1"
+          className="light"
           x1="79.62"
           y1="143.24"
           x2="17.52"
@@ -257,7 +266,7 @@ const Light = ({ animatePaths }) => {
           custom={4}
         />
         <motion.line
-          className="cls-1"
+          className="light"
           x1="81.16"
           y1="117.2"
           x2="30.29"
@@ -268,8 +277,8 @@ const Light = ({ animatePaths }) => {
           custom={3}
         />
       </g>
-    </svg>
+    </Svg>
   );
 };
 
-export default Light;
+export default React.memo(Light);

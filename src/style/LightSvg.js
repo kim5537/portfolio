@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
-const Svg = styled.svg``;
+// const Svg = styled.svg``;
 
 const LightSvg = ({ isInView }) => {
   const svgAni = {
@@ -23,7 +23,7 @@ const LightSvg = ({ isInView }) => {
   };
 
   return (
-    <Svg
+    <svg
       width="448"
       height="448"
       viewBox="0 0 448 448"
@@ -530,7 +530,7 @@ const LightSvg = ({ isInView }) => {
         stroke-linecap="round"
         stroke-linejoin="round"
       />
-    </Svg>
+    </svg>
   );
 };
 

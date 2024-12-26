@@ -25,15 +25,13 @@ const MainItem = styled.main`
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 30px;
 `;
 
 const ImgWrap = styled.div`
-  width: 800px;
-  height: 800px;
+  width: 400px;
+  height: 400px;
   position: relative;
-  svg {
-    position: absolute;
-  }
 `;
 
 const TextWrap = styled.div`
@@ -45,6 +43,14 @@ const TextWrap = styled.div`
   color: ${({ theme }) => theme.color.white};
 `;
 
+const Marking = styled.div`
+  position: absolute;
+  width: 300px;
+  height: 30px;
+  background-color: ${({ theme }) => theme.color.woodColor};
+  opacity: 0.7;
+`;
+
 const AboutMe = forwardRef(function AboutMe(props, ref) {
   const aniRef = useRef();
   const isvisible = useInView(aniRef, { once: true });
@@ -53,17 +59,19 @@ const AboutMe = forwardRef(function AboutMe(props, ref) {
   const { scrollYProgress, scrollY } = useScroll();
 
   useMotionValueEvent(scrollYProgress, "change", (current) => {});
+
   useEffect(() => {
-    console.log("isvisible", isvisible);
-    setAnimatePaths(true);
+    if (isvisible) {
+      setAnimatePaths(true);
+    }
   }, [isvisible]);
 
   return (
     <Wrapper>
       <MainItem ref={ref}>
-        <ImgWrap>
-          <LightItem animatePaths={animatePaths} ref={aniRef} />
-          <Light animatePaths={animatePaths} ref={aniRef} />
+        <ImgWrap ref={aniRef}>
+          <LightItem animatePaths={animatePaths} />
+          <Light animatePaths={animatePaths} />
         </ImgWrap>
         <TextWrap isvisible={isvisible ? "visible" : "hidden"}>
           <div>웹사이트를 드로잉하는 Front End!</div>
