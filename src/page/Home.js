@@ -41,7 +41,6 @@ const Home = ({ navTarget }) => {
       <AboutMe ref={aboutRef} />
       <AboutMe2 />
       <Skill2 ref={skillRef} />
-
       <Project ref={projectRef} />
       <Art ref={artRef} />
     </>

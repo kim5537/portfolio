@@ -7,7 +7,7 @@ const Svg = styled.svg`
 `;
 
 const LightItem = ({ animatePaths }) => {
-  useEffect(() => {}, [animatePaths]);
+  // useEffect(() => {}, [animatePaths]);
   const LightItemVariants = {
     start: {
       pathLength: 0,

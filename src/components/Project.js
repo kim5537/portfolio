@@ -71,7 +71,7 @@ const Inner = styled.div`
   width: 100vw;
   max-width: 100%;
   height: 100%;
-  z-index: 30;
+  z-index: 10;
 `;
 
 const ProjectWrap = styled.div`
@@ -157,7 +157,6 @@ const WaveWrap = styled.div`
   height: 30px;
   position: absolute;
   bottom: 0;
-  border: 1px solid #f00;
   z-index: 20;
 `;
 
@@ -229,7 +228,6 @@ const Section01 = styled.div`
   max-width: 100%;
   height: 0px;
   top: 0;
-  border: 1px solid #f00;
 `;
 
 const TreeBack = styled.div`
@@ -347,12 +345,12 @@ const Project = forwardRef(function Project(props, ref) {
   return (
     <Wrapper ref={ref}>
       <Section01>
-        <TreeBack>
+        {/* <TreeBack>
           <img
             src={`${process.env.PUBLIC_URL}/section/back00.png`}
             alt="back"
           />
-        </TreeBack>
+        </TreeBack> */}
         <Tree>
           <img
             src={`${process.env.PUBLIC_URL}/section/tree00.png`}
@@ -415,7 +413,6 @@ const Project = forwardRef(function Project(props, ref) {
             />
           </CityImg>
         </CityWrap>
-
         <SkyWrap>
           <SkyImg img={"project/SKY00.png"} className="sky00" />
           <SkyImg img={"project/SKY01.png"} className="sky01" />

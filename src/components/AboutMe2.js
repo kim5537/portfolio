@@ -1,6 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
-import { Img, Tree01 } from "../style/imgobject";
+import {
+  Bird,
+  Flower01,
+  Flower02,
+  Img,
+  Tree01,
+  Tree02,
+} from "../style/imgobject";
 import { color, motion, useInView, useMotionValueEvent } from "framer-motion";
 
 const Container = styled.div`
@@ -9,19 +16,43 @@ const Container = styled.div`
   height: 1200px;
   background-image: url(${process.env.PUBLIC_URL}/aboutImg/back00.png);
   padding-top: 40px;
-  border: 1px solid #f00;
   position: relative;
 `;
 
 const Svgdiv = styled.div`
-  right: 0;
-  top: -200px;
-  width: 600px;
   height: auto;
   position: absolute;
-  rotate: -40deg;
   z-index: 10;
-  border: 1px solid #f00;
+  &.tree01 {
+    right: 0;
+    top: -30px;
+    width: 800px;
+    rotate: -40deg;
+  }
+  &.tree02 {
+    top: 0;
+    left: 0;
+    width: 100%;
+    svg {
+      stroke-width: 2px;
+    }
+  }
+  &.bird {
+    top: 28px;
+    right: 0;
+    width: 20%;
+    svg {
+      stroke-width: 1px;
+    }
+  }
+`;
+
+const TreeBird = styled.div`
+  position: absolute;
+  height: 600px;
+  width: 900px;
+  top: 1000px;
+  left: -80px;
 `;
 
 const BackImgWrap = styled.div`
@@ -117,9 +148,33 @@ const Text = styled.h2`
   }
 `;
 
-const Box = styled.div`
+const CharacterWrap = styled.div`
   width: 100%;
   height: 100%;
+  svg {
+    position: absolute;
+    &#flower01 {
+      width: 100px;
+      height: 120px;
+      top: -9px;
+      left: 154px;
+      rotate: -10deg;
+      stroke-width: 1px;
+      rotate: -14deg;
+    }
+    &#flower02 {
+      width: 80px;
+      height: 130px;
+      top: -20px;
+      left: 220px;
+    }
+  }
+`;
+
+const Box = styled.div`
+  width: 100%;
+  height: calc(100% - 60px);
+  margin-top: 60px;
   background-color: ${({ theme }) => theme.color.white};
   border: 1px solid ${(props) => props.theme.color.mainDark};
   border-radius: 40px;
@@ -266,14 +321,24 @@ const AboutMe2 = () => {
   const wapRef2 = useRef(null);
   const wapRef3 = useRef(null);
   const wapRef4 = useRef(null);
+  const flower01 = useRef(null);
+  const flower02 = useRef(null);
 
   const wapView = useInView(wapRef, { once: true });
 
   return (
     <Container>
-      <Svgdiv>
-        <Tree01 color={`#6f623f`} />
+      <Svgdiv className="tree01">
+        <Tree01 color={`#6f623f`} wapView={wapView} />
       </Svgdiv>
+      <TreeBird>
+        <Svgdiv className="tree02">
+          <Tree02 color={`#6f623f`} wapView={wapView} />
+        </Svgdiv>
+        <Svgdiv className="bird">
+          <Bird color={`#6f623f`} wapView={wapView} />
+        </Svgdiv>
+      </TreeBird>
       <BackImgWrap>
         <Img
           bgimg={`aboutImg/sky.png`}
@@ -291,17 +356,31 @@ const AboutMe2 = () => {
               <p>샘솟는 창의력을 가진 </p>
               <p>드로잉 가능한 개발자 김령희 입니다.</p>
             </Text>
-            <Box>
-              <Img
-                bgimg={`aboutImg/character.png`}
-                width={`300px`}
-                height={`480px`}
-                left={`8%`}
-                top={`auto`}
-                styleplus={`bottom: 0;`}
-                media="width: 100% ; height: 100%; background-size:contain; bottom: -10% ; left: 50% ; transform:translateX(-50%)"
+            <CharacterWrap>
+              <Flower01
+                ref={flower01}
+                className="flower01"
+                color={`#6f623f`}
+                wapView={wapView}
               />
-            </Box>
+              <Flower02
+                ref={flower02}
+                className="flower02"
+                color={`#6f623f`}
+                wapView={wapView}
+              />
+              <Box>
+                <Img
+                  bgimg={`aboutImg/character.png`}
+                  width={`300px`}
+                  height={`480px`}
+                  left={`8%`}
+                  top={`auto`}
+                  styleplus={`bottom: 0;`}
+                  media="width: 100% ; height: 100%; background-size:contain; bottom: -10% ; left: 50% ; transform:translateX(-50%)"
+                />
+              </Box>
+            </CharacterWrap>
           </Left>
           <Right>
             <Wap1
