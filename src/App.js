@@ -3,17 +3,9 @@ import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import MouseEventContext from "./context/context";
 import theme from "./style/theme";
 import Nav from "./components/Nav";
-// import Main from "./components/Main";
-// import AboutMe from "./components/AboutMe";
-// import AboutMe2 from "./components/AboutMe2";
-// // import Skill from "./components/Skill";
-// import Skill2 from "./components/Skill2";
-// import Project from "./components/Project";
-// import Art from "./components/Art";
 import { useScroll } from "framer-motion";
 import { throttle } from "lodash";
 import Home from "./page/Home";
-import ProjectModal from "./components/section/ProjectModal";
 
 const Globalstyle = createGlobalStyle`
   @font-face {

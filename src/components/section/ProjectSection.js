@@ -30,8 +30,8 @@ const CategoryItem = styled.div`
   text-align: center;
   color: ${(props) => props.theme.color.darkGray};
   filter: ${(props) =>
-    props.active ? " drop-shadow(0px 0px 2px #A2A7AA)" : "none"};
-  font-weight: ${(props) => (props.active ? " 800" : "nomal")};
+    props.check ? " drop-shadow(0px 0px 2px #A2A7AA)" : "none"};
+  font-weight: ${(props) => (props.check ? " 800" : "nomal")};
 `;
 
 const SliderWrap = styled.div`
@@ -159,19 +159,19 @@ const ProjectSection = ({ setModalOpen, setTargetId }) => {
     <ProjectInner>
       <CategoryWrap>
         <CategoryItem
-          $active={activeFilter === "javaScript"}
+          check={activeFilter === "javaScript"}
           onClick={() => typeFillter("javaScript")}
         >
           JS
         </CategoryItem>
         <CategoryItem
-          $active={activeFilter === "react"}
+          check={activeFilter === "react"}
           onClick={() => typeFillter("react")}
         >
           React
         </CategoryItem>
         <CategoryItem
-          $active={activeFilter === "typeScript"}
+          check={activeFilter === "typeScript"}
           onClick={() => typeFillter("typeScript")}
         >
           TS

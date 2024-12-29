@@ -6,6 +6,7 @@ import { motion, animate, useTransform, AnimatePresence } from "framer-motion";
 import ProjectSection from "./section/ProjectSection";
 import Wave from "react-wavify";
 import ProjectModal from "./section/ProjectModal";
+import { symbol } from "framer-motion/client";
 
 const star = keyframes`
 0% {
@@ -57,6 +58,7 @@ const Wrapper = styled.div`
   overflow: hidden;
   background: url(${process.env.PUBLIC_URL}/project/back.png);
   position: relative;
+  z-index: 1;
   &::before {
     content: "";
     height: 100%;
@@ -132,19 +134,26 @@ const SkyWrap = styled(motion.div)`
   height: 100%;
 `;
 
-const SkyImg = styled.img`
+const SkyStarWrap = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
+const Star01 = styled(motion.img)`
   position: absolute;
+  top: 0;
   width: 100%;
   height: 100%;
   background: url(${process.env.PUBLIC_URL}/${(props) => props.img});
-  &.sky00 {
-    animation: ${star} 4s 3s ease-out infinite;
-    pointer-events: none;
-  }
-  &.sky01 {
-    animation: ${star} 4s 2s ease-in infinite;
-    pointer-events: none;
-  }
+  animation: ${star} 4s 3s ease-out infinite;
+`;
+const Star02 = styled(motion.img)`
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: url(${process.env.PUBLIC_URL}/${(props) => props.img});
+  animation: ${star} 4s 2s ease-out infinite;
 `;
 
 const StarLineWrap = styled.div`
@@ -223,52 +232,6 @@ const Overlay = styled(motion.div)`
   background-color: #00000060;
 `;
 
-const Section01 = styled.div`
-  width: 100vw;
-  max-width: 100%;
-  height: 0px;
-  top: 0;
-`;
-
-const TreeBack = styled.div`
-  height: auto;
-  width: 100vw;
-  max-width: 100%;
-  img {
-    position: absolute;
-    top: 0px;
-    width: 100vw;
-    max-width: 100%;
-    z-index: 6;
-  }
-`;
-
-const Tree = styled.div`
-  height: auto;
-  img {
-    position: absolute;
-    top: -100px;
-    right: -10vw;
-    width: 60vw;
-    transform: rotate(-10deg);
-    z-index: 10;
-    pointer-events: none;
-  }
-`;
-
-const Tree2 = styled.div`
-  height: auto;
-  img {
-    position: absolute;
-    top: -40px;
-    left: -10vw;
-    width: 70vw;
-    transform: rotate(12deg);
-    z-index: 10;
-    pointer-events: none;
-  }
-`;
-
 const Project = forwardRef(function Project(props, ref) {
   const speed = 0.1;
   const targetX = useRef(0);
@@ -344,27 +307,6 @@ const Project = forwardRef(function Project(props, ref) {
 
   return (
     <Wrapper ref={ref}>
-      <Section01>
-        {/* <TreeBack>
-          <img
-            src={`${process.env.PUBLIC_URL}/section/back00.png`}
-            alt="back"
-          />
-        </TreeBack> */}
-        <Tree>
-          <img
-            src={`${process.env.PUBLIC_URL}/section/tree00.png`}
-            alt="tree"
-          />
-        </Tree>
-        <Tree2>
-          <img
-            src={`${process.env.PUBLIC_URL}/section/tree01.png`}
-            alt="tree"
-          />
-        </Tree2>
-      </Section01>
-
       <ProjectModal
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}
@@ -414,8 +356,10 @@ const Project = forwardRef(function Project(props, ref) {
           </CityImg>
         </CityWrap>
         <SkyWrap>
-          <SkyImg img={"project/SKY00.png"} className="sky00" />
-          <SkyImg img={"project/SKY01.png"} className="sky01" />
+          <SkyStarWrap>
+            <Star01 alt="star" img={"project/SKY00.png"} />
+            <Star02 alt="star" img={"project/SKY01.png"} />
+          </SkyStarWrap>
           <StarLineWrap>
             <StarLine className="starLine1" />
             <StarLine className="starLine2" />

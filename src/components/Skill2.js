@@ -325,7 +325,7 @@ const Skill = forwardRef(function Skill(props, ref) {
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
       setModalOpen(false); // 5초 후 Modal 닫기
-    }, 5000);
+    }, 10000);
   };
 
   useEffect(() => {
