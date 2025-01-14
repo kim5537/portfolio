@@ -28,6 +28,11 @@ const Svgdiv = styled.div`
     top: -30px;
     width: 800px;
     rotate: -40deg;
+    @media (max-width: 900px) {
+      top: -110px;
+      right: -50px;
+      width: 400px;
+    }
   }
   &.tree02 {
     top: 0;
@@ -39,10 +44,17 @@ const Svgdiv = styled.div`
   }
   &.bird {
     top: 28px;
-    right: 0;
     width: 20%;
     svg {
       stroke-width: 1px;
+    }
+    @media (max-width: 900px) {
+      width: 20%;
+      right: 0px;
+      top: 18px;
+      svg {
+        stroke-width: 2px;
+      }
     }
   }
 `;
@@ -53,6 +65,11 @@ const TreeBird = styled.div`
   width: 900px;
   top: 1000px;
   left: -80px;
+  @media (max-width: 900px) {
+    width: 460px;
+    top: 1040px;
+    left: -120px;
+  }
 `;
 
 const BackImgWrap = styled.div`
@@ -161,12 +178,24 @@ const CharacterWrap = styled.div`
       rotate: -10deg;
       stroke-width: 1px;
       rotate: -14deg;
+      @media (max-width: 900px) {
+        top: 340px;
+        width: 40px;
+        left: 20px;
+        stroke-width: 2px;
+      }
     }
     &#flower02 {
       width: 80px;
       height: 130px;
       top: -20px;
       left: 220px;
+      @media (max-width: 900px) {
+        top: 324px;
+        width: 40px;
+        left: 50px;
+        stroke-width: 2px;
+      }
     }
   }
 `;

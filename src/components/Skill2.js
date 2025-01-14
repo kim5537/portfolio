@@ -171,6 +171,9 @@ const SkillWrap = styled.div`
   max-width: 100%;
   height: 530px;
   margin-top: 30vh;
+  @media (max-width: 900px) {
+    height: 400px;
+  }
 `;
 
 const Rail = styled.div`
@@ -182,13 +185,6 @@ const Rail = styled.div`
   margin-top: 400px;
   bottom: -80px;
 `;
-
-// //임시 트레인 랩
-// const TrainWrap = styled.div`
-//   width: 1200px;
-//   height: 100%;
-//   margin: 0 auto;
-// `;
 
 const TrainMotion = styled(motion.div)`
   position: absolute;
@@ -217,6 +213,10 @@ const PartWrap = styled(motion.div)`
   gap: 8px;
   border-radius: 18px;
   background-color: ${({ theme }) => theme.color.white};
+
+  @media (max-width: 900px) {
+    height: 300px;
+  }
 `;
 
 const Part = styled(motion.div)`

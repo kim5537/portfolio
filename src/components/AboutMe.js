@@ -26,12 +26,20 @@ const MainItem = styled.main`
   justify-content: center;
   align-items: center;
   gap: 30px;
+  @media (max-width: 900px) {
+    flex-direction: column;
+    gap: 10px;
+  }
 `;
 
 const ImgWrap = styled.div`
   width: 400px;
   height: 400px;
   position: relative;
+  @media (max-width: 900px) {
+    width: 300px;
+    height: 300px;
+  }
 `;
 
 const TextWrap = styled.div`
@@ -41,6 +49,10 @@ const TextWrap = styled.div`
   font-size: 2rem;
   font-family: ${({ theme }) => theme.font.title};
   color: ${({ theme }) => theme.color.white};
+  @media (max-width: 900px) {
+    font-size: 1.2rem;
+    gap: 0.5rem;
+  }
 `;
 
 const Marking = styled.div`
