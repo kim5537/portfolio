@@ -88,6 +88,8 @@ const ToggleLeft = styled.div`
   margin-right: 20px;
   //margin-bottom: 200px;
   filter: drop-shadow(0px 0px 3px #a2a7aa);
+  opacity: ${(props) => (props.page ? "1" : "0")};
+  cursor: ${(props) => (props.page ? "pointer" : "none")};
 `;
 
 const ToggleRight = styled.div`
@@ -102,9 +104,10 @@ const ProjectSection = ({ setModalOpen, setTargetId }) => {
   const [prevFillter, setprevFillter] = useState("");
   const [dataIndex, setDataIndex] = useState(0);
   const [offset, setOffset] = useState(6);
+  const [page, setPage] = useState(false);
   const [slideEnd, setSlideEnd] = useState(false);
   const [right, setRight] = useState(false);
-  const [activeFilter, setActiveFilter] = useState("full");
+  const [activeFilter, setActiveFilter] = useState(0);
 
   const toggleProject = () => {
     setSlideEnd((prev) => !prev);
@@ -114,6 +117,7 @@ const ProjectSection = ({ setModalOpen, setTargetId }) => {
     setSlideEnd(true);
     const projectLength = datas.length;
     const maxIndex = Math.ceil(projectLength / offset - 1);
+    maxIndex < offset ? setPage(false) : setPage(true);
     if (text === "right") {
       setRight(true);
       setDataIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
@@ -124,19 +128,19 @@ const ProjectSection = ({ setModalOpen, setTargetId }) => {
     }
   };
 
-  const typeFillter = (text) => {
-    if (text === prevFillter) {
+  const typeFillter = (num) => {
+    if (num === prevFillter) {
       setdatas(Projectsdata);
-      setActiveFilter("full");
-      setprevFillter("full");
+      setActiveFilter(0);
+      setprevFillter(0);
     } else {
-      setActiveFilter(text);
+      setActiveFilter(num);
       setDataIndex(0);
       const fillterdata = Projectsdata.filter(
-        (project) => project.main === text
+        (project) => project.mainNum === num
       );
       setdatas(fillterdata);
-      setprevFillter(text);
+      setprevFillter(num);
     }
   };
 
@@ -158,28 +162,19 @@ const ProjectSection = ({ setModalOpen, setTargetId }) => {
   return (
     <ProjectInner>
       <CategoryWrap>
-        <CategoryItem
-          check={activeFilter === "javaScript"}
-          onClick={() => typeFillter("javaScript")}
-        >
+        <CategoryItem check={activeFilter === 1} onClick={() => typeFillter(1)}>
           JS
         </CategoryItem>
-        <CategoryItem
-          check={activeFilter === "react"}
-          onClick={() => typeFillter("react")}
-        >
+        <CategoryItem check={activeFilter === 2} onClick={() => typeFillter(2)}>
           React
         </CategoryItem>
-        <CategoryItem
-          check={activeFilter === "typeScript"}
-          onClick={() => typeFillter("typeScript")}
-        >
+        <CategoryItem check={activeFilter === 3} onClick={() => typeFillter(3)}>
           TS
         </CategoryItem>
       </CategoryWrap>
       <SliderWrap>
         <ToggleWrap>
-          <ToggleLeft onClick={() => toggleFn("left")}>
+          <ToggleLeft onClick={() => toggleFn("left")} page={page}>
             <ArrowLeft fill={"#a2a7aa"} size={"20px"} />
           </ToggleLeft>
           <AnimatePresence
@@ -209,7 +204,7 @@ const ProjectSection = ({ setModalOpen, setTargetId }) => {
               </ProjectFix>
             </SlideWrap>
           </AnimatePresence>
-          <ToggleRight onClick={() => toggleFn("right")}>
+          <ToggleRight onClick={() => toggleFn("right")} page={page}>
             <ArrowRight fill={"#a2a7aa"} size={"20px"} />
           </ToggleRight>
         </ToggleWrap>

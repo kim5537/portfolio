@@ -4,9 +4,7 @@ import styled, { keyframes } from "styled-components";
 import { Img } from "../style/imgobject";
 import { motion, animate, useTransform, AnimatePresence } from "framer-motion";
 import ProjectSection from "./section/ProjectSection";
-import Wave from "react-wavify";
 import ProjectModal from "./section/ProjectModal";
-import { symbol } from "framer-motion/client";
 
 const star = keyframes`
 0% {
@@ -161,14 +159,6 @@ const StarLineWrap = styled.div`
   height: 100%;
 `;
 
-const WaveWrap = styled.div`
-  width: 100%;
-  height: 30px;
-  position: absolute;
-  bottom: 0;
-  z-index: 20;
-`;
-
 const StarLine = styled.div`
   border-radius: 4px;
   background-color: #fff;
@@ -301,7 +291,7 @@ const Project = forwardRef(function Project(props, ref) {
       document.body.style.overflow = "hidden";
     }
     if (!modalOpen) {
-      document.body.style.overflow = " visible";
+      document.body.style.overflow = "visible";
     }
   }, [modalOpen]);
 
@@ -369,25 +359,6 @@ const Project = forwardRef(function Project(props, ref) {
             <StarLine className="starLine6" />
           </StarLineWrap>
         </SkyWrap>
-        <WaveWrap>
-          <Wave mask="url(#mask)" fill="#1277b0">
-            <defs>
-              <linearGradient id="gradient" gradientTransform="rotate(90)">
-                <stop offset="0" stopColor="white" />
-                <stop offset="0.5" stopColor="black" />
-              </linearGradient>
-              <mask id="mask">
-                <rect
-                  x="0"
-                  y="0"
-                  width="2000"
-                  height="200"
-                  fill="url(#gradient)"
-                />
-              </mask>
-            </defs>
-          </Wave>
-        </WaveWrap>
       </Inner>
       {modalOpen ? (
         <OverlayWrap>

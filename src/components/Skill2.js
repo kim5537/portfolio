@@ -102,10 +102,10 @@ const Wrapper = styled.div`
 
 const ModalWrap = styled(motion.div)`
   position: absolute;
-  width: 520px;
-  height: 118px;
-  top: -50px;
-  left: 400px;
+  width: 560px;
+  height: 140px;
+  top: -70px;
+  left: 320px;
 `;
 const ModalContents = styled.div`
   padding: 10px 16px;
@@ -113,10 +113,26 @@ const ModalContents = styled.div`
   height: 100%;
   background-color: ${(props) => props.theme.color.white};
   border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
-const Name = styled.h5``;
+const Name = styled.h5`
+  margin-bottom: 4px;
+  span {
+    font-size: 1.3rem;
+    /* background-color: ${(props) => props.theme.color.green}; */
+    color: ${(props) => props.theme.color.green};
+    padding: 2px 4px;
+    border-radius: 8px;
+  }
+`;
 const Desc = styled.div`
   word-break: keep-all;
+  height: 64%;
+  /* background-color: ${(props) => props.theme.color.green}; */
+  padding: 2px 4px;
+  border-radius: 8px;
 `;
 
 const Title = styled(motion.h1)`
@@ -226,7 +242,7 @@ const Part = styled(motion.div)`
     }
   }
   & > div:nth-child(2) {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     margin: auto;
   }
@@ -236,7 +252,6 @@ const Skill = forwardRef(function Skill(props, ref) {
   const targetRef = useRef();
   const moveRef = useRef();
   const [targetY, setTargetY] = useState({});
-  // const { crrentScrollY } = useScroll();
   const { scrollY } = useMouseScroll();
   const [fixed, setFixed] = useState("absolute");
   const [istop, setIstop] = useState("top : 0 ; bottom : auto ;");
@@ -256,14 +271,6 @@ const Skill = forwardRef(function Skill(props, ref) {
       window.removeEventListener("resize", mobileSize);
     };
   }, []);
-
-  // useEffect(() => {
-  //   if (modalopen) {
-  //     setTimeout(() => {
-  //       setModalOpen(false);
-  //     }, 5000);
-  //   }
-  // }, [modalopen]);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -407,7 +414,9 @@ const Skill = forwardRef(function Skill(props, ref) {
                           custom={mobile}
                         >
                           <ModalContents>
-                            <Name>{selectedSkill.name}</Name>
+                            <Name>
+                              <span>{selectedSkill.name}</span>
+                            </Name>
                             <Desc>{selectedSkill.desc}</Desc>
                           </ModalContents>
                         </ModalWrap>
