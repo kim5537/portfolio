@@ -3,9 +3,11 @@ import styled from "styled-components";
 import Main from "../components/Main";
 import AboutMe from "../components/AboutMe";
 import AboutMe2 from "../components/AboutMe2";
-import Skill2 from "../components/Skill2";
+import Skill from "../components/Skill";
 import Project from "../components/Project";
 import Art from "../components/Art";
+import { useMouseScroll } from "../context/usecontext";
+import { useScroll, motion, useTransform } from "framer-motion";
 
 const Section01 = styled.div`
   width: 100vw;
@@ -17,28 +19,34 @@ const Section01 = styled.div`
 `;
 
 const Tree = styled.div`
-  height: auto;
   img {
     position: absolute;
-    top: -100px;
+    top: -170px;
     right: -10vw;
     width: 60vw;
     transform: rotate(-10deg);
     z-index: 10;
     pointer-events: none;
+    @media (max-width: 900px) {
+      width: 130vw;
+      right: -16vw;
+    }
   }
 `;
 
 const Tree2 = styled.div`
-  height: auto;
   img {
     position: absolute;
-    top: -40px;
-    left: -10vw;
+    top: 100px;
+    left: -12vw;
     width: 70vw;
-    transform: rotate(12deg);
-    z-index: 10;
+    transform: rotate(12deg);/    z-index: 10;
     pointer-events: none;
+    @media (max-width: 900px) {
+      width: 110vw;
+      left: -14vw;
+      top: 300px;
+    }
   }
 `;
 
@@ -46,11 +54,10 @@ const TreeBack = styled.div`
   height: auto;
   width: 100vw;
   max-width: 100%;
+
   img {
-    position: absolute;
-    top: 0px;
     width: 100vw;
-    max-width: 100%;
+    object-fit: cover;
   }
 `;
 
@@ -60,6 +67,7 @@ const Home = ({ navTarget }) => {
   const skillRef = useRef();
   const projectRef = useRef();
   const artRef = useRef();
+  const Section01Ref = useRef(null);
   const navPages = {
     Main: mainRef,
     AboutMe: aboutRef,
@@ -67,6 +75,10 @@ const Home = ({ navTarget }) => {
     Project: projectRef,
     Art: artRef,
   };
+  const { scrollYProgress } = useScroll({
+    target: projectRef,
+    offset: ["start start", "end end"],
+  });
 
   useEffect(() => {
     if (!navTarget) {
@@ -87,8 +99,8 @@ const Home = ({ navTarget }) => {
       <Main ref={mainRef} />
       <AboutMe ref={aboutRef} />
       <AboutMe2 />
-      <Skill2 ref={skillRef} />
-      <Section01>
+      <Skill ref={skillRef} />
+      <Section01 ref={Section01Ref}>
         <TreeBack>
           <img
             src={`${process.env.PUBLIC_URL}/section/back00.png`}
@@ -96,15 +108,25 @@ const Home = ({ navTarget }) => {
           />
         </TreeBack>
         <Tree>
-          <img
+          <motion.img
             src={`${process.env.PUBLIC_URL}/section/tree00.png`}
             alt="tree"
+            style={{
+              rotate: "-10deg",
+              x: 0,
+              y: useTransform(scrollYProgress, [0, 0.2], [-100, 100]),
+            }}
           />
         </Tree>
         <Tree2>
-          <img
+          <motion.img
             src={`${process.env.PUBLIC_URL}/section/tree01.png`}
             alt="tree"
+            style={{
+              rotate: "12deg",
+              x: 0,
+              y: useTransform(scrollYProgress, [0, 0.2], [0, 300]),
+            }}
           />
         </Tree2>
       </Section01>

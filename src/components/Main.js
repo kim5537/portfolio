@@ -9,6 +9,7 @@ import {
 } from "framer-motion";
 import Scolle from "./section/Scolle";
 import Section from "./section/Section";
+import { useMouseScroll } from "../context/usecontext";
 
 const Container = styled.div`
   width: 100vw;
@@ -118,7 +119,8 @@ const Cat = styled.div`
 `;
 
 const Main = forwardRef(function Main(props, ref) {
-  const { scrollYProgress, scrollY } = useScroll();
+  const { scrollYProgress } = useScroll();
+  const { scrollY } = useMouseScroll();
 
   const [isvisible, setIsVisible] = useState("block");
 
@@ -131,9 +133,9 @@ const Main = forwardRef(function Main(props, ref) {
   });
 
   // const scaleCloud = useTransform(scrollYProgress, [0.4, 1], [1, 1.1]);
-  const scaleBack = useTransform(scrollYProgress, [0.3, 1], [1, 1.1]);
+  const scaleBack = useTransform(scrollYProgress, [0.15, 1], [1, 1.3]);
 
-  const scaleMan = useTransform(scrollYProgress, [0.1, 1], [1, 1.6]);
+  const scaleMan = useTransform(scrollYProgress, [0.08, 1], [1, 1.6]);
   const parX = useTransform(scrollYProgress, [0, 1], [1, 10]);
 
   const scaleCat = useTransform(scrollYProgress, [0, 1], [1, 1.8]);

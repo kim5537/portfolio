@@ -1,9 +1,10 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import data from "../../data.json";
 import { ArrowLeft, ArrowRight } from "../../style/imgobject";
 import Wave from "react-wavify";
+import { useMobile } from "../../context/usecontext";
 
 const ProjectInner = styled.div`
   z-index: 20;
@@ -12,14 +13,22 @@ const ProjectInner = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
+  @media (max-width: 900px) {
+    margin-top: 100px;
+  }
 `;
 
 const CategoryWrap = styled.div`
-  width: 940px;
+  max-width: 940px;
+  width: 100%;
   display: flex;
   justify-content: end;
   margin-bottom: 10px;
   gap: 8px;
+  @media (max-width: 900px) {
+    margin-bottom: 18px;
+    margin-right: ${(props) => (props.minProject ? "180px" : " 0px")};
+  }
 `;
 
 const CategoryItem = styled.div`
@@ -38,11 +47,15 @@ const SliderWrap = styled.div`
   position: relative;
 `;
 
-const SlideWrap = styled.div`
+const SlideItemWrap = styled.div`
   position: relative;
   width: 940px;
   height: 420px;
-  /* overflow: hidden; */
+  @media (max-width: 900px) {
+    min-width: 300px;
+    width: 100%;
+    height: ${(props) => (props.minProject ? "200px" : " 940px")};
+  }
 `;
 
 const ProjectFix = styled(motion.div)`
@@ -55,10 +68,15 @@ const ProjectFix = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
+  @media (max-width: 900px) {
+    height: 50%;
+    grid-template-columns: ${(props) =>
+      props.minProject ? "repeat(1, 1fr)" : "repeat(2, 1fr)"};
+  }
 `;
 
 const ProjectItem = styled(motion.div)`
-  width: 300px;
+  width: ${(props) => (props.minProject ? "100%" : " 300px")};
   height: 200px;
   background-color: aliceblue;
   box-shadow: 0px 0px 14px #fff;
@@ -86,16 +104,20 @@ const ToggleWrap = styled.div`
 
 const ToggleLeft = styled.div`
   margin-right: 20px;
-  //margin-bottom: 200px;
   filter: drop-shadow(0px 0px 3px #a2a7aa);
-  opacity: ${(props) => (props.page ? "1" : "0")};
-  cursor: ${(props) => (props.page ? "pointer" : "none")};
+  cursor: pointer;
+  margin-top: 0px;
+  @media (max-width: 900px) {
+    margin-top: ${(props) => (props.minProject ? "0px" : " -500px")};
+  }
 `;
 
 const ToggleRight = styled.div`
   margin-left: 20px;
-  //margin-bottom: 200px;
   filter: drop-shadow(0px 0px 3px #a2a7aa);
+  @media (max-width: 900px) {
+    margin-top: ${(props) => (props.minProject ? "0px" : " -500px")};
+  }
 `;
 
 const ProjectSection = ({ setModalOpen, setTargetId }) => {
@@ -104,20 +126,34 @@ const ProjectSection = ({ setModalOpen, setTargetId }) => {
   const [prevFillter, setprevFillter] = useState("");
   const [dataIndex, setDataIndex] = useState(0);
   const [offset, setOffset] = useState(6);
-  const [page, setPage] = useState(false);
   const [slideEnd, setSlideEnd] = useState(false);
   const [right, setRight] = useState(false);
   const [activeFilter, setActiveFilter] = useState(0);
+  const { mobile, minProject } = useMobile();
+  const [maxIndex, setMaxIndex] = useState(0);
 
   const toggleProject = () => {
     setSlideEnd((prev) => !prev);
   };
 
+  useEffect(() => {
+    if (mobile && !minProject) {
+      setOffset(4);
+    } else if (mobile && minProject) {
+      setOffset(1);
+    } else {
+      setOffset(6);
+    }
+  }, [mobile, minProject]);
+
+  useEffect(() => {
+    const projectLength = datas.length;
+    const maxIndexResult = Math.ceil(projectLength / offset - 1);
+    setMaxIndex(maxIndexResult);
+  }, [dataIndex]);
+
   const toggleFn = (text) => {
     setSlideEnd(true);
-    const projectLength = datas.length;
-    const maxIndex = Math.ceil(projectLength / offset - 1);
-    maxIndex < offset ? setPage(false) : setPage(true);
     if (text === "right") {
       setRight(true);
       setDataIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
@@ -160,8 +196,8 @@ const ProjectSection = ({ setModalOpen, setTargetId }) => {
   };
 
   return (
-    <ProjectInner>
-      <CategoryWrap>
+    <ProjectInner minProject={minProject}>
+      <CategoryWrap minProject={minProject}>
         <CategoryItem check={activeFilter === 1} onClick={() => typeFillter(1)}>
           JS
         </CategoryItem>
@@ -174,7 +210,7 @@ const ProjectSection = ({ setModalOpen, setTargetId }) => {
       </CategoryWrap>
       <SliderWrap>
         <ToggleWrap>
-          <ToggleLeft onClick={() => toggleFn("left")} page={page}>
+          <ToggleLeft onClick={() => toggleFn("left")} minProject={minProject}>
             <ArrowLeft fill={"#a2a7aa"} size={"20px"} />
           </ToggleLeft>
           <AnimatePresence
@@ -182,8 +218,8 @@ const ProjectSection = ({ setModalOpen, setTargetId }) => {
             custom={right}
             variants={toggleProject}
           >
-            <SlideWrap>
-              <ProjectFix>
+            <SlideItemWrap className="SlideItemWrap" minProject={minProject}>
+              <ProjectFix minProject={minProject}>
                 {datas
                   .slice(dataIndex * offset, dataIndex * offset + offset)
                   .map((project) => (
@@ -195,6 +231,7 @@ const ProjectSection = ({ setModalOpen, setTargetId }) => {
                       exit="exit"
                       transition={{ duration: 3 }}
                       onClick={() => handleModal(project.id)}
+                      minProject={minProject}
                     >
                       {project.title} ||
                       {project.people} ||
@@ -202,9 +239,12 @@ const ProjectSection = ({ setModalOpen, setTargetId }) => {
                     </ProjectItem>
                   ))}
               </ProjectFix>
-            </SlideWrap>
+            </SlideItemWrap>
           </AnimatePresence>
-          <ToggleRight onClick={() => toggleFn("right")} page={page}>
+          <ToggleRight
+            onClick={() => toggleFn("right")}
+            minProject={minProject}
+          >
             <ArrowRight fill={"#a2a7aa"} size={"20px"} />
           </ToggleRight>
         </ToggleWrap>

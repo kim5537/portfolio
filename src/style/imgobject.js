@@ -55,6 +55,13 @@ export const Inner = styled.div`
   width: 1200px;
   margin: 0 auto;
 `;
+export const Inner2 = styled.div`
+  width: 1200px;
+  margin: 0 auto;
+  @media (max-width: 1000px) {
+    width: 100%;
+  }
+`;
 
 export const ArrowRight = ({ fill, size }) => {
   return (

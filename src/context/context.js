@@ -1,4 +1,4 @@
 import { createContext } from "react";
 
-const MouseEventContext = createContext(null);
-export default MouseEventContext;
+export const MouseEventContext = createContext(null);
+export const MobileContext = createContext(null);

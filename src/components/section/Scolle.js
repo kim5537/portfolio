@@ -45,8 +45,11 @@ const Text = styled.div`
   }
   &::before {
     position: absolute;
-    content: "모든 이미지는 전부 직접 드로잉한 소재입니다!";
+    content: "모든 이미지는 드로잉하였습니다!";
     -webkit-text-stroke: 0px;
+    @media (max-width: 900px) {
+      font-size: 1rem;
+    }
   }
 `;
 
@@ -66,7 +69,7 @@ const Scolle = () => {
             transition={{ duration: 30, repeat: Infinity }}
           />
         </ImgWrap>
-        <Text>모든 이미지는 전부 직접 드로잉한 소재입니다!</Text>
+        <Text>모든 이미지는 드로잉하였습니다!</Text>
       </Wrap>
     </Wrapper>
   );

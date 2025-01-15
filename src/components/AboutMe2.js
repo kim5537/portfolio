@@ -43,14 +43,14 @@ const Svgdiv = styled.div`
     }
   }
   &.bird {
-    top: 28px;
     width: 20%;
+    top: 28px;
+    right: 0;
     svg {
       stroke-width: 1px;
     }
     @media (max-width: 900px) {
       width: 20%;
-      right: 0px;
       top: 18px;
       svg {
         stroke-width: 2px;
@@ -65,6 +65,7 @@ const TreeBird = styled.div`
   width: 900px;
   top: 1000px;
   left: -80px;
+
   @media (max-width: 900px) {
     width: 460px;
     top: 1040px;

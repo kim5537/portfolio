@@ -2,7 +2,7 @@ import React, { forwardRef, useEffect, useState, useRef } from "react";
 import { useMouseScroll } from "../context/usecontext";
 import styled, { keyframes } from "styled-components";
 import { Img } from "../style/imgobject";
-import { motion, animate, useTransform, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import ProjectSection from "./section/ProjectSection";
 import ProjectModal from "./section/ProjectModal";
 
@@ -109,22 +109,27 @@ const CityImg = styled.div`
 const Back = styled(motion.div)`
   width: 100vw;
   max-width: 100%;
+  min-width: 1200px;
   height: 100%;
   position: absolute;
   bottom: 0;
   left: 0;
-  background: center left/contain
+  background: bottom left / contain
     url(${process.env.PUBLIC_URL}/project/nightback00.png) no-repeat;
-  /* border: 1px solid #0f0; */
 `;
 const Back2 = styled(motion.div)`
-  width: 100%;
+  width: 100vw;
+  max-width: 100%;
+  min-width: 1200px;
   height: 100%;
   position: absolute;
   bottom: 0;
   right: 0;
-  background: center right/contain
+  background: bottom right/contain
     url(${process.env.PUBLIC_URL}/project/nightback01.png) no-repeat;
+  @media (max-width: 900px) {
+    filter: drop-shadow(0px 0px 12px #12152b);
+  }
 `;
 
 const SkyWrap = styled(motion.div)`
@@ -137,20 +142,20 @@ const SkyStarWrap = styled.div`
   height: 100%;
 `;
 
-const Star01 = styled(motion.img)`
+const Star01 = styled(motion.div)`
   position: absolute;
   top: 0;
   width: 100%;
   height: 100%;
-  background: url(${process.env.PUBLIC_URL}/${(props) => props.img});
+  background: url(${process.env.PUBLIC_URL}/project/SKY00.png);
   animation: ${star} 4s 3s ease-out infinite;
 `;
-const Star02 = styled(motion.img)`
+const Star02 = styled(motion.div)`
   position: absolute;
   top: 0;
   width: 100%;
   height: 100%;
-  background: url(${process.env.PUBLIC_URL}/${(props) => props.img});
+  background: url(${process.env.PUBLIC_URL}/project/SKY01.png);
   animation: ${star} 4s 2s ease-out infinite;
 `;
 
@@ -347,8 +352,8 @@ const Project = forwardRef(function Project(props, ref) {
         </CityWrap>
         <SkyWrap>
           <SkyStarWrap>
-            <Star01 alt="star" img={"project/SKY00.png"} />
-            <Star02 alt="star" img={"project/SKY01.png"} />
+            <Star01 alt="star" />
+            <Star02 alt="star" />
           </SkyStarWrap>
           <StarLineWrap>
             <StarLine className="starLine1" />

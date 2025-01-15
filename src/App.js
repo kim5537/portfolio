@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, useContext } from "react";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
-import MouseEventContext from "./context/context";
+import { MouseEventContext, MobileContext } from "./context/context";
 import theme from "./style/theme";
 import Nav from "./components/Nav";
 import { useScroll } from "framer-motion";
@@ -43,7 +43,9 @@ const App = () => {
   const [crrentScrollY, setCrrentScrollY] = useState(0);
   const [navTarget, setNavTarget] = useState();
   const { scrollY } = useScroll();
-
+  const [mobile, setMobile] = useState(false);
+  const [mobileTrain, setMobileTrain] = useState(false);
+  const [minProject, setMinProject] = useState(false);
   const navClick = (nav) => {
     setNavTarget(nav);
   };
@@ -53,10 +55,27 @@ const App = () => {
       setMouseX(e.pageX - window.innerWidth / 2);
     }, 50);
     window.addEventListener("mousemove", handleMouseMove);
+
+    const mobileSize = () => {
+      setMobileTrain(window.innerWidth < 1260);
+      setMobile(window.innerWidth <= 900);
+      setMinProject(window.innerWidth < 700);
+    };
+
+    window.addEventListener("resize", mobileSize);
+    mobileSize();
+
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("resize", mobileSize);
     };
   }, []);
+
+  useEffect(() => {
+    console.log("mobileTrain = ", mobileTrain);
+    console.log("mobile = ", mobile);
+    console.log("minProject = ", minProject);
+  }, [mobile, mobileTrain, minProject]);
 
   useEffect(() => {
     const scrollNum = throttle(
@@ -76,10 +95,12 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <Globalstyle />
       <MouseEventContext.Provider value={{ mouseX, crrentScrollY, scrollY }}>
-        <Page>
-          <Nav navClick={navClick} />
-          <Home navTarget={navTarget} />
-        </Page>
+        <MobileContext.Provider value={{ mobile, mobileTrain, minProject }}>
+          <Page>
+            <Nav navClick={navClick} />
+            <Home navTarget={navTarget} />
+          </Page>
+        </MobileContext.Provider>
       </MouseEventContext.Provider>
     </ThemeProvider>
   );
