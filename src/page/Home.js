@@ -6,7 +6,7 @@ import AboutMe2 from "../components/AboutMe2";
 import Skill from "../components/Skill";
 import Project from "../components/Project";
 import Art from "../components/Art";
-import { useMouseScroll } from "../context/usecontext";
+import { useMobile, useMouseScroll } from "../context/usecontext";
 import { useScroll, motion, useTransform } from "framer-motion";
 
 const Section01 = styled.div`
@@ -40,7 +40,7 @@ const Tree2 = styled.div`
     top: 100px;
     left: -12vw;
     width: 70vw;
-    transform: rotate(12deg);/    z-index: 10;
+    transform: rotate(12deg);
     pointer-events: none;
     @media (max-width: 900px) {
       width: 110vw;
@@ -68,6 +68,7 @@ const Home = ({ navTarget }) => {
   const projectRef = useRef();
   const artRef = useRef();
   const Section01Ref = useRef(null);
+  const { mobile } = useMobile();
   const navPages = {
     Main: mainRef,
     AboutMe: aboutRef,
@@ -114,7 +115,11 @@ const Home = ({ navTarget }) => {
             style={{
               rotate: "-10deg",
               x: 0,
-              y: useTransform(scrollYProgress, [0, 0.2], [-100, 100]),
+              y: useTransform(
+                scrollYProgress,
+                [0, 0.2],
+                mobile ? [-100, 100] : [-100, 50]
+              ),
             }}
           />
         </Tree>
@@ -125,7 +130,11 @@ const Home = ({ navTarget }) => {
             style={{
               rotate: "12deg",
               x: 0,
-              y: useTransform(scrollYProgress, [0, 0.2], [0, 300]),
+              y: useTransform(
+                scrollYProgress,
+                [0.1, 0.3],
+                mobile ? [0, 300] : [-40, 120]
+              ),
             }}
           />
         </Tree2>
