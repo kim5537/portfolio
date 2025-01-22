@@ -4,6 +4,7 @@ import Wave from "react-wavify";
 import styled from "styled-components";
 import { useMouseScroll } from "../context/usecontext";
 import { Img } from "../style/imgobject";
+import ArtProjectSection from "./section/ArtProjectSection";
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -109,6 +110,15 @@ const SeaWrap = styled.div`
   top: 0;
   pointer-events: none;
   border: 1px solid #f00;
+`;
+
+const ArtWrap = styled.div`
+  position: absolute;
+  width: 100vw;
+  max-width: 100%;
+  height: 600px;
+  bottom: 300px;
+  z-index: 2;
 `;
 
 const Art = forwardRef(function Art(props, ref) {
@@ -231,6 +241,9 @@ const Art = forwardRef(function Art(props, ref) {
             <Img bgimg={"project/night06.png"} className="city" />
           </CityImg>
         </CityWrap>
+        <ArtWrap>
+          <ArtProjectSection />
+        </ArtWrap>
         <SeaWrap>
           <Img
             bgimg={"art/sea00.png"}
